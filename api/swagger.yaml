@@ -1,0 +1,285 @@
+openapi: 3.0.0
+info:
+  title: MZT Health Fitness App
+  description: A webapp to assist a coach in managing their client's workout programs.
+  version: 0.0.1
+servers:
+- url: /
+paths:
+  /customer/{customerId}:
+    get:
+      description: Gets all customer information by customer ID
+      operationId: getCustomerById
+      parameters:
+      - name: customerId
+        in: path
+        description: The customer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: OK Customer Info Obtained
+          content:
+            applicaiton/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+                x-content-type: applicaiton/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: Default
+  /customer/getAllCustomers:
+    get:
+      description: Gets list of all customers
+      operationId: getAllCustomers
+      responses:
+        200:
+          description: OK Customer Info Obtained
+          content:
+            applicaiton/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+                x-content-type: applicaiton/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: Default
+  /customer/measurements/{customerId}:
+    get:
+      description: Gets list of a customer's measurements by their id. This returns
+        multiple measurements if there exists more than 1
+      operationId: getCustomerMeasurementsById
+      parameters:
+      - name: customerId
+        in: path
+        description: The customer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: OK Customer Measurement Obtained
+          content:
+            applicaiton/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerMeasurement'
+                x-content-type: applicaiton/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: Default
+  /customer/measurements/:
+    get:
+      description: Gets list of a customer's measurements by their id and measurement
+        date
+      operationId: getCustomerMeasurementsByIdDate
+      parameters:
+      - name: customerId
+        in: query
+        description: The customer id
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      - name: measurementDate
+        in: query
+        description: The customer measurementDate
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+      responses:
+        200:
+          description: OK Customer Measurement Obtained
+          content:
+            applicaiton/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerMeasurement'
+                x-content-type: applicaiton/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: Default
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int64
+          readOnly: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+        signupDate:
+          type: string
+          format: date
+        gender:
+          type: string
+        dob:
+          type: string
+          format: date
+        activityLevel:
+          type: string
+        goal:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        address:
+          $ref: '#/components/schemas/Customer_address'
+        health_condition:
+          type: string
+        occupation:
+          type: string
+        availability:
+          type: string
+        commitment:
+          type: string
+      example:
+        lastName: lastName
+        signupDate: 2000-01-23
+        goal: goal
+        address:
+          zip: 64246
+          address2: address2
+          city: city
+          address1: address1
+        occupation: occupation
+        gender: gender
+        commitment: commitment
+        availability: availability
+        health_condition: health_condition
+        firstName: firstName
+        phone: phone
+        dob: 2000-01-23
+        customerId: 0
+        activityLevel: activityLevel
+        email: ""
+    CustomerMeasurement:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int64
+          readOnly: true
+        measurementDate:
+          type: string
+          format: date
+        weight:
+          type: number
+          format: double
+        height:
+          type: number
+          format: double
+        bodyLeftArm:
+          type: number
+          format: double
+        bodyRightArm:
+          type: number
+          format: double
+        bodyLeftLeg:
+          type: number
+          format: double
+        bodyRightLeg:
+          type: number
+          format: double
+        bodyNeck:
+          type: number
+          format: double
+        bodyHip:
+          type: number
+          format: double
+        bodyRightLegThigh:
+          type: number
+          format: double
+        bodyLeftLegThigh:
+          type: number
+          format: double
+        dicksonMetric:
+          type: number
+          format: double
+      example:
+        bodyRightLeg: 7.061401241503109105224211816675961017608642578125
+        bodyRightLegThigh: 2.027123023002321833274663731572218239307403564453125
+        bodyLeftArm: 5.962133916683182377482808078639209270477294921875
+        bodyHip: 3.61607674925191080461672754609026014804840087890625
+        weight: 6.02745618307040320615897144307382404804229736328125
+        measurementDate: 2000-01-23
+        bodyLeftLeg: 2.3021358869347654518833223846741020679473876953125
+        dicksonMetric: 7.3862819483858839220147274318151175975799560546875
+        bodyRightArm: 5.63737665663332876420099637471139430999755859375
+        customerId: 0
+        bodyNeck: 9.301444243932575517419536481611430644989013671875
+        bodyLeftLegThigh: 4.1456080298839363962315474054776132106781005859375
+        height: 1.46581298050294517310021547018550336360931396484375
+    Customer_address:
+      type: object
+      properties:
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        zip:
+          maximum: 99999
+          minimum: 10000
+          type: integer
+          format: int64
+      example:
+        zip: 64246
+        address2: address2
+        city: city
+        address1: address1
