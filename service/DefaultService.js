@@ -1,5 +1,5 @@
 'use strict';
-const Cust = require('../models/customer.model.js'); 
+const Customer = require('../models/customer.model.js'); 
 const Exercise = require('../models/exercise.model.js'); 
 
 /**
@@ -15,7 +15,7 @@ exports.getAllCustomers = function() {
     /*Customer.find(function(err, cust){
         console.log(cust);
     });*/
-    Cust.find().then(customer => {
+    Customer.find().then(customer => {
         resolve(customer);
     });
   });
