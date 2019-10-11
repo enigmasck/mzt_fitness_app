@@ -4,6 +4,21 @@ var fs = require('fs'),
     path = require('path'),
     http = require('http');
 
+//Configuration database
+const mongoose   = require('mongoose')
+const dbConfig   = require ('./config/database.config.js')
+
+mongoose.Promise = global.Promise
+
+//Connecting to database
+mongoose.connect(dbConfig.url, {
+	useUnifiedTopology: true
+}).then(() => {
+	console.log("MongoDB connection success.")
+}).catch( err => {
+	console.log('Could not connect to the database. Exiting now...', err)
+})
+
 var app = require('connect')();
 var oas3Tools = require('oas3-tools');
 var jsyaml = require('js-yaml');
