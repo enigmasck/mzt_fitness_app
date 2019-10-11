@@ -15,7 +15,7 @@
   "dependencies": {
     "connect": "^3.2.0",
     "js-yaml": "^3.3.0",
-    "oas3-tools": "^1.0.1",
-    "mongoose": "^5.7.3"
+    "mongoose": "^5.7.3",
+    "oas3-tools": "^1.0.1"
   }
 }

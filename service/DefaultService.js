@@ -8,18 +8,11 @@ const Customer = require('../models/customer.model.js')
  **/
 exports.getAllCustomers = function() {
   return new Promise(function(resolve, reject) {
-  var data = {};
-  console.log('in getAllCustomers');
-  data = Customer.find();
-  console.log('data='+data); 
-    /*if (Object.keys(data).length > 0) {
-      resolve(data[Object.keys(data)[0]]);
-    } else {
-      resolve();
-    }*/
+    Customer.find()
+    console.log('data='+customer); 
+    resolve(customer);
   });
 }
-
 
 /**
  * Gets all customer information by customer ID
