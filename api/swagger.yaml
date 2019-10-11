@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.1
 info:
   title: MZT Health Fitness App
   description: A webapp to assist a coach in managing their client's workout programs.
