@@ -1,5 +1,5 @@
 'use strict';
-
+const Customer = require('../models/customer.model.js') 
 
 /**
  * Gets list of all customers
@@ -8,55 +8,15 @@
  **/
 exports.getAllCustomers = function() {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "lastName" : "lastName",
-  "signupDate" : "2000-01-23",
-  "goal" : "goal",
-  "address" : {
-    "zip" : 64246,
-    "address2" : "address2",
-    "city" : "city",
-    "address1" : "address1"
-  },
-  "occupation" : "occupation",
-  "gender" : "gender",
-  "commitment" : "commitment",
-  "availability" : "availability",
-  "health_condition" : "health_condition",
-  "firstName" : "firstName",
-  "phone" : "phone",
-  "dob" : "2000-01-23",
-  "customerId" : 0,
-  "activityLevel" : "activityLevel",
-  "email" : ""
-}, {
-  "lastName" : "lastName",
-  "signupDate" : "2000-01-23",
-  "goal" : "goal",
-  "address" : {
-    "zip" : 64246,
-    "address2" : "address2",
-    "city" : "city",
-    "address1" : "address1"
-  },
-  "occupation" : "occupation",
-  "gender" : "gender",
-  "commitment" : "commitment",
-  "availability" : "availability",
-  "health_condition" : "health_condition",
-  "firstName" : "firstName",
-  "phone" : "phone",
-  "dob" : "2000-01-23",
-  "customerId" : 0,
-  "activityLevel" : "activityLevel",
-  "email" : ""
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+  var data = {};
+  console.log('in getAllCustomers');
+  data = Customer.find();
+  console.log('data='+data); 
+    /*if (Object.keys(data).length > 0) {
+      resolve(data[Object.keys(data)[0]]);
     } else {
       resolve();
-    }
+    }*/
   });
 }
 
