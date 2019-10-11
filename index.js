@@ -37,7 +37,7 @@ var swaggerDoc = jsyaml.safeLoad(spec);
 
 // Initialize the Swagger middleware
 oas3Tools.initializeMiddleware(swaggerDoc, function (middleware) {
-  console.log('Are you doing anything?');
+
   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
   app.use(middleware.swaggerMetadata());
 

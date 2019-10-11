@@ -24,12 +24,12 @@ paths:
         200:
           description: OK Customer Info Obtained
           content:
-            applicaiton/json:
+            application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Customer'
-                x-content-type: applicaiton/json
+                x-content-type: application/json
         400:
           description: 'Error: Bad Request'
         401:
@@ -49,12 +49,12 @@ paths:
         200:
           description: OK Customer Info Obtained
           content:
-            applicaiton/json:
+            application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Customer'
-                x-content-type: applicaiton/json
+                x-content-type: application/json
         400:
           description: 'Error: Bad Request'
         401:
@@ -85,12 +85,12 @@ paths:
         200:
           description: OK Customer Measurement Obtained
           content:
-            applicaiton/json:
+            application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/CustomerMeasurement'
-                x-content-type: applicaiton/json
+                x-content-type: application/json
         400:
           description: 'Error: Bad Request'
         401:
@@ -130,12 +130,72 @@ paths:
         200:
           description: OK Customer Measurement Obtained
           content:
-            applicaiton/json:
+            application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/CustomerMeasurement'
-                x-content-type: applicaiton/json
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: Default
+  /exercise/getAllExercises:
+    get:
+      description: Gets list of all exercises
+      operationId: getAllExercises
+      responses:
+        200:
+          description: OK Exercise Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Exercise'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: Default
+  /exercise/getExerciseById/{exerciseId}:
+    get:
+      description: Gets an exercise by ID
+      operationId: getExerciseById
+      parameters:
+      - name: exerciseId
+        in: path
+        description: The exercise id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: OK Exercise Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Exercise'
+                x-content-type: application/json
         400:
           description: 'Error: Bad Request'
         401:
@@ -153,8 +213,7 @@ components:
       type: object
       properties:
         customerId:
-          type: integer
-          format: int64
+          type: object
           readOnly: true
         firstName:
           type: string
@@ -177,8 +236,17 @@ components:
         email:
           type: string
           format: email
-        address:
-          $ref: '#/components/schemas/Customer_address'
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        zip:
+          maximum: 99999
+          minimum: 10000
+          type: integer
+          format: int64
         health_condition:
           type: string
         occupation:
@@ -188,31 +256,29 @@ components:
         commitment:
           type: string
       example:
+        zip: 17207
         lastName: lastName
         signupDate: 2000-01-23
         goal: goal
-        address:
-          zip: 64246
-          address2: address2
-          city: city
-          address1: address1
         occupation: occupation
         gender: gender
+        address2: address2
+        city: city
+        address1: address1
         commitment: commitment
         availability: availability
         health_condition: health_condition
         firstName: firstName
         phone: phone
         dob: 2000-01-23
-        customerId: 0
+        customerId: {}
         activityLevel: activityLevel
         email: ""
     CustomerMeasurement:
       type: object
       properties:
         customerId:
-          type: integer
-          format: int64
+          type: object
           readOnly: true
         measurementDate:
           type: string
@@ -251,35 +317,60 @@ components:
           type: number
           format: double
       example:
-        bodyRightLeg: 7.061401241503109105224211816675961017608642578125
-        bodyRightLegThigh: 2.027123023002321833274663731572218239307403564453125
-        bodyLeftArm: 5.962133916683182377482808078639209270477294921875
-        bodyHip: 3.61607674925191080461672754609026014804840087890625
-        weight: 6.02745618307040320615897144307382404804229736328125
+        bodyRightLeg: 2.3021358869347654518833223846741020679473876953125
+        bodyRightLegThigh: 3.61607674925191080461672754609026014804840087890625
+        bodyLeftArm: 1.46581298050294517310021547018550336360931396484375
+        bodyHip: 9.301444243932575517419536481611430644989013671875
+        weight: 0.80082819046101150206595775671303272247314453125
         measurementDate: 2000-01-23
-        bodyLeftLeg: 2.3021358869347654518833223846741020679473876953125
-        dicksonMetric: 7.3862819483858839220147274318151175975799560546875
-        bodyRightArm: 5.63737665663332876420099637471139430999755859375
-        customerId: 0
-        bodyNeck: 9.301444243932575517419536481611430644989013671875
-        bodyLeftLegThigh: 4.1456080298839363962315474054776132106781005859375
-        height: 1.46581298050294517310021547018550336360931396484375
-    Customer_address:
+        bodyLeftLeg: 5.63737665663332876420099637471139430999755859375
+        dicksonMetric: 4.1456080298839363962315474054776132106781005859375
+        bodyRightArm: 5.962133916683182377482808078639209270477294921875
+        customerId: {}
+        bodyNeck: 7.061401241503109105224211816675961017608642578125
+        bodyLeftLegThigh: 2.027123023002321833274663731572218239307403564453125
+        height: 6.02745618307040320615897144307382404804229736328125
+    Exercise:
       type: object
       properties:
-        address1:
+        exerciseId:
+          type: object
+        name:
           type: string
-        address2:
+        description:
           type: string
-        city:
+        equipmentRequired:
           type: string
-        zip:
-          maximum: 99999
-          minimum: 10000
+        exerciseType:
+          type: string
+        musclesTargeted:
+          type: string
+        setBreak:
           type: integer
-          format: int64
+          description: the time in seconds to rest between each set
+        repetitions:
+          type: integer
+          description: the count of one atomic set of movement in a set
+        sets:
+          type: integer
+          description: a set is composed of a number of repititions
+        exerciseEstDuration:
+          type: integer
+          description: The time allocated to perform exercise
+        exerciseTag:
+          type: array
+          items: {}
       example:
-        zip: 64246
-        address2: address2
-        city: city
-        address1: address1
+        exerciseId: {}
+        sets: 1
+        exerciseTag:
+        - ""
+        - ""
+        exerciseType: exerciseType
+        name: name
+        exerciseEstDuration: 5
+        description: description
+        equipmentRequired: equipmentRequired
+        setBreak: 0
+        repetitions: 6
+        musclesTargeted: musclesTargeted

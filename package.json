@@ -4,8 +4,8 @@
   "description": "A webapp to assist a coach in managing their client's workout programs.",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm install",
-    "start": "node index.js"
+	"prestart": "npm install",
+	"start": "node index.js"
   },
   "keywords": [
     "swagger"
