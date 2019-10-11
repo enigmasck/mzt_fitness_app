@@ -13,6 +13,16 @@ module.exports.getAllCustomers = function getAllCustomers (req, res, next) {
     });
 };
 
+module.exports.getAllExercises = function getAllExercises (req, res, next) {
+  Default.getAllExercises()
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
 module.exports.getCustomerById = function getCustomerById (req, res, next) {
   var customerId = req.swagger.params['customerId'].value;
   Default.getCustomerById(customerId)
@@ -39,6 +49,17 @@ module.exports.getCustomerMeasurementsByIdDate = function getCustomerMeasurement
   var customerId = req.swagger.params['customerId'].value;
   var measurementDate = req.swagger.params['measurementDate'].value;
   Default.getCustomerMeasurementsByIdDate(customerId,measurementDate)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.getExerciseById = function getExerciseById (req, res, next) {
+  var exerciseId = req.swagger.params['exerciseId'].value;
+  Default.getExerciseById(exerciseId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
