@@ -1,20 +1,24 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var Default = require('../service/DefaultService');
+var Customer = require('../service/customer.service');
+var Exercise = require('../service/exercise.service');
+var Session = require('../service/session.service');
+
 
 module.exports.getAllCustomers = function getAllCustomers (req, res, next) {
-  Default.getAllCustomers()
-    .then(function (response) {
+  console.log('getAllCustomers');
+  Customer.findAll().then(function (response) {
       utils.writeJson(res, response);
     })
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+
 };
 
 module.exports.getAllExercises = function getAllExercises (req, res, next) {
-  Default.getAllExercises()
+  Exercise.getAllExercises()
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -24,8 +28,10 @@ module.exports.getAllExercises = function getAllExercises (req, res, next) {
 };
 
 module.exports.getCustomerById = function getCustomerById (req, res, next) {
+  console.log('getCustomerById');
   var customerId = req.swagger.params['customerId'].value;
-  Default.getCustomerById(customerId)
+  console.log('getCustomerById='+customerId);
+  Customer.findOne(customerId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -34,9 +40,10 @@ module.exports.getCustomerById = function getCustomerById (req, res, next) {
     });
 };
 
+/*
 module.exports.getCustomerMeasurementsById = function getCustomerMeasurementsById (req, res, next) {
   var customerId = req.swagger.params['customerId'].value;
-  Default.getCustomerMeasurementsById(customerId)
+  Customer.getCustomerMeasurementsById(customerId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -48,7 +55,7 @@ module.exports.getCustomerMeasurementsById = function getCustomerMeasurementsByI
 module.exports.getCustomerMeasurementsByIdDate = function getCustomerMeasurementsByIdDate (req, res, next) {
   var customerId = req.swagger.params['customerId'].value;
   var measurementDate = req.swagger.params['measurementDate'].value;
-  Default.getCustomerMeasurementsByIdDate(customerId,measurementDate)
+  c.getCustomerMeasurementsByIdDate(customerId,measurementDate)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -56,10 +63,11 @@ module.exports.getCustomerMeasurementsByIdDate = function getCustomerMeasurement
       utils.writeJson(res, response);
     });
 };
+*/
 
 module.exports.getExerciseById = function getExerciseById (req, res, next) {
   var exerciseId = req.swagger.params['exerciseId'].value;
-  Default.getExerciseById(exerciseId)
+  Exercise.getExerciseById(exerciseId)
     .then(function (response) {
       utils.writeJson(res, response);
     })

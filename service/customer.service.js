@@ -1,71 +1,65 @@
 const Customer = require('../models/customer.model.js');
 
-exports.findAll = (req, res) => {
+exports.findAll = function() {
+  return new Promise(function(resolve, reject) {
     Customer.find()
     .then(customers => {
-        res.send(customers);
+        resolve(customers);
     }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occured while retrieving customers."
-        });
+        reject('IT WAS REJECTED');
     });
+  });
 };
 
-exports.findOne = (req, res) => {
-    Customer.findById(req.params.customerId)
-    .then(customers => {
-        if(!customers) {
-            return res.status(404).send({
-                message: "Customer not found with id " + req.params.customerId
-            });            
-        }
-        res.send(customers);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Customer not found with id " + req.params.customerId
-            });                
-        }
-        return res.status(500).send({
-            message: "Error retrieving customer with id " + req.params.customerId
+exports.findOne = function(custId) {
+  return new Promise(function(resolve, reject) {
+        Customer.findById(custId)
+        .then(customers => {
+            resolve(customers);
+        }).catch(err => {
+            if(err.kind === 'ObjectId') {
+                reject('Customer Not Found By ID');            
+            }
+            //TODO setup real error messages
+            reject('INTERNAL ERROR');
         });
     });
 };
 
 // Create and save a new customer
-exports.create = (req, res) => {
-    // Validate request
-    if(!req.body.content) {
-        return res.status(400).send({
-            message: "Customer content can not be empty"
+exports.create = function() {
+  return new Promise(function(resolve, reject) {
+        // Validate request
+        if(!req.body.content) {
+            reject('Customer content can not be empty');
+        }
+
+        // Create a customer
+        const customer = new Customer({ 
+            first_name: req.body.first_name || "NA",
+            last_name: req.body.last_name || "NA",
+            signup_date: req.body.signup_date || "NA",
+            gender: req.body.gender || "NA",
+            dob: req.body.dob || "NA",
+            activity_level: req.body.activity_level || "NA",
+            goal: req.body.goal || "NA",
+            phone: req.body.phone || "NA",
+            email: req.body.email || "NA",
+            address: req.body.address || "NA",
+            health_condition: req.body.health_condition || "NA",
+            occupation: req.body.occupation || "NA",
+            availability: req.body.availability || "NA",
+            commitment: req.body.commitment || "NA"
         });
-    }
 
-    // Create a customer
-    const customer = new Customer({ 
-        first_name: req.body.first_name || "NA",
-	last_name: req.body.last_name || "NA",
-	signup_date: req.body.signup_date || "NA",
-        gender: req.body.gender || "NA",
-        dob: req.body.dob || "NA",
-        activity_level: req.body.activity_level || "NA",
-        goal: req.body.goal || "NA",
-        phone: req.body.phone || "NA",
-        email: req.body.email || "NA",
-        address: req.body.address || "NA",
-        health_condition: req.body.health_condition || "NA",
-        occupation: req.body.occupation || "NA",
-        availability: req.body.availability || "NA",
-        commitment: req.body.commitment || "NA"
-    });
-
-    // Save the customer in the database
-    customer.save()
-    .then(data => {
-        res.send(data);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while creating the customer."
+        // Save the customer in the database
+        customer.save()
+        .then(data => {
+            res.send(data);
+        }).catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while creating the customer."
+            });
         });
     });
 };
