@@ -1,21 +1,18 @@
 {
-  "name": "mzt-health-fitness-app",
+  "name": "mzt-fitness-api",
   "version": "0.0.1",
-  "description": "A webapp to assist a coach in managing their client's workout programs.",
+  "description": "A webapp to assist a coach in managing their client's workout programs",
   "main": "index.js",
   "scripts": {
-	"prestart": "npm install",
-	"start": "node index.js"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "swagger"
-  ],
-  "license": "Unlicense",
-  "private": true,
+  "author": "Team MZT",
+  "license": "ISC",
   "dependencies": {
     "connect": "^3.2.0",
     "js-yaml": "^3.3.0",
-    "mongoose": "^5.7.3",
-    "oas3-tools": "^1.0.1"
+    "oas3-tools": "^1.0.1",
+    "mongoose": "^5.7.3"
   }
 }
