@@ -1,7 +1,14 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+const mongoose = require('mongoose');
 
+const ProgramSchema = mongoose.Schema({
+    program_id: String,
+    title: String,
+    description: String,
+    programSDate: Date,
+    programEDate: Date,
+    coach_id: String
+}, {
+    timestamp: true
+});
 
+module.exports = mongoose.model('Program', ProgramSchema);

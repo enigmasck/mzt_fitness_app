@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const ExerciseHasSessionSchema = mongoose.Schema({
 	exercise_id: String,
@@ -9,4 +9,4 @@ const ExerciseHasSessionSchema = mongoose.Schema({
 	timestamp: true
 });
 
-module.exports = mongoose.model('ExerciseHasSession', ExerciseHasSessionSchema)
+module.exports = mongoose.model('ExerciseHasSession', ExerciseHasSessionSchema);

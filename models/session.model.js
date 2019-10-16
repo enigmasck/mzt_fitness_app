@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const SessionSchema = mongoose.Schema({
 	session_id: String,
@@ -11,9 +11,9 @@ const SessionSchema = mongoose.Schema({
         coach_id: Number,
         exercise_tag: Array,
         measurement_date: Date,
-        customer_id: Number
+        customer_id: String
 }, {
 	timestamp: true
 });
 
-module.exports = mongoose.model('Session', SessionSchema)
+module.exports = mongoose.model('Session', SessionSchema);

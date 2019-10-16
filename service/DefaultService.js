@@ -1,24 +1,25 @@
 'use strict';
-const Customer = require('../models/customer.model.js'); 
-const Exercise = require('../models/exercise.model.js'); 
+const Customer = require('../models/customer.model.js');
+const Exercise = require('../models/exercise.model.js');
+const Program = require('../models/program.model.js');
 
 /**
- * Gets list of all customers
+ * Gets list of all programs
  *
  * returns List
  **/
-exports.getAllCustomers = function() {
-  return new Promise(function(resolve, reject) {
-    //VERY IMPORTANT DO NOT FORGETTTTTT .then(TABLENAME =>
-    //customers needs to be the exact name of the table in MongoDB
-    
-    /*Customer.find(function(err, cust){
-        console.log(cust);
-    });*/
-    Customer.find().then(customer => {
-        resolve(customer);
+exports.getAllCustomers = function () {
+    return new Promise(function (resolve, reject) {
+        //VERY IMPORTANT DO NOT FORGETTTTTT .then(TABLENAME =>
+        //programs needs to be the exact name of the table in MongoDB
+
+        /*Customer.find(function(err, cust){
+         console.log(cust);
+         });*/
+        Customer.find().then(customer => {
+            resolve(customer);
+        });
     });
-  });
 };
 
 
@@ -27,15 +28,34 @@ exports.getAllCustomers = function() {
  *
  * returns List
  **/
-exports.getAllExercises = function() {
-  return new Promise(function(resolve, reject) {
-     //For whatever weird reason....Every collection name needs to be pluralized in the DB
-    Exercise.find().then(exercise => {
-        console.log(Object.keys(exercise).length);
-        resolve(exercise);
+exports.getAllExercises = function () {
+    return new Promise(function (resolve, reject) {
+        //For whatever weird reason....Every collection name needs to be pluralized in the DB
+        Exercise.find().then(exercise => {
+            //console.log(Object.keys(exercise).length);
+            resolve(exercise);
+        });
     });
-  });
-}
+};
+
+/**
+ * Gets list of all programs
+ *
+ * returns List
+ **/
+exports.getAllPrograms = function () {
+    return new Promise(function (resolve, reject) {
+        //VERY IMPORTANT DO NOT FORGETTTTTT .then(TABLENAME =>
+        //programs needs to be the exact name of the table in MongoDB
+
+        /*Program.find(function(err, cust){
+         console.log(cust);
+         });*/
+        Program.find().then(program => {
+            resolve(program);
+        });
+    });
+};
 
 /**
  * Gets all customer information by customer ID
@@ -43,55 +63,55 @@ exports.getAllExercises = function() {
  * customerId Long The customer id
  * returns List
  **/
-exports.getCustomerById = function(customerId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "zip" : 17207,
-  "lastName" : "lastName",
-  "signupDate" : "2000-01-23",
-  "goal" : "goal",
-  "occupation" : "occupation",
-  "gender" : "gender",
-  "address2" : "address2",
-  "city" : "city",
-  "address1" : "address1",
-  "commitment" : "commitment",
-  "availability" : "availability",
-  "health_condition" : "health_condition",
-  "firstName" : "firstName",
-  "phone" : "phone",
-  "dob" : "2000-01-23",
-  "customerId" : { },
-  "activityLevel" : "activityLevel",
-  "email" : ""
-}, {
-  "zip" : 17207,
-  "lastName" : "lastName",
-  "signupDate" : "2000-01-23",
-  "goal" : "goal",
-  "occupation" : "occupation",
-  "gender" : "gender",
-  "address2" : "address2",
-  "city" : "city",
-  "address1" : "address1",
-  "commitment" : "commitment",
-  "availability" : "availability",
-  "health_condition" : "health_condition",
-  "firstName" : "firstName",
-  "phone" : "phone",
-  "dob" : "2000-01-23",
-  "customerId" : { },
-  "activityLevel" : "activityLevel",
-  "email" : ""
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
+exports.getCustomerById = function (customerId) {
+    return new Promise(function (resolve, reject) {
+        var examples = {};
+        examples['application/json'] = [{
+                "zip": 17207,
+                "lastName": "lastName",
+                "signupDate": "2000-01-23",
+                "goal": "goal",
+                "occupation": "occupation",
+                "gender": "gender",
+                "address2": "address2",
+                "city": "city",
+                "address1": "address1",
+                "commitment": "commitment",
+                "availability": "availability",
+                "health_condition": "health_condition",
+                "firstName": "firstName",
+                "phone": "phone",
+                "dob": "2000-01-23",
+                "customerId": {},
+                "activityLevel": "activityLevel",
+                "email": ""
+            }, {
+                "zip": 17207,
+                "lastName": "lastName",
+                "signupDate": "2000-01-23",
+                "goal": "goal",
+                "occupation": "occupation",
+                "gender": "gender",
+                "address2": "address2",
+                "city": "city",
+                "address1": "address1",
+                "commitment": "commitment",
+                "availability": "availability",
+                "health_condition": "health_condition",
+                "firstName": "firstName",
+                "phone": "phone",
+                "dob": "2000-01-23",
+                "customerId": {},
+                "activityLevel": "activityLevel",
+                "email": ""
+            }];
+        if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+        } else {
+            resolve();
+        }
+    });
+};
 
 
 /**
@@ -100,45 +120,45 @@ exports.getCustomerById = function(customerId) {
  * customerId Long The customer id
  * returns List
  **/
-exports.getCustomerMeasurementsById = function(customerId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "bodyRightLeg" : 2.3021358869347655,
-  "bodyRightLegThigh" : 3.616076749251911,
-  "bodyLeftArm" : 1.4658129805029452,
-  "bodyHip" : 9.301444243932576,
-  "weight" : 0.8008281904610115,
-  "measurementDate" : "2000-01-23",
-  "bodyLeftLeg" : 5.637376656633329,
-  "dicksonMetric" : 4.145608029883936,
-  "bodyRightArm" : 5.962133916683182,
-  "customerId" : { },
-  "bodyNeck" : 7.061401241503109,
-  "bodyLeftLegThigh" : 2.027123023002322,
-  "height" : 6.027456183070403
-}, {
-  "bodyRightLeg" : 2.3021358869347655,
-  "bodyRightLegThigh" : 3.616076749251911,
-  "bodyLeftArm" : 1.4658129805029452,
-  "bodyHip" : 9.301444243932576,
-  "weight" : 0.8008281904610115,
-  "measurementDate" : "2000-01-23",
-  "bodyLeftLeg" : 5.637376656633329,
-  "dicksonMetric" : 4.145608029883936,
-  "bodyRightArm" : 5.962133916683182,
-  "customerId" : { },
-  "bodyNeck" : 7.061401241503109,
-  "bodyLeftLegThigh" : 2.027123023002322,
-  "height" : 6.027456183070403
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
+exports.getCustomerMeasurementsById = function (customerId) {
+    return new Promise(function (resolve, reject) {
+        var examples = {};
+        examples['application/json'] = [{
+                "bodyRightLeg": 2.3021358869347655,
+                "bodyRightLegThigh": 3.616076749251911,
+                "bodyLeftArm": 1.4658129805029452,
+                "bodyHip": 9.301444243932576,
+                "weight": 0.8008281904610115,
+                "measurementDate": "2000-01-23",
+                "bodyLeftLeg": 5.637376656633329,
+                "dicksonMetric": 4.145608029883936,
+                "bodyRightArm": 5.962133916683182,
+                "customerId": {},
+                "bodyNeck": 7.061401241503109,
+                "bodyLeftLegThigh": 2.027123023002322,
+                "height": 6.027456183070403
+            }, {
+                "bodyRightLeg": 2.3021358869347655,
+                "bodyRightLegThigh": 3.616076749251911,
+                "bodyLeftArm": 1.4658129805029452,
+                "bodyHip": 9.301444243932576,
+                "weight": 0.8008281904610115,
+                "measurementDate": "2000-01-23",
+                "bodyLeftLeg": 5.637376656633329,
+                "dicksonMetric": 4.145608029883936,
+                "bodyRightArm": 5.962133916683182,
+                "customerId": {},
+                "bodyNeck": 7.061401241503109,
+                "bodyLeftLegThigh": 2.027123023002322,
+                "height": 6.027456183070403
+            }];
+        if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+        } else {
+            resolve();
+        }
+    });
+};
 
 
 /**
@@ -148,44 +168,44 @@ exports.getCustomerMeasurementsById = function(customerId) {
  * measurementDate date The customer measurementDate
  * returns List
  **/
-exports.getCustomerMeasurementsByIdDate = function(customerId,measurementDate) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "bodyRightLeg" : 2.3021358869347655,
-  "bodyRightLegThigh" : 3.616076749251911,
-  "bodyLeftArm" : 1.4658129805029452,
-  "bodyHip" : 9.301444243932576,
-  "weight" : 0.8008281904610115,
-  "measurementDate" : "2000-01-23",
-  "bodyLeftLeg" : 5.637376656633329,
-  "dicksonMetric" : 4.145608029883936,
-  "bodyRightArm" : 5.962133916683182,
-  "customerId" : { },
-  "bodyNeck" : 7.061401241503109,
-  "bodyLeftLegThigh" : 2.027123023002322,
-  "height" : 6.027456183070403
-}, {
-  "bodyRightLeg" : 2.3021358869347655,
-  "bodyRightLegThigh" : 3.616076749251911,
-  "bodyLeftArm" : 1.4658129805029452,
-  "bodyHip" : 9.301444243932576,
-  "weight" : 0.8008281904610115,
-  "measurementDate" : "2000-01-23",
-  "bodyLeftLeg" : 5.637376656633329,
-  "dicksonMetric" : 4.145608029883936,
-  "bodyRightArm" : 5.962133916683182,
-  "customerId" : { },
-  "bodyNeck" : 7.061401241503109,
-  "bodyLeftLegThigh" : 2.027123023002322,
-  "height" : 6.027456183070403
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
+exports.getCustomerMeasurementsByIdDate = function (customerId, measurementDate) {
+    return new Promise(function (resolve, reject) {
+        var examples = {};
+        examples['application/json'] = [{
+                "bodyRightLeg": 2.3021358869347655,
+                "bodyRightLegThigh": 3.616076749251911,
+                "bodyLeftArm": 1.4658129805029452,
+                "bodyHip": 9.301444243932576,
+                "weight": 0.8008281904610115,
+                "measurementDate": "2000-01-23",
+                "bodyLeftLeg": 5.637376656633329,
+                "dicksonMetric": 4.145608029883936,
+                "bodyRightArm": 5.962133916683182,
+                "customerId": {},
+                "bodyNeck": 7.061401241503109,
+                "bodyLeftLegThigh": 2.027123023002322,
+                "height": 6.027456183070403
+            }, {
+                "bodyRightLeg": 2.3021358869347655,
+                "bodyRightLegThigh": 3.616076749251911,
+                "bodyLeftArm": 1.4658129805029452,
+                "bodyHip": 9.301444243932576,
+                "weight": 0.8008281904610115,
+                "measurementDate": "2000-01-23",
+                "bodyLeftLeg": 5.637376656633329,
+                "dicksonMetric": 4.145608029883936,
+                "bodyRightArm": 5.962133916683182,
+                "customerId": {},
+                "bodyNeck": 7.061401241503109,
+                "bodyLeftLegThigh": 2.027123023002322,
+                "height": 6.027456183070403
+            }];
+        if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+        } else {
+            resolve();
+        }
+    });
 }
 
 
@@ -195,38 +215,70 @@ exports.getCustomerMeasurementsByIdDate = function(customerId,measurementDate) {
  * exerciseId Long The exercise id
  * returns List
  **/
-exports.getExerciseById = function(exerciseId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "exerciseId" : { },
-  "sets" : 1,
-  "exerciseTag" : [ "", "" ],
-  "exerciseType" : "exerciseType",
-  "name" : "name",
-  "exerciseEstDuration" : 5,
-  "description" : "description",
-  "equipmentRequired" : "equipmentRequired",
-  "setBreak" : 0,
-  "repetitions" : 6,
-  "musclesTargeted" : "musclesTargeted"
-}, {
-  "exerciseId" : { },
-  "sets" : 1,
-  "exerciseTag" : [ "", "" ],
-  "exerciseType" : "exerciseType",
-  "name" : "name",
-  "exerciseEstDuration" : 5,
-  "description" : "description",
-  "equipmentRequired" : "equipmentRequired",
-  "setBreak" : 0,
-  "repetitions" : 6,
-  "musclesTargeted" : "musclesTargeted"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
+exports.getExerciseById = function (exerciseId) {
+    return new Promise(function (resolve, reject) {
+        var examples = {};
+        examples['application/json'] = [{
+                "exerciseId": {},
+                "sets": 1,
+                "exerciseTag": ["", ""],
+                "exerciseType": "exerciseType",
+                "name": "name",
+                "exerciseEstDuration": 5,
+                "description": "description",
+                "equipmentRequired": "equipmentRequired",
+                "setBreak": 0,
+                "repetitions": 6,
+                "musclesTargeted": "musclesTargeted"
+            }, {
+                "exerciseId": {},
+                "sets": 1,
+                "exerciseTag": ["", ""],
+                "exerciseType": "exerciseType",
+                "name": "name",
+                "exerciseEstDuration": 5,
+                "description": "description",
+                "equipmentRequired": "equipmentRequired",
+                "setBreak": 0,
+                "repetitions": 6,
+                "musclesTargeted": "musclesTargeted"
+            }];
+        if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+        } else {
+            resolve();
+        }
+    });
+};
+
+/**
+ * Gets a program by ID
+ *
+ * programId Long The program id
+ * returns List
+ **/
+exports.getProgramById = function (programId) {
+    return new Promise(function (resolve, reject) {
+        var examples = {};
+        examples['application/json'] = [{
+                "programId": {},
+                "title": "title of program XXX",
+                "description": "description of program XXX",
+                "programSDate": 2019 - 10 - 11,
+                "programEDate": 2019 - 11 - 11,
+                "coachId": {}
+            }, {
+                "programId": {},
+                "title": "title of program XXX",
+                "description": "description of program XXX",
+                "programSDate": 2019 - 10 - 11,
+                "programEDate": 2019 - 11 - 11,
+                "coachId": {}
+            }];
+        if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+        } else {
+            resolve();
+        }
+    });
+};

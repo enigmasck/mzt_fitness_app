@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const CustomerMeasurementSchema = mongoose.Schema({
 	customer_id: String,
@@ -18,4 +18,4 @@ const CustomerMeasurementSchema = mongoose.Schema({
 	timestamp: true
 });
 
-module.exports = mongoose.model('CustomerMeasurement', CustomerMeasurementSchema)
+module.exports = mongoose.model('CustomerMeasurement', CustomerMeasurementSchema);

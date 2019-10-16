@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const CoachSchema = mongoose.Schema({
 	coach_id: String,
@@ -16,4 +16,4 @@ const CoachSchema = mongoose.Schema({
 	timestamp: true
 });
 
-module.exports = mongoose.model('Coach', CoachSchema)
+module.exports = mongoose.model('Coach', CoachSchema);

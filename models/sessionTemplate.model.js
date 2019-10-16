@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const SessionTemplateSchema = mongoose.Schema({
 	session_template_id: String,
@@ -10,4 +10,4 @@ const SessionTemplateSchema = mongoose.Schema({
 	timestamp: true
 });
 
-module.exports = mongoose.model('SessionTemplate', SessionTemplateSchema)
+module.exports = mongoose.model('SessionTemplate', SessionTemplateSchema);

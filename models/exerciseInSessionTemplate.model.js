@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const ExerciseInSessionTemplateSchema = mongoose.Schema({
 	exercise_id: String,
@@ -7,4 +7,4 @@ const ExerciseInSessionTemplateSchema = mongoose.Schema({
 	timestamp: true
 });
 
-module.exports = mongoose.model('ExerciseInSessionTemplate', ExerciseInSessionTemplateSchema)
+module.exports = mongoose.model('ExerciseInSessionTemplate', ExerciseInSessionTemplateSchema);
