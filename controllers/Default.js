@@ -6,7 +6,7 @@ var Exercise = require('../service/exercise.service');
 var Session = require('../service/session.service');
 
 
-module.exports.getAllCustomers = function getAllCustomers (req, res, next) {
+/*module.exports.getAllCustomers = function getAllCustomers (req, res, next) {
   console.log('getAllCustomers');
   Customer.findAll().then(function (response) {
       utils.writeJson(res, response);
@@ -38,7 +38,7 @@ module.exports.getCustomerById = function getCustomerById (req, res, next) {
     .catch(function (response) {
       utils.writeJson(res, response);
     });
-};
+};*/
 
 /*
 module.exports.getCustomerMeasurementsById = function getCustomerMeasurementsById (req, res, next) {

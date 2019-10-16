@@ -6,12 +6,12 @@ info:
 servers:
 - url: /
 paths:
-  /customer/{customerId}:
+  /customer/getCustomerById/{customer_id}:
     get:
       description: Gets all customer information by customer ID
       operationId: getCustomerById
       parameters:
-      - name: customerId
+      - name: customer_id
         in: path
         description: The customer id
         required: true
@@ -39,7 +39,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: Default
+      x-swagger-router-controller: customer.controller
   /customer/getAllCustomers:
     get:
       description: Gets list of all customers
@@ -64,14 +64,14 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: Default
-  /customer/measurements/{customerId}:
+      x-swagger-router-controller: customer.controller
+  /customer/measurements/{customer_id}:
     get:
       description: Gets list of a customer's measurements by their id. This returns
         multiple measurements if there exists more than 1
       operationId: getCustomerMeasurementsById
       parameters:
-      - name: customerId
+      - name: customer_id
         in: path
         description: The customer id
         required: true
@@ -100,14 +100,14 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: Default
+      x-swagger-router-controller: customer.measurements.controller
   /customer/measurements/:
     get:
       description: Gets list of a customer's measurements by their id and measurement
         date
       operationId: getCustomerMeasurementsByIdDate
       parameters:
-      - name: customerId
+      - name: customer_id
         in: query
         description: The customer id
         required: true
@@ -145,7 +145,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: Default
+      x-swagger-router-controller: customer.measurements.controller
   /exercise/getAllExercises:
     get:
       description: Gets list of all exercises
@@ -170,21 +170,20 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: Default
-  /exercise/getExerciseById/{exerciseId}:
+      x-swagger-router-controller: exercise.controller
+  /exercise/getExerciseById/{exercise_id}:
     get:
       description: Gets an exercise by ID
       operationId: getExerciseById
       parameters:
-      - name: exerciseId
+      - name: exercise_id
         in: path
         description: The exercise id
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         200:
           description: OK Exercise Info Obtained
@@ -205,20 +204,79 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: Default
+      x-swagger-router-controller: exercise.controller
+  /exercise/addExercise:
+    post:
+      description: Creates new exercise
+      operationId: addExercise
+      requestBody:
+        description: Add a new exercise
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Exercise'
+      responses:
+        200:
+          description: OK Exercise Info Obtained
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exercise'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: exercise.controller
+  /exercise/updateExercise:
+    post:
+      description: Updates an existing exercise
+      operationId: updateExercise
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Exercise'
+      responses:
+        200:
+          description: OK Exercise Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exercise'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: exercise.controller
 components:
   schemas:
     Customer:
       type: object
       properties:
-        customerId:
+        customer_id:
           type: object
           readOnly: true
-        firstName:
+        first_name:
           type: string
-        lastName:
+        last_name:
           type: string
-        signupDate:
+        signup_date:
           type: string
           format: date
         gender:
@@ -226,7 +284,7 @@ components:
         dob:
           type: string
           format: date
-        activityLevel:
+        activity_level:
           type: string
         goal:
           type: string
@@ -256,8 +314,8 @@ components:
           type: string
       example:
         zip: 17207
-        lastName: lastName
-        signupDate: 2000-01-23
+        last_name: lastName
+        signup_date: 2000-01-23
         goal: goal
         occupation: occupation
         gender: gender
@@ -267,19 +325,19 @@ components:
         commitment: commitment
         availability: availability
         health_condition: health_condition
-        firstName: firstName
+        first_name: firstName
         phone: phone
         dob: 2000-01-23
-        customerId: {}
-        activityLevel: activityLevel
+        customer_id: {}
+        activity_level: activityLevel
         email: ""
     CustomerMeasurement:
       type: object
       properties:
-        customerId:
+        customer_id:
           type: object
           readOnly: true
-        measurementDate:
+        measurement_date:
           type: string
           format: date
         weight:
@@ -288,63 +346,63 @@ components:
         height:
           type: number
           format: double
-        bodyLeftArm:
+        body_left_arm:
           type: number
           format: double
-        bodyRightArm:
+        body_right_arm:
           type: number
           format: double
-        bodyLeftLeg:
+        body_left_leg:
           type: number
           format: double
-        bodyRightLeg:
+        body_right_leg:
           type: number
           format: double
-        bodyNeck:
+        body_neck:
           type: number
           format: double
-        bodyHip:
+        body_hip:
           type: number
           format: double
-        bodyRightLegThigh:
+        body_right_leg_thigh:
           type: number
           format: double
-        bodyLeftLegThigh:
+        body_left_leg_thigh:
           type: number
           format: double
-        dicksonMetric:
+        dickson_metric:
           type: number
           format: double
       example:
-        bodyRightLeg: 2.3021358869347654518833223846741020679473876953125
-        bodyRightLegThigh: 3.61607674925191080461672754609026014804840087890625
-        bodyLeftArm: 1.46581298050294517310021547018550336360931396484375
-        bodyHip: 9.301444243932575517419536481611430644989013671875
+        body_right_leg: 2.3021358869347654518833223846741020679473876953125
+        body_right_leg_thigh: 3.61607674925191080461672754609026014804840087890625
+        body_left_arm: 1.46581298050294517310021547018550336360931396484375
+        body_hip: 9.301444243932575517419536481611430644989013671875
         weight: 0.80082819046101150206595775671303272247314453125
-        measurementDate: 2000-01-23
-        bodyLeftLeg: 5.63737665663332876420099637471139430999755859375
-        dicksonMetric: 4.1456080298839363962315474054776132106781005859375
-        bodyRightArm: 5.962133916683182377482808078639209270477294921875
-        customerId: {}
-        bodyNeck: 7.061401241503109105224211816675961017608642578125
-        bodyLeftLegThigh: 2.027123023002321833274663731572218239307403564453125
+        measurement_date: 2000-01-23
+        body_left_leg: 5.63737665663332876420099637471139430999755859375
+        dickson_metric: 4.1456080298839363962315474054776132106781005859375
+        body_right_arm: 5.962133916683182377482808078639209270477294921875
+        customer_id: {}
+        body_neck: 7.061401241503109105224211816675961017608642578125
+        body_left_leg_thigh: 2.027123023002321833274663731572218239307403564453125
         height: 6.02745618307040320615897144307382404804229736328125
     Exercise:
       type: object
       properties:
-        exerciseId:
+        exercise_id:
           type: object
         name:
           type: string
         description:
           type: string
-        equipmentRequired:
+        equipment_required:
           type: string
-        exerciseType:
+        exercise_type:
           type: string
-        musclesTargeted:
+        muscles_targeted:
           type: string
-        setBreak:
+        set_break:
           type: integer
           description: the time in seconds to rest between each set
         repetitions:
@@ -353,23 +411,23 @@ components:
         sets:
           type: integer
           description: a set is composed of a number of repititions
-        exerciseEstDuration:
+        exercise_es_duration:
           type: integer
           description: The time allocated to perform exercise
-        exerciseTag:
+        exercise_tag:
           type: array
           items: {}
       example:
-        exerciseId: {}
+        exercis_id: {}
         sets: 1
-        exerciseTag:
+        exercise_tag:
         - ""
         - ""
-        exerciseType: exerciseType
+        exercise_type: exerciseType
         name: name
-        exerciseEstDuration: 5
+        exercise_est_duration: 5
         description: description
-        equipmentRequired: equipmentRequired
-        setBreak: 0
+        equipment_required: equipmentRequired
+        set_break: 0
         repetitions: 6
-        musclesTargeted: musclesTargeted
+        muscles_targeted: musclesTargeted

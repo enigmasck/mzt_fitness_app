@@ -1,121 +1,101 @@
 const Exercise = require('../models/exercise.model.js');
 
-exports.findAll = (req, res) => {
-    Exercise.find()
-    .then(exercises => {
-        res.send(exercises);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occured while retrieving exercises."
+exports.findAll = function() {
+  return new Promise(function(resolve, reject) {
+        Exercise.find()
+        .then(exercises => {
+            resolve(exercises);
+        }).catch(err => {
+            reject(err.message || "Some error occured while retrieving exercises.");
         });
     });
 };
 
-exports.findOne = (req, res) => {
-    Exercise.findById(req.params.exerciseId)
-    .then(exercises => {
-        if(!exercises) {
-            return res.status(404).send({
-                message: "Customer not found with id " + req.params.exerciseId
-            });            
-        }
-        res.send(exercises);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Exercise not found with id " + req.params.exerciseId
-            });                
-        }
-        return res.status(500).send({
-            message: "Error retrieving exercise with id " + req.params.exerciseId
+exports.findOne = function(exercise_id) {
+  return new Promise(function(resolve, reject) {
+        Exercise.findById(exercise_id)
+        .then(exercises => {
+            if(!exercises) {
+                reject("Customer not found with id " + exercise_id);            
+            }
+            resolve(exercises);
+        }).catch(err => {
+            if(err.kind === 'ObjectId') {
+                reject("Exercise not found with id " + exercise_id);                
+            }
+            reject("Error retrieving exercise with id " + exercise_id);
         });
     });
 };
 
 // Create and save a new exercise
-exports.create = (req, res) => {
-    // Validate request
-    //if(!req.body.content) {
-    //    return res.status(400).send({
-    //        message: "Exercise content can not be empty"
-    //    });
-    //}
+exports.create = function(ex) {
+  return new Promise(function(resolve, reject) {
+        if(!exercise) {
+            resolve("Exercise content can not be empty");
+        }
+        console.log('before new exercise');
+        const exercise = new Exercise({
+            name: ex.name || "Untitled Exercise", 
+            description: ex.description || "NA",
+            equipement_required: ex.equipement_required || "NA",
+            exercise_type: ex.exercise_type || "NA",
+            muscles_targeted: ex.muscles_targeted || "NA",
+            set_break: ex.set_break || "NA",
+            repetition: ex.repetition || "NA",
+            sets: ex.sets || "NA",
+            exercise_est_duration: ex.exercise_est_duration || "NA", 
+            exercise_tag: ex.exercise_tag || "NA"
+        });
 
-    // Create an exercise
-    const exercise = new Exercise({
-        name: req.body.name || "Untitled Exercise", 
-        description: req.body.description || "NA",
-        equipement_required: req.body.equipement_required || "NA",
-        exercise_type: req.body.exercise_type || "NA",
-        muscles_targeted: req.body.muscles_targeted || "NA",
-        set_break: req.body.set_break || "NA",
-        repetition: req.body.repetition || "NA",
-        sets: req.body.sets || "NA",
-        exercise_est_duration: req.body.exercise_est_duration || "NA", 
-        exercise_tag: req.body.exercise_tag || "NA"
-    });
-
-    // Save the exercise in the database
-    exercise.save()
-    .then(data => {
-        res.send(data);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while creating the exercise."
+        exercise.save()
+        .then(data => {
+            resolve(data);
+            console.log('data saved');
+        }).catch(err => {
+            reject(err.message || "Some error occurred while creating the exercise");
         });
     });
 };
 
 // Update an exercise identified by the exerciseId in the request
-exports.update = (req, res) => {
-    // Validate Request
-    //if(!req.body.content) {
-    //    return res.status(400).send({
-    //        message: "Exercise content can not be empty"
-    //    });
-    //}
-
-    // Find exercise and update its name with the request body
-    Exercise.findByIdAndUpdate(req.params.exerciseId, {
-        name: req.body.name || "Untitled Exercise" 
-    }, {new: true})
-    .then(exercises => {
-        if(!exercises) {
-            return res.status(404).send({
-                message: "Exercise not found with id " + req.params.exerciseId
-            });
+exports.update = function(ex) {
+  return new Promise(function(resolve, reject) {
+        if(!ex) {
+            resolve("Exercise content can not be empty");
         }
-        res.send(exercises);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Exercise not found with id " + req.params.exerciseId
-            });                
-        }
-        return res.status(500).send({
-            message: "Error updating exercise with id " + req.params.exerciseId
+        // Find exercise and update its name with the request body
+        Exercise.findByIdAndUpdate(ex.exercise_id, {
+            name: ex.name || "Untitled Exercise" 
+        }, {new: true})
+        .then(exercises => {
+            if(!exercises) {
+                reject("Exercise not found with id " + ex.exercise_id);
+            }
+            resolve(exercises);
+        }).catch(err => {
+            if(err.kind === 'ObjectId') {
+                reject("Exercise not found with id " + ex.exercise_id);               
+            }
+           reject("Error updating exercise with id " + ex.exercise_id);
         });
     });
 };
 
 // Delete an exercise with the specified exerciseId in the request
-exports.delete = (req, res) => {
-    Exercise.findByIdAndRemove(req.params.exerciseId)
-    .then(exercises => {
-        if(!exercises) {
-            return res.status(404).send({
-                message: "Exercise not found with id " + req.params.exerciseId
-            });
-        }
-        res.send({message: "Exercise deleted successfully!"});
-    }).catch(err => {
-        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
-            return res.status(404).send({
-                message: "Exercise not found with id " + req.params.exerciseId
-            });                
-        }
-        return res.status(500).send({
-            message: "Could not delete exercise with id " + req.params.exerciseId
+exports.delete = function(exId) {
+  return new Promise(function(resolve, reject) {
+        Exercise.findByIdAndRemove(exId)
+        .then(exercises => {
+            if(!exercises) {
+                reject("Exercise not found with id " + exId);
+            }
+            resolve("Exercise deleted successfully!");
+        }).catch(err => {
+            if(err.kind === 'ObjectId' || err.name === 'NotFound') {
+                reject("Exercise not found with id " + exId);               
+            }
+            reject("Could not delete exercise with id " + exId); 
         });
     });
 };

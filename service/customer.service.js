@@ -36,17 +36,17 @@ exports.create = function(cust) {
 
         // Create a customer
         const customer = new Customer({ 
-            first_name: cust.firstName || "NA",
-            last_name: cust.lastName || "NA",
-            signup_date: cust.signupDate || "NA",
+            first_name: cust.first_name || "NA",
+            last_name: cust.last_name || "NA",
+            signup_date: cust.signup_date || "NA",
             gender: cust.gender || "NA",
             dob: cust.dob || "NA",
-            activity_level: cust.activityLevel || "NA",
+            activity_level: cust.activity_level || "NA",
             goal: cust.goal || "NA",
             phone: cust.phone || "NA",
             email: cust.email || "NA",
             address: cust.address || "NA",
-            health_condition: cust.healthCondition || "NA",
+            health_condition: cust.health_condition || "NA",
             occupation: cust.occupation || "NA",
             availability: cust.availability || "NA",
             commitment: cust.commitment || "NA"
@@ -72,37 +72,37 @@ exports.update = function(cust) {
 
         // Find customer and update its name with the request body
         Customer.findByIdAndUpdate(cust.customerId, {
-            first_name: cust.firstName || "NA",
-            last_name: cust.lastName || "NA"
+            first_name: cust.first_name || "NA",
+            last_name: cust.last_name || "NA"
         }, {new: true})
         .then(customers => {
             if(!customers) {
-                reject("Customer not found with id " + cust.customerId);
+                reject("Customer not found with id " + cust.customer_id);
             }
             resolve(customers);
         }).catch(err => {
             if(err.kind === 'ObjectId') {
-                reject("Customer not found with id " + cust.customerId);
+                reject("Customer not found with id " + cust.customer_id);
             }
-            reject("Error updating customer with id " + cust.customerId);
+            reject("Error updating customer with id " + cust.customer_id);
         });
     });
 };
 
 // Delete a customer with the specified customerId in the request
-exports.delete = function(customerId) {
+exports.delete = function(customer_id) {
   return new Promise(function(resolve, reject) {
-    Customer.findByIdAndRemove(customerId)
+    Customer.findByIdAndRemove(customer_id)
     .then(customers => {
         if(!customers) {
-            reject("Customer not found with id " + customerId);
+            reject("Customer not found with id " + customer_id);
         }
         resolve("Customer deleted successfully!");
     }).catch(err => {
             if(err.kind === 'ObjectId' || err.name === 'NotFound') {
-                reject("Customer not found with id " + customerId);            
+                reject("Customer not found with id " + customer_id);            
             }
-            reject("Could not delete customer with id " + customerId);
+            reject("Could not delete customer with id " + customer_id);
         });
     });
 };
