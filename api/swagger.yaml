@@ -11,14 +11,7 @@ paths:
       description: Gets all customer information by customer ID
       operationId: getCustomerById
       parameters:
-      - name: customer_id
-        in: path
-        description: The customer id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
+      - $ref: '#/components/parameters/customerIdParamGet'
       responses:
         200:
           description: OK Customer Info Obtained
@@ -65,21 +58,97 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: customer.controller
+  /customer/addCustomer:
+    post:
+      description: Creates new customer
+      operationId: addCustomer
+      requestBody:
+        description: Add a new customer
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        200:
+          description: OK Customer Info Obtained
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: customer.controller
+  /customer/updateCustomer:
+    post:
+      description: Updates an existing customer
+      operationId: updateCustomer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        200:
+          description: OK Customer Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: customer.controller
+  /customer/deleteCustomer:
+    delete:
+      description: Deletes an existing customer
+      operationId: deleteCustomer
+      parameters:
+        - $ref: '#/components/parameters/customerIdParamDel'
+      responses:
+        200:
+          description: OK Customer Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/parameters/customerIdParamDel'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: customer.controller
   /customer/measurements/{customer_id}:
     get:
       description: Gets list of a customer's measurements by their id. This returns
         multiple measurements if there exists more than 1
       operationId: getCustomerMeasurementsById
       parameters:
-      - name: customer_id
-        in: path
-        description: The customer id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
+      - $ref: '#/components/parameters/customerIdParamGet'
       responses:
         200:
           description: OK Customer Measurement Obtained
@@ -101,19 +170,12 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: Default
-  /program/getProgramById/{programId}:
+  /program/getProgramById/{program_id}:
     get:
       description: Gets all program information by program ID
       operationId: getProgramById
       parameters:
-      - name: programId
-        in: path
-        description: The program id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
+      - $ref: '#/components/parameters/programIdParamGet'
       responses:
         200:
           description: OK Program Info Obtained
@@ -134,7 +196,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: Default
+      x-swagger-router-controller: program.controller
   /program/getAllPrograms:
     get:
       description: Gets list of all programs
@@ -159,7 +221,91 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: Default
+      x-swagger-router-controller: program.controller
+  /program/addProgram:
+    post:
+      description: Creates new program
+      operationId: addProgram
+      requestBody:
+        description: Add a new program
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Program'
+      responses:
+        200:
+          description: OK Program Info Obtained
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: program.controller
+  /program/updateProgram:
+    post:
+      description: Updates an existing program
+      operationId: updateProgram
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Program'
+      responses:
+        200:
+          description: OK Program Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: program.controller
+  /program/deleteProgram:
+    delete:
+      description: Deletes an existing program
+      operationId: deleteProgram
+      parameters:
+        - $ref: '#/components/parameters/programIdParamDel'
+      responses:
+        200:
+          description: OK Program Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/parameters/programIdParamDel'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: program.controller
   /customer/measurements/:
     get:
       description: Gets list of a customer's measurements by their id and measurement
@@ -235,14 +381,7 @@ paths:
       description: Gets an exercise by ID
       operationId: getExerciseById
       parameters:
-      - name: exercise_id
-        in: path
-        description: The exercise id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
+      - $ref: '#/components/parameters/exerciseIdParamGet'
       responses:
         200:
           description: OK Exercise Info Obtained
@@ -323,7 +462,87 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: exercise.controller
+  /exercise/deleteExercise:
+    delete:
+      description: Deletes an existing exercise
+      operationId: deleteExercise
+      parameters:
+        - $ref: '#/components/parameters/exerciseIdParamDel'
+      responses:
+        200:
+          description: OK Exercise Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/parameters/exerciseIdParamDel'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: exercise.controller
 components:
+  parameters:
+    customerIdParamGet:
+      name: customer_id
+      in: path
+      description: the id of the customer
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    customerIdParamDel:
+      name: customer_id
+      in: query
+      description: the id of the customer
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    exerciseIdParamGet:
+      name: exercise_id
+      in: path
+      description: the id of the exercise
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    exerciseIdParamDel:
+      name: exercise_id
+      in: query
+      description: the id of the exercise
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    programIdParamGet:
+      name: program_id
+      in: path
+      description: the id of the program
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    programIdParamDel:
+      name: program_id
+      in: query
+      description: the id of the program
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
   schemas:
     Customer:
       type: object

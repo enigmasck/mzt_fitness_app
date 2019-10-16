@@ -27,7 +27,7 @@ exports.findOne = function (custId) {
 };
 
 // Create and save a new customer
-exports.create = function () {
+exports.create = function (cust) {
     return new Promise(function (resolve, reject) {
         // Validate request
         if(!cust) {
@@ -36,20 +36,20 @@ exports.create = function () {
 
         // Create a customer
         const customer = new Customer({ 
-            first_name: cust.first_name || "NA",
-            last_name: cust.last_name || "NA",
-            signup_date: cust.signup_date || "NA",
-            gender: cust.gender || "NA",
-            dob: cust.dob || "NA",
-            activity_level: cust.activity_level || "NA",
-            goal: cust.goal || "NA",
-            phone: cust.phone || "NA",
-            email: cust.email || "NA",
-            address: cust.address || "NA",
-            health_condition: cust.health_condition || "NA",
-            occupation: cust.occupation || "NA",
-            availability: cust.availability || "NA",
-            commitment: cust.commitment || "NA"
+            first_name: cust['first_name'] || "NA",
+            last_name: cust['last_name'] || "NA",
+            signup_date: cust['signup_date'] || 0000-00-00,
+            gender: cust['gender'] || "NA",
+            dob: cust['dob'] || "NA",
+            activity_level: cust['activity_level'] || "NA",
+            goal: cust['goal'] || "NA",
+            phone: cust['phone'] || "NA",
+            email: cust['email'] || "NA",
+            address: cust['address'] || "NA",
+            health_condition: cust['health_condition'] || "NA",
+            occupation: cust['occupation'] || "NA",
+            availability: cust['availability'] || "NA",
+            commitment: cust['commitment'] || "NA"
         });
 
         // Save the customer in the database
@@ -71,20 +71,20 @@ exports.update = function(cust) {
         }
 
         // Find customer and update its name with the request body
-        Customer.findByIdAndUpdate(cust.customerId, {
-            first_name: cust.first_name || "NA",
-            last_name: cust.last_name || "NA"
+        Customer.findByIdAndUpdate(cust['customer_id'], {
+            first_name: cust['first_name'] || "NA",
+            last_name: cust['last_name'] || "NA"
         }, {new: true})
         .then(customers => {
             if(!customers) {
-                reject("Customer not found with id " + cust.customer_id);
+                reject("Customer not found with id " + cust['customer_id']);
             }
             resolve(customers);
         }).catch(err => {
             if(err.kind === 'ObjectId') {
-                reject("Customer not found with id " + cust.customer_id);
+                reject("Customer not found with id " + cust['customer_id']);
             }
-            reject("Error updating customer with id " + cust.customer_id);
+            reject("Error updating customer with id " + cust['customer_id']);
         });
     });
 };

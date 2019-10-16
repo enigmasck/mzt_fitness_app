@@ -31,21 +31,20 @@ exports.findOne = function(exercise_id) {
 // Create and save a new exercise
 exports.create = function(ex) {
   return new Promise(function(resolve, reject) {
-        if(!exercise) {
+        if(!ex) {
             resolve("Exercise content can not be empty");
         }
-        console.log('before new exercise');
         const exercise = new Exercise({
-            name: ex.name || "Untitled Exercise", 
-            description: ex.description || "NA",
-            equipement_required: ex.equipement_required || "NA",
-            exercise_type: ex.exercise_type || "NA",
-            muscles_targeted: ex.muscles_targeted || "NA",
-            set_break: ex.set_break || "NA",
-            repetition: ex.repetition || "NA",
-            sets: ex.sets || "NA",
-            exercise_est_duration: ex.exercise_est_duration || "NA", 
-            exercise_tag: ex.exercise_tag || "NA"
+            name: ex['name'] || "Untitled Exercise", 
+            description: ex['description'] || "NA",
+            equipement_required: ex['equipement_required'] || "NA",
+            exercise_type: ex['exercise_type'] || "NA",
+            muscles_targeted: ex['muscles_targeted'] || "NA",
+            set_break: ex['set_break'] || 0,
+            repetition: ex['repetition'] || 0,
+            sets: ex['sets'] || 0,
+            exercise_est_duration: ex['exercise_est_duration'] || 0, 
+            exercise_tag: ex['exercise_tag'] || "NA"
         });
 
         exercise.save()
@@ -65,19 +64,19 @@ exports.update = function(ex) {
             resolve("Exercise content can not be empty");
         }
         // Find exercise and update its name with the request body
-        Exercise.findByIdAndUpdate(ex.exercise_id, {
-            name: ex.name || "Untitled Exercise" 
+        Exercise.findByIdAndUpdate(ex['exercise_id'], {
+            name: ex['name'] || "Untitled Exercise" 
         }, {new: true})
         .then(exercises => {
             if(!exercises) {
-                reject("Exercise not found with id " + ex.exercise_id);
+                reject("Exercise not found with id " + ex['exercise_id']);
             }
             resolve(exercises);
         }).catch(err => {
             if(err.kind === 'ObjectId') {
-                reject("Exercise not found with id " + ex.exercise_id);               
+                reject("Exercise not found with id " + ex['exercise_id']);               
             }
-           reject("Error updating exercise with id " + ex.exercise_id);
+           reject("Error updating exercise with id " + ex['exercise_id']);
         });
     });
 };

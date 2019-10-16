@@ -27,86 +27,72 @@ exports.findOne = function (progId) {
 };
 
 // Create and save a new program
-exports.create = function () {
+exports.create = function (prog) {
     return new Promise(function (resolve, reject) {
         // Validate request
-        if (!req.body.content) {
+        if (!prog) {
             reject('Program content can not be empty');
         }
 
         // Create a program
         const program = new Program({
-            programID: req.body.programid || "NA",
-            title: req.body.title || "NA",
-            description: req.body.description || "NA",
-            programSDate: req.body.programsdate || "NA",
-            programEDate: req.body.programedate || "NA",
-            coachID: req.body.coachid || "NA"
+            title: prog['title'] || "No title",
+            description: prog['description'] || "No description",
+            programSDate: prog['programsdate'] || 0000-00-00,
+            programEDate: prog['programedate'] || 0000-00-00,
         });
 
         // Save the program in the database
         program.save()
                 .then(data => {
-                    res.send(data);
+                    resolve(data);
                 }).catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while creating the program."
-            });
+            reject(err.message || "Some error occurred while creating the program.");
         });
     });
 };
 
 // Update a program identified by the programId in the request
-exports.update = (req, res) => {
-    // Validate Request
-    if (!req.body.content) {
-        return res.status(400).send({
-            message: "Program content can not be empty"
-        });
-    }
-
-    // Find program and update its name with the request body
-    Program.findByIdAndUpdate(req.params.programId, {
-        title: req.body.title || "NA",
-        discription: req.body.discription || "NA"
-    }, {new : true})
-            .then(programs => {
-                if (!programs) {
-                    return res.status(404).send({
-                        message: "Program not found with id " + req.params.programId
-                    });
-                }
-                res.send(programs);
-            }).catch(err => {
-        if (err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Program not found with id " + req.params.programId
-            });
+exports.update = function (prog) {
+    return new Promise(function (resolve, reject) {
+        // Validate Request
+        if (!prog) {
+            reject("Program content can not be empty");
         }
-        return res.status(500).send({
-            message: "Error updating program with id " + req.params.programId
+
+        // Find program and update its name with the request body
+        Program.findByIdAndUpdate(prog['program_id'], {
+            title: prog['title'] || "NA",
+            discription: prog['discription'] || "NA"
+        }, {new : true})
+                .then(programs => {
+                    if (!programs) {
+                        reject("Program not found with id " + prog['program_id']);
+                    }
+                    resolve(programs);
+                }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject("Program not found with id " + prog['program_id']);
+            }
+            reject("Error updating program with id " + prog['program_id']);
         });
     });
 };
 
 // Delete a program with the specified programId in the request
-exports.delete = (req, res) => {
-    Program.findByIdAndRemove(req.params.programId)
-            .then(programs => {
-                if (!programs) {
-                    return res.status(404).send({
-                        message: "Program not found with id " + req.params.programId
-                    });
-                }
-                res.send({message: "Program deleted successfully!"});
-            }).catch(err => {
-        if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-            return res.status(404).send({
-                message: "Program not found with id " + req.params.programId
-            });
-        }
-        return res.status(500).send({
-            message: "Could not delete program with id " + req.params.programId
+exports.delete = function (program_id) {
+    return new Promise(function (resolve, reject) {
+        Program.findByIdAndRemove(program_id)
+                .then(programs => {
+                    if (!programs) {
+                        reject("Program not found with id " + program_id);
+                    }
+                    resolve("Program deleted successfully!");
+                }).catch(err => {
+            if (err.kind === 'ObjectId' || err.name === 'NotFound') {
+                reject("Program not found with id " + program_id);
+            }
+            reject("Could not delete program with id " + program_id);
         });
     });
 };

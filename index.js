@@ -19,7 +19,14 @@ mongoose.connect(dbConfig.url, {
 	console.log('Could not connect to the database. Exiting now...', err);
 });
 
+var express = require('express')();
+var bodyParser = require('body-parser');
+var multer  = require('multer');
 var app = require('connect')();
+app.use(express);
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(multer()); // for parsing multipart/form-data
 var oas3Tools = require('oas3-tools');
 var jsyaml = require('js-yaml');
 var serverPort = 8080;

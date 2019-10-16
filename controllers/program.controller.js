@@ -1,11 +1,24 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var Exercise = require('../service/exercise.service');
+var Program = require('../service/program.service');
 
-module.exports.getExerciseById = function getExerciseById (req, res, next) {
-  var exerciseId = req.swagger.params['exercise_id'].value;
-  Exercise.findOne(exerciseId)
+module.exports.getAllPrograms = function getAllPrograms (req, res, next) {
+  console.log('getAllPrograms');
+  Program.findAll().then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+
+};
+
+module.exports.getProgramById = function getProgramById (req, res, next) {
+  console.log('getProgramById');
+  var program_id = req.swagger.params['program_id'].value;
+  console.log('getProgramById='+program_id);
+  Program.findOne(program_id)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -14,8 +27,8 @@ module.exports.getExerciseById = function getExerciseById (req, res, next) {
     });
 };
 
-module.exports.getAllExercises = function getAllExercises (req, res, next) {
-  Exercise.findAll()
+module.exports.addProgram = function addProgram (req, res, next) {
+  Program.create(req.body)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -24,8 +37,8 @@ module.exports.getAllExercises = function getAllExercises (req, res, next) {
     });
 };
 
-module.exports.addExercise = function addExercise (req, res, next) {
-  Exercise.create(req.body)
+module.exports.updateProgram = function updateProgram (req, res, next) {
+  Program.update(req.body)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -34,18 +47,8 @@ module.exports.addExercise = function addExercise (req, res, next) {
     });
 };
 
-module.exports.updateExercise = function updateExercise (req, res, next) {
-  Exercise.update(req.body)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
-};
-
-module.exports.deleteExercise = function deleteExercise (req, res, next) {
-  Exercise.delete(req.query['exercise_id'])
+module.exports.deleteProgram = function deleteProgram (req, res, next) {
+  Program.delete(req.query['program_id'])
     .then(function (response) {
       utils.writeJson(res, response);
     })
