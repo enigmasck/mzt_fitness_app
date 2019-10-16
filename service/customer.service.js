@@ -1,24 +1,24 @@
 const Customer = require('../models/customer.model.js');
 
-exports.findAll = function() {
-  return new Promise(function(resolve, reject) {
-    Customer.find()
-    .then(customers => {
-        resolve(customers);
-    }).catch(err => {
-        reject('IT WAS REJECTED');
+exports.findAll = function () {
+    return new Promise(function (resolve, reject) {
+        Customer.find()
+                .then(customers => {
+                    resolve(customers);
+                }).catch(err => {
+            reject('IT WAS REJECTED');
+        });
     });
-  });
 };
 
-exports.findOne = function(custId) {
-  return new Promise(function(resolve, reject) {
+exports.findOne = function (custId) {
+    return new Promise(function (resolve, reject) {
         Customer.findById(custId)
-        .then(customers => {
-            resolve(customers);
-        }).catch(err => {
-            if(err.kind === 'ObjectId') {
-                reject('Customer Not Found By ID');            
+                .then(customers => {
+                    resolve(customers);
+                }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject('Customer Not Found By ID');
             }
             //TODO setup real error messages
             reject('INTERNAL ERROR');
@@ -27,8 +27,8 @@ exports.findOne = function(custId) {
 };
 
 // Create and save a new customer
-exports.create = function(cust) {
-  return new Promise(function(resolve, reject) {
+exports.create = function () {
+    return new Promise(function (resolve, reject) {
         // Validate request
         if(!cust) {
             reject('Customer content can not be empty');
