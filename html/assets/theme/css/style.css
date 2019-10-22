@@ -49,6 +49,12 @@ pre {
   justify-content: center;
   -webkit-justify-content: center; }
 
+.centerize {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
 a {
   font-style: normal;
   font-weight: 400;
