@@ -2792,6 +2792,12 @@ section.lazy-placeholder:after {
 .cid-rFCyM8AuwD {
   background-image: url("../../../assets/images/background1.jpg");
 }
+
+.cid-endFocusSession {
+  background-image: url("../../../assets/images/focus_end_seesion.jpg");
+  opacity: 0.9;
+}
+
 .cid-rFCyM8AuwD .mbr-section-subtitle {
   letter-spacing: .2rem;
 }
