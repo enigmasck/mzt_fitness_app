@@ -92,7 +92,7 @@ body {
   border-radius: 3px;
 }
 .bg-primary {
-  background-color: #149dcc !important;
+  background-color: #14cc3e#14cc3e !important;
 }
 .bg-success {
   background-color: #f7ed4a !important;
@@ -108,8 +108,8 @@ body {
 }
 .btn-primary,
 .btn-primary:active {
-  background-color: #149dcc !important;
-  border-color: #149dcc !important;
+  background-color: #14cc3e !important;
+  border-color: #14cc3e !important;
   color: #ffffff !important;
 }
 .btn-primary:hover,
@@ -280,14 +280,14 @@ body {
 .btn-primary-outline.focus,
 .btn-primary-outline.active {
   color: #ffffff;
-  background-color: #149dcc;
-  border-color: #149dcc;
+  background-color: #14cc3e;
+  border-color: #14cc3e;
 }
 .btn-primary-outline.disabled,
 .btn-primary-outline:disabled {
   color: #ffffff !important;
-  background-color: #149dcc !important;
-  border-color: #149dcc !important;
+  background-color: #14cc3e !important;
+  border-color: #14cc3e !important;
 }
 .btn-secondary-outline,
 .btn-secondary-outline:active {
@@ -424,7 +424,7 @@ body {
   border-color: #ffffff;
 }
 .text-primary {
-  color: #149dcc !important;
+  color: #14cc3e !important;
 }
 .text-secondary {
   color: #ff3366 !important;
@@ -507,8 +507,8 @@ a.text-black:focus {
   border-radius: 100px !important;
 }
 .mbr-gallery-filter li.active .btn {
-  background-color: #149dcc;
-  border-color: #149dcc;
+  background-color: #14cc3e;
+  border-color: #14cc3e;
   color: #ffffff;
 }
 .mbr-gallery-filter li.active .btn:focus {
@@ -519,7 +519,7 @@ a.text-black:focus {
 }
 a,
 a:hover {
-  color: #149dcc;
+  color: #14cc3e;
 }
 .mbr-plan-header.bg-primary .mbr-plan-subtitle,
 .mbr-plan-header.bg-primary .mbr-plan-price-desc {
@@ -554,7 +554,7 @@ a:hover {
   font-size: 1.6rem;
 }
 blockquote {
-  border-color: #149dcc;
+  border-color: #14cc3e;
 }
 /* Forms */
 .mbr-form .btn {
@@ -610,11 +610,11 @@ blockquote {
 /* Footer */
 .mbr-footer-content li::before,
 .mbr-footer .mbr-contacts li::before {
-  background: #149dcc;
+  background: #14cc3e;
 }
 .mbr-footer-content li a:hover,
 .mbr-footer .mbr-contacts li a:hover {
-  color: #149dcc;
+  color: #14cc3e;
 }
 .footer3 input[type="email"],
 .footer4 input[type="email"] {
@@ -656,7 +656,7 @@ blockquote {
 }
 .jq-selectbox li:hover,
 .jq-selectbox li.selected {
-  background-color: #149dcc;
+  background-color: #14cc3e;
   color: #ffffff;
 }
 .jq-selectbox .jq-selectbox__trigger-arrow,
@@ -669,14 +669,14 @@ blockquote {
 .jq-selectbox:hover .jq-selectbox__trigger-arrow,
 .jq-number__spin.minus:hover:after,
 .jq-number__spin.plus:hover:after {
-  border-top-color: #149dcc;
-  border-bottom-color: #149dcc;
+  border-top-color: #14cc3e;
+  border-bottom-color: #14cc3e;
 }
 .xdsoft_datetimepicker .xdsoft_calendar td.xdsoft_default,
 .xdsoft_datetimepicker .xdsoft_calendar td.xdsoft_current,
 .xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box > div > div.xdsoft_current {
   color: #ffffff !important;
-  background-color: #149dcc !important;
+  background-color: #14cc3e !important;
   box-shadow: none !important;
 }
 .xdsoft_datetimepicker .xdsoft_calendar td:hover,
@@ -1542,7 +1542,7 @@ section.lazy-placeholder:after {
 }
 .cid-rFzBidHWNu .mbr-iconfont {
   font-size: 80px;
-  color: #149dcc;
+  color: #14cc3e;
 }
 .cid-rFzBidHWNu .cards-container {
   display: flex;
@@ -2786,8 +2786,16 @@ section.lazy-placeholder:after {
   background-image: url("../../../assets/images/background4.jpg");
 }
 .cid-rFCyM8AuwD {
-  background-image: url("../../../assets/images/background1.jpg");
+  padding-top: 90px;
+  padding-bottom: 90px;
+  background-image: url("../../../assets/images/challenge_background.jpg");
 }
+
+.cid-endFocusSession {
+  background-image: url("../../../assets/images/focus_end_seesion.jpg");
+  opacity: 0.9;
+}
+
 .cid-rFCyM8AuwD .mbr-section-subtitle {
   letter-spacing: .2rem;
 }
@@ -2826,7 +2834,7 @@ section.lazy-placeholder:after {
   line-height: 20px;
   transition: all .2s;
   color: #ffffff;
-  background: #149dcc;
+  background: #14cc3e;
   width: 25px;
   height: 25px;
   border-radius: 50%;
