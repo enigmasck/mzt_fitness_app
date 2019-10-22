@@ -1132,6 +1132,16 @@ section.lazy-placeholder:after {
 .cid-rFxS6PmLUN .navbar-dropdown.bg-color.transparent.opened {
   background: #232323;
 }
+
+section.lazy-placeholder:after {
+  opacity: 0.3;
+}
+.cid-rFxS6PmLUN {
+  padding-top: 90px;
+  padding-bottom: 90px;
+  background-image: url("../../../assets/images/banner-1-1920x1159.jpg.jpg");
+}
+
 .cid-rFxS6PmLUN a {
   font-style: normal;
 }
@@ -2780,6 +2790,12 @@ section.lazy-placeholder:after {
   padding-bottom: 90px;
   background-image: url("../../../assets/images/challenge_background.jpg");
 }
+
+.cid-endFocusSession {
+  background-image: url("../../../assets/images/focus_end_seesion.jpg");
+  opacity: 0.9;
+}
+
 .cid-rFCyM8AuwD .mbr-section-subtitle {
   letter-spacing: .2rem;
 }
@@ -4158,6 +4174,11 @@ section.lazy-placeholder:after {
   transition: none;
   min-height: 77px;
 }
+
+.cid-rFxS6PmLUN .inlineBlock{
+  display: inline-block;
+}
+
 .cid-rFxS6PmLUN .navbar-dropdown.bg-color.transparent.opened {
   background: #232323;
 }
@@ -4185,7 +4206,7 @@ section.lazy-placeholder:after {
 .cid-rFxS6PmLUN .btn {
   padding: 0.4rem 1.5rem;
   display: inline-flex;
-  align-items: center;
+  
 }
 .cid-rFxS6PmLUN .btn .mbr-iconfont {
   font-size: 1.6rem;
