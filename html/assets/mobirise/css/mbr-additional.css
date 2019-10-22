@@ -1139,7 +1139,7 @@ section.lazy-placeholder:after {
 .cid-rFxS6PmLUN {
   padding-top: 90px;
   padding-bottom: 90px;
-  background-image: url("../../../assets/images/weight_lift_dumbbell.jpg");
+  background-image: url("../../../assets/images/background4.jpg");
 }
 
 .cid-rFxS6PmLUN a {
@@ -4166,6 +4166,11 @@ section.lazy-placeholder:after {
   transition: none;
   min-height: 77px;
 }
+
+.cid-rFxS6PmLUN .inlineBlock{
+  display: inline-block;
+}
+
 .cid-rFxS6PmLUN .navbar-dropdown.bg-color.transparent.opened {
   background: #232323;
 }
@@ -4193,7 +4198,7 @@ section.lazy-placeholder:after {
 .cid-rFxS6PmLUN .btn {
   padding: 0.4rem 1.5rem;
   display: inline-flex;
-  align-items: center;
+  
 }
 .cid-rFxS6PmLUN .btn .mbr-iconfont {
   font-size: 1.6rem;
