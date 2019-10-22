@@ -1132,6 +1132,16 @@ section.lazy-placeholder:after {
 .cid-rFxS6PmLUN .navbar-dropdown.bg-color.transparent.opened {
   background: #232323;
 }
+
+section.lazy-placeholder:after {
+  opacity: 0.3;
+}
+.cid-rFxS6PmLUN {
+  padding-top: 90px;
+  padding-bottom: 90px;
+  background-image: url("../../../assets/images/weight_lift_dumbbell.jpg");
+}
+
 .cid-rFxS6PmLUN a {
   font-style: normal;
 }
