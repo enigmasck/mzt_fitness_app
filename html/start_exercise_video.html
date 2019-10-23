@@ -23,51 +23,60 @@
   
 </head>
 <body>
-  <section class="menu cid-rFxS6PmLUN" once="menu" id="menu1-c">
+  
 
-    
-
+<section class="menu cid-rFxS6PmLUN" once="menu" id="menu1-5">   
     <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm bg-color transparent">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <div class="hamburger">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
-        
+        </button>
         <div class="menu-logo">
             <div class="navbar-brand">
                 <span class="navbar-logo">
                     <a href="https://mobirise.com">
-                         <img src="assets/images/untitled1-1-122x92.png" alt="Mobirise" title="" style="height: 3.8rem;">
+                         <img src="assets/images/logo-mzt.png" alt="Mobirise" title="" style="height: 3.8rem;">
                     </a>
                 </span>
-                <span class="navbar-caption-wrap"><a class="navbar-caption text-white display-4" href="https://mobirise.com">
-                        MZT FITNESS</a></span>
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="https://mobirise.com">
+                        MZT FITNESS
+                    </a>
+                </span>
             </div>
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true"><li class="nav-item">
-                    <a class="nav-link link text-white display-4" href="https://mobirise.com">
+            <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
+                <li class="nav-item">
+                    <a class="nav-link link text-white display-4" href="homepage.html">
                         <span class="mbri-home mbr-iconfont mbr-iconfont-btn"></span>
-                        Services
+                        Home page
                     </a>
-                </li><li class="nav-item">
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link text-white display-4" href="community_page.html">
+                        <span class="mbri-chat mbr-iconfont mbr-iconfont-btn"></span>
+                        Community
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link link text-white display-4" href="https://mobirise.com">
                         <span class="mbri-search mbr-iconfont mbr-iconfont-btn"></span>
                         About Us
                     </a>
-                </li></ul>
-            
+                </li>
+            </ul> 
         </div>
     </nav>
 </section>
 
 <section class="header9 mbr-fullscreen mbr-parallax-background align-center" id="header9-e">
-    <div class="mbr-overlay" style="opacity: 0.8; background-color: rgb(255, 255, 255);">
-        
-    </div>
-
+    <div class="mbr-overlay" style="opacity: 0.3;">       
+    </div>  
     
     <div class="container align-center">
         <label id="timer" class="display-1 align-center" style="padding-top: 20px"></label>
@@ -75,45 +84,47 @@
         <div class="align-right">
             <a id="test"></a>
         </div>
-    </div>
-    
+    </div>  
+    <div class="mbr-section-btn">
+        <a class="btn btn-md btn-secondary display-4" href="end_exercise.html">Finished</a>
+    </div>  
 </section>
 
-    <script>
-        function end(){
-            document.getElementById("timer").innerHTML = "Congratulations!";
-            var a = document.getElementById("test");
-            a.class = "btn btn-md btn-primary btn-lg display-4";
-            a.href = "exercise_in_focus_session.html";
-            a.innerHTML = "Exercise Evaluation";
+<script>
+    function end(){
+        document.getElementById("timer").innerHTML = "Congratulations!";
+        var a = document.getElementById("test");
+        a.class = "btn btn-md btn-primary btn-lg display-4";
+        a.href = "exercise_in_focus_session.html";
+        a.innerHTML = "Exercise Evaluation";
+    }
+    // Set the date we're counting down to
+    var countDownDate = new Date().getTime() + 7000;
+
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = Math.floor((countDownDate - now)/1000);
+        // Display the result in the element with id="demo"
+        document.getElementById("timer").innerHTML = distance;
+
+        // If the count down is finished, write some text
+
+        if (distance < 1) {
+          clearInterval(x);
+          document.getElementById("timer").innerHTML = "GO!";
+          var v = document.createElement('source');
+          v.src = "../video/videoplayback.mp4";
+          v.type = "video/mp4";
+          document.getElementById("video").appendChild(v);
+          document.getElementById("timer").innerHTML = "";
         }
-        // Set the date we're counting down to
-var countDownDate = new Date().getTime() + 7000;
-
-// Update the count down every 1 second
-var x = setInterval(function() {
-
-  // Get today's date and time
-  var now = new Date().getTime();
-
-  // Find the distance between now and the count down date
-  var distance = Math.floor((countDownDate - now)/1000);
-  // Display the result in the element with id="demo"
-  document.getElementById("timer").innerHTML = distance;
-
-  // If the count down is finished, write some text
-  
-  if (distance < 1) {
-    clearInterval(x);
-    document.getElementById("timer").innerHTML = "GO!";
-    var v = document.createElement('source');
-    v.src = "../video/videoplayback.mp4";
-    v.type = "video/mp4";
-    document.getElementById("video").appendChild(v);
-    document.getElementById("timer").innerHTML = "";
-  }
-}, 1000);
-    </script>
+    }, 1000);
+  </script>
   <script src="assets/web/assets/jquery/jquery.min.js"></script>
   <script src="assets/popper/popper.min.js"></script>
   <script src="assets/bootstrap/js/bootstrap.min.js"></script>
@@ -124,7 +135,6 @@ var x = setInterval(function() {
   <script src="assets/touchswipe/jquery.touch-swipe.min.js"></script>
   <script src="assets/parallax/jarallax.min.js"></script>
   <script src="assets/theme/js/script.js"></script>
-  
   
 </body>
 </html>
