@@ -1099,8 +1099,13 @@ section.lazy-placeholder:after {
   color: #c1c1c1 !important;
 }
 .cid-rFxS7jTt2C {
-  background-image: url("../../../assets/images/banner-1-1920x1159.jpg");
+  background-image: url("../../../assets/images/background-login.jpg");
 }
+
+.cid-rFCUpdpwBS {
+  background-image: url("../../../assets/images/background-homepage.jpg");
+}
+
 .cid-rFxS7jTt2C .form-control,
 .cid-rFxS7jTt2C .form-control:focus {
   background: #ffffff;
@@ -2782,13 +2787,11 @@ section.lazy-placeholder:after {
 .cid-rFxS6PmLUN .dropdown-item:hover {
   color: #c1c1c1 !important;
 }
-.cid-rFCyxd8hf3 {
-  background-image: url("../../../assets/images/background4.jpg");
-}
+
 .cid-rFCyM8AuwD {
   padding-top: 90px;
   padding-bottom: 90px;
-  background-image: url("../../../assets/images/challenge_background.jpg");
+  background-image: url("../../../assets/images/background_community.jpg");
 }
 
 .cid-endFocusSession {
