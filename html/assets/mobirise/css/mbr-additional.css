@@ -2902,8 +2902,7 @@ section.lazy-placeholder:after {
 
 
 .cid-rFD0NwyLkn .counter-container ul li:before{
-  position: absolute;
-  left: 0px;
+  position: relative;
   margin-top: -10px;
   padding-top: 3px;
   content: '';
@@ -2921,8 +2920,7 @@ section.lazy-placeholder:after {
 }
 
 .cid-rFD0NwyLkn #load ul li:before{
-  position: absolute;
-  left: 0px;
+  position: relative;
   margin-top: -10px;
   padding-top: 3px;
   content: '';
