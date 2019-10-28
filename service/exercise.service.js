@@ -58,14 +58,24 @@ exports.create = function(ex) {
 };
 
 // Update an exercise identified by the exerciseId in the request
+//https://mongoosejs.com/docs/tutorials/findoneandupdate.html
 exports.update = function(ex) {
   return new Promise(function(resolve, reject) {
+
         if(!ex) {
-            resolve("Exercise content can not be empty");
+            reject("Exercise content can not be empty");
         }
         // Find exercise and update its name with the request body
         Exercise.findByIdAndUpdate(ex['exercise_id'], {
-            name: ex['name'] || "Untitled Exercise" 
+            name: ex['name'] || "Untitled Exercise",
+            description: ex['description'] || "N/A", 
+            equipement_required : ex['equipement_required'] || "N/A",
+            exercise_type : ex['exercise_type'] || "N/A",
+            muscles_targeted : ex['muscles_targeted'] || "N/A",
+            set_break : ex['set_break'] || 0,
+            repetition : ex['repetition'] || 0,
+            sets : ex['sets'] || 0,
+            exercise_est_duration : ex['exercise_est_duration'] || 0
         }, {new: true})
         .then(exercises => {
             if(!exercises) {
@@ -78,7 +88,7 @@ exports.update = function(ex) {
             }
            reject("Error updating exercise with id " + ex['exercise_id']);
         });
-    });
+  });
 };
 
 // Delete an exercise with the specified exerciseId in the request
