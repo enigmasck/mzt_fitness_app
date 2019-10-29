@@ -11,23 +11,35 @@ exports.findAll = (req, res) => {
     });
 };
 
+exports.findAllByProgId = (req, res) => {
+    var query = {'program_id' : req.params.program_id};
+    Session.find(query)
+    .then(sessions => {
+        res.send(sessions);
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message || "Some error occured while retrieving sessions."
+        });
+    });
+};
+
 exports.findOne = (req, res) => {
-    Session.findById(req.params.sessionId)
+    Session.findById(req.params.session_id)
     .then(sessions => {
         if(!sessions) {
             return res.status(404).send({
-                message: "Session not found with id " + req.params.sessionId
+                message: "Session not found with id " + req.params.session_id
             });            
         }
         res.send(sessions);
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "Session not found with id " + req.params.sessionId
+                message: "Session not found with id " + req.params.session_id
             });                
         }
         return res.status(500).send({
-            message: "Error retrieving session with id " + req.params.sessionId
+            message: "Error retrieving session with id " + req.params.session_id
         });
     });
 };
@@ -66,7 +78,7 @@ exports.create = (req, res) => {
     });
 };
 
-// Update a session identified by the sessionId in the request
+// Update a session identified by the session_id in the request
 exports.update = (req, res) => {
     // Validate Request
     if(!req.body.content) {
@@ -76,47 +88,47 @@ exports.update = (req, res) => {
     }
 
     // Find session and update it with the request body
-    Session.findByIdAndUpdate(req.params.sessionId, {
+    Session.findByIdAndUpdate(req.params.session_id, {
         name: req.body.name || "Untitled Session",
         content: req.body.content
     }, {new: true})
     .then(sessions => {
         if(!sessions) {
             return res.status(404).send({
-                message: "Session not found with id " + req.params.sessionId
+                message: "Session not found with id " + req.params.session_id
             });
         }
         res.send(sessions);
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "Session not found with id " + req.params.sessionId
+                message: "Session not found with id " + req.params.session_id
             });                
         }
         return res.status(500).send({
-            message: "Error updating session with id " + req.params.sessionId
+            message: "Error updating session with id " + req.params.session_id
         });
     });
 };
 
-// Delete a session with the specified sessionId in the request
+// Delete a session with the specified session_id in the request
 exports.delete = (req, res) => {
-    Session.findByIdAndRemove(req.params.sessionId)
+    Session.findByIdAndRemove(req.params.session_id)
     .then(sessions => {
         if(!sessions) {
             return res.status(404).send({
-                message: "Session not found with id " + req.params.sessionId
+                message: "Session not found with id " + req.params.session_id
             });
         }
         res.send({message: "Session deleted successfully!"});
     }).catch(err => {
         if(err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({
-                message: "Session not found with id " + req.params.sessionId
+                message: "Session not found with id " + req.params.session_id
             });                
         }
         return res.status(500).send({
-            message: "Could not delete session with id " + req.params.sessionId
+            message: "Could not delete session with id " + req.params.session_id
         });
     });
 };

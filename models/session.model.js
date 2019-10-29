@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const SessionSchema = mongoose.Schema({
 	session_id: String,
-        sessin_type: String,
+        session_type: String,
         session_start_date: Date,
         session_end_date: Date,
         session_coach_notes: String,

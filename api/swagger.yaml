@@ -487,6 +487,146 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: exercise.controller
+      
+  /session/getAllSessionsByProgId/{program_id}:
+    get:
+      description: Gets a session by program ID
+      operationId: getAllSessionsByProgId
+      parameters:
+      - $ref: '#/components/parameters/programIdParamGet'
+      responses:
+        200:
+          description: OK Session Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: session.controller
+  /session/getSessionById/{session_id}:
+    get:
+      description: Gets an session by ID
+      operationId: getSessionById
+      parameters:
+      - $ref: '#/components/parameters/sessionIdParamGet'
+      responses:
+        200:
+          description: OK Session Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: session.controller
+  /session/addSession:
+    post:
+      description: Creates new session
+      operationId: addSession
+      requestBody:
+        description: Add a new session
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Session'
+      responses:
+        200:
+          description: OK Session Info Obtained
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: session.controller
+  /session/updateSession:
+    post:
+      description: Updates an existing session
+      operationId: updateSession
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Session'
+      responses:
+        200:
+          description: OK Session Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: session.controller
+  /session/deleteSession:
+    delete:
+      description: Deletes an existing session
+      operationId: deleteSession
+      parameters:
+        - $ref: '#/components/parameters/sessionIdParamDel'
+      responses:
+        200:
+          description: OK session Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/parameters/sessionIdParamDel'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: session.controller
+
 components:
   parameters:
     customerIdParamGet:
@@ -538,6 +678,24 @@ components:
       name: program_id
       in: query
       description: the id of the program
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    sessionIdParamGet:
+      name: session_id
+      in: path
+      description: the id of the session
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    sessionIdParamDel:
+      name: session_id
+      in: query
+      description: the id of the session
       required: true
       style: simple
       explode: false
@@ -733,3 +891,48 @@ components:
         programSDate: 2019-10-11
         programEDate: 2019-11-11
         coachId: {}
+    Session:
+        type: object
+        properties:
+            session_id:
+                type: object
+            session_type:
+                type: string
+            session_start_date:
+                type: string
+                format: date
+            session_end_date:
+                type: string
+                format: date
+            session_coach_notes:
+                type: string
+            session_customer_feedback:
+                type: string
+            program_id:
+                type: object
+            coach_id:
+                type: object
+            exercise_tag:
+                type: array
+                items: {}
+            measurement_date:
+                type: string
+                format: date
+            customer_id:
+                type: object
+        example:
+            session_id: {}
+            session_type: Exercise Session
+            session_start_date: 2019-10-29
+            session_end_date: 2019-10-29
+            session_coach_notes: Good Job!
+            session_customer_feedback: Thank you!
+            program_id: {}
+            coach_id: {}
+            exercise_tag: {}
+            measurement_date: 2019-10-29
+            customer_id: {}
+            
+            
+            
+            
