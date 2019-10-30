@@ -62,7 +62,7 @@ exports.create = (req, res) => {
         program_id: req.body.program_id || "NA",
         coach_id: req.body.coach_id || "NA",
         exercise_tag: req.body.exercise_tag || "NA",
-        measurement_date: req.body.measurement_date || "NA",
+        measurement_date: req.body.measurement_date || "NA"
     });
 
     session.save()

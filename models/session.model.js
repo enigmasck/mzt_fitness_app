@@ -7,8 +7,8 @@ const SessionSchema = mongoose.Schema({
         session_end_date: Date,
         session_coach_notes: String,
         session_customer_feedback: String,
-        program_id: Number,
-        coach_id: Number,
+        program_id: String,
+        coach_id: String,
         exercise_tag: Array,
         measurement_date: Date,
         customer_id: String

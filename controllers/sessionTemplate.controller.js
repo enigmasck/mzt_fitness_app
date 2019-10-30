@@ -1,7 +1,7 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var SessionTemp = require('../service/session.template.service');
+var SessionTemp = require('../service/sessionTemplate.service');
 
 module.exports.getSessionTempById = function getSessionTempById (req, res, next) {
   var sessionId = req.swagger.params['session_template_id'].value;
@@ -46,7 +46,7 @@ module.exports.updateSessionTemp = function updateSessionTemp (req, res, next) {
 };
 
 module.exports.deleteSessionTemp = function deleteSessionTemp (req, res, next) {
-  SessionTemp.delete(req.query['session_id'])
+  SessionTemp.delete(req.query['session_template_id'])
     .then(function (response) {
       utils.writeJson(res, response);
     })

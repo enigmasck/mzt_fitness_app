@@ -45,37 +45,35 @@ exports.findOne = (req, res) => {
 };
 
 // Create and save a new session
-exports.create = (req, res) => {
+exports.create = function(sess) {
+  return new Promise(function(resolve, reject) {
     // Validate request
-    if(!req.body.content) {
-        return res.status(400).send({
-            message: "Session content can not be empty"
-        });
+    if(!sess) {
+        resolve("Session content can not be empty");
     }
 
     // Create a session
     const session = new Session({
-        name: req.body.name || "Untitled Session", 
-        sessin_type: req.body.sessin_type || "NA",
-        session_start_date: req.body.session_start_date || "NA",
-        session_end_date: req.body.session_end_date || "NA",
-        session_coach_notes: req.body.session_coach_notes || "NA",
-        session_customer_feedback: req.body.session_customer_feedback || "NA",
-        program_id: req.body.program_id || "NA",
-        coach_id: req.body.coach_id || "NA",
-        exercise_tag: req.body.exercise_tag || "NA",
-        measurement_date: req.body.measurement_date || "NA",
+        name: sess['name'] || "Untitled Session", 
+        sessin_type: sess['session_type'] || "NA",
+        session_start_date: sess['ssession_start_date'] || "2000/01/10",
+        session_end_date: sess['ssession_end_date'] || "2000/01/10",
+        session_coach_notes: sess['ssession_coach_notes'] || "NA",
+        session_customer_feedback: sess['session_customer_feedback'] || "NA",
+        program_id: sess['program_id'] || "NA",
+        coach_id: sess['coach_id'] || "NA",
+        exercise_tag: sess['req.body.exercise_tag'] || "NA",
+        measurement_date: sess['measurement_date'] || "2000/01/10"
     });
 
     // Save the session in the database
     session.save()
     .then(data => {
-        res.send(data);
+        resolve(data);
     }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while creating the session."
-        });
+        reject("Some error occurred while creating the session: " + err);
     });
+});
 };
 
 // Update a session identified by the session_id in the request
