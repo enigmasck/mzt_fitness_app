@@ -5,6 +5,7 @@ const SessionTemplateSchema = mongoose.Schema({
         coach_id: String,
         session_type: String,
         session_coach_notes: String,
+        exercise_tag: Array,
         program_template_id: String
 }, {
 	timestamp: true

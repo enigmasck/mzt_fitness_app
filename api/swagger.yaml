@@ -627,6 +627,145 @@ paths:
       - basicAuth: []
       x-swagger-router-controller: session.controller
 
+  /sessionTemplate/getAllSessionTempByProgId/{program_id}:
+    get:
+      description: Gets a session template by program ID
+      operationId: getAllSessionTempByProgId
+      parameters:
+      - $ref: '#/components/parameters/programIdParamGet'
+      responses:
+        200:
+          description: OK Session Template Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SessionTemp'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: sessionTemplate.controller
+  /sessionTemplate/getSessionTempById/{session_template_id}:
+    get:
+      description: Gets an session template by ID
+      operationId: getSessionTempById
+      parameters:
+      - $ref: '#/components/parameters/sessionTempIdParamGet'
+      responses:
+        200:
+          description: OK Session Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SessionTemp'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: sessionTemplate.controller
+  /sessionTemplate/addSessionTemp:
+    post:
+      description: Creates new session template
+      operationId: addSessionTemp
+      requestBody:
+        description: Add a new session template
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionTemp'
+      responses:
+        200:
+          description: OK Session Info Obtained
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionTemp'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: sessionTemplate.controller
+  /sessionTemplate/updateSessionTemp:
+    post:
+      description: Updates an existing session template
+      operationId: updateSessionTemp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionTemp'
+      responses:
+        200:
+          description: OK Session Template Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionTemp'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: sessionTemplate.controller
+  /sessionTemplate/deleteSessionTemp:
+    delete:
+      description: Deletes an existing session template
+      operationId: deleteSession
+      parameters:
+        - $ref: '#/components/parameters/sessionTempIdParamDel'
+      responses:
+        200:
+          description: OK session template Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/parameters/sessionTempIdParamDel'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: sessionTemplate.controller
+
 components:
   parameters:
     customerIdParamGet:
@@ -932,6 +1071,22 @@ components:
             exercise_tag: {}
             measurement_date: 2019-10-29
             customer_id: {}
+    SessionTemp:
+        type: object
+        properties:
+            session_template_id:
+                type: object
+            coach_id:
+                type: object
+            session_type:
+                type: String
+            session_coach_notes:
+                type: String
+            exercise_tag:
+                type: array
+                items: {}
+            program_template_id:
+                type: object
             
             
             
