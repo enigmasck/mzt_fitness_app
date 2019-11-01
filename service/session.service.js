@@ -78,7 +78,7 @@ exports.update = function(sess) {
     if(!sess) {return reject("Session content can not be empty");}
 
     // Find session and update it with the request body
-    Session.findByIdAndUpdate(sess['session_id'], {
+    Session.findByIdAndUpdate(sess['session_id'], {$set:{
         name: sess['name'] || "Untitled Session", 
         session_type: sess['session_type'] || "NA",
         session_start_date: sess['session_start_date'] || "2000/01/10",
@@ -90,7 +90,7 @@ exports.update = function(sess) {
         customer_id: sess['customer_id'] || "NA",
         exercise_tag: sess['exercise_tag'] || "NA",
         measurement_date: sess['measurement_date'] || "2000/01/10"
-    }, {new: true})
+    }}, {new: true})
     .then(sessions => {
         if(!sessions) {
             reject("Session not found with id " + sess['session_id']);
