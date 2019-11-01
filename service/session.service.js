@@ -5,9 +5,7 @@ exports.findAll = (req, res) => {
     .then(sessions => {
         res.send(sessions);
     }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occured while retrieving sessions."
-        });
+        reject("Some error occured while retrieving sessions.");
     });
 };
 

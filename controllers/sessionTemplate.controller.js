@@ -4,7 +4,7 @@ var utils = require('../utils/writer.js');
 var SessionTemp = require('../service/sessionTemplate.service');
 
 module.exports.getSessionTempById = function getSessionTempById (req, res, next) {
-  var sessionId = req.swagger.params['session_template_id'].value;
+  var sessionId = req.swagger.params['session_id'].value;
   SessionTemp.findOne(sessionId)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -15,7 +15,7 @@ module.exports.getSessionTempById = function getSessionTempById (req, res, next)
 };
 
 module.exports.getAllSessionTempByProgId = function getAllSessionTempByProgId (req, res, next) {
-  var programId = req.swagger.params['program_template_id'].value;
+  var programId = req.swagger.params['program_id'].value;
   SessionTemp.findAllByProgId(programId)
     .then(function (response) {
       utils.writeJson(res, response);
