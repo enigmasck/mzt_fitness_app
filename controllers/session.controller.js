@@ -5,6 +5,7 @@ var Session = require('../service/session.service');
 
 module.exports.getSessionById = function getSessionById (req, res, next) {
   var sessionId = req.swagger.params['session_id'].value;
+  console.log('session id = '+ sessionId);
   Session.findOne(sessionId)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -14,8 +15,9 @@ module.exports.getSessionById = function getSessionById (req, res, next) {
     });
 };
 
-module.exports.getAllSessionByProgId = function getAllSessionByProgId (req, res, next) {
+module.exports.getAllSessionsByProgId = function getAllSessionsByProgId (req, res, next) {
   var programId = req.swagger.params['program_id'].value;
+  console.log('progId='+programId);
   Session.findAllByProgId(programId)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -46,7 +48,8 @@ module.exports.updateSession = function updateSession (req, res, next) {
 };
 
 module.exports.deleteSession = function deleteSession (req, res, next) {
-  Session.delete(req.query['session_id'])
+    console.log("session id = " + req.swagger.params['session_id'].value);
+  Session.delete(req.swagger.params['session_id'].value)
     .then(function (response) {
       utils.writeJson(res, response);
     })

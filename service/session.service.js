@@ -11,37 +11,33 @@ exports.findAll = (req, res) => {
     });
 };
 
-exports.findAllByProgId = (req, res) => {
-    var query = {'program_id' : req.params.program_id};
-    Session.find(query)
-    .then(sessions => {
-        res.send(sessions);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occured while retrieving sessions."
+exports.findAllByProgId = function(progId) {
+  return new Promise(function(resolve, reject) {
+        console.log('prog id = ' + progId);
+        var query = {'program_id' : progId};
+        Session.find(query)
+        .then(sessions => {
+            resolve(sessions);
+        }).catch(err => {
+            reject("Some error occured while retrieving sessions.");
         });
     });
 };
-
-exports.findOne = (req, res) => {
-    Session.findById(req.params.session_id)
+exports.findOne = function(sessId) {
+  return new Promise(function(resolve, reject) {
+    Session.findById(sessId)
     .then(sessions => {
         if(!sessions) {
-            return res.status(404).send({
-                message: "Session not found with id " + req.params.session_id
-            });            
+            reject("Session not found with id " + sessId);            
         }
-        res.send(sessions);
+        resolve(sessions);
     }).catch(err => {
         if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Session not found with id " + req.params.session_id
-            });                
+            reject("Session not found with id " + sessId);                
         }
-        return res.status(500).send({
-            message: "Error retrieving session with id " + req.params.session_id
-        });
+        reject("Error retrieving session with id " + sessId);
     });
+});
 };
 
 // Create and save a new session
@@ -51,18 +47,19 @@ exports.create = function(sess) {
     if(!sess) {
         resolve("Session content can not be empty");
     }
-
+    console.log("exercise tags= " + sess['exercise_tag']);
     // Create a session
     const session = new Session({
         name: sess['name'] || "Untitled Session", 
-        sessin_type: sess['session_type'] || "NA",
-        session_start_date: sess['ssession_start_date'] || "2000/01/10",
-        session_end_date: sess['ssession_end_date'] || "2000/01/10",
-        session_coach_notes: sess['ssession_coach_notes'] || "NA",
+        session_type: sess['session_type'] || "NA",
+        session_start_date: sess['session_start_date'] || "2000/01/10",
+        session_end_date: sess['session_end_date'] || "2000/01/10",
+        session_coach_notes: sess['session_coach_notes'] || "NA",
         session_customer_feedback: sess['session_customer_feedback'] || "NA",
         program_id: sess['program_id'] || "NA",
         coach_id: sess['coach_id'] || "NA",
-        exercise_tag: sess['req.body.exercise_tag'] || "NA",
+        customer_id: sess['customer_id'] || "NA",
+        exercise_tag: sess['exercise_tag'] || "NA",
         measurement_date: sess['measurement_date'] || "2000/01/10"
     });
 
@@ -77,56 +74,52 @@ exports.create = function(sess) {
 };
 
 // Update a session identified by the session_id in the request
-exports.update = (req, res) => {
+exports.update = function(sess) {
+  return new Promise(function(resolve, reject) {
     // Validate Request
-    if(!req.body.content) {
-        return res.status(400).send({
-            message: "Session content can not be empty"
-        });
-    }
+    if(!sess) {return reject("Session content can not be empty");}
 
     // Find session and update it with the request body
-    Session.findByIdAndUpdate(req.params.session_id, {
-        name: req.body.name || "Untitled Session",
-        content: req.body.content
+    Session.findByIdAndUpdate(sess['session_id'], {
+        name: sess['name'] || "Untitled Session", 
+        session_type: sess['session_type'] || "NA",
+        session_start_date: sess['session_start_date'] || "2000/01/10",
+        session_end_date: sess['session_end_date'] || "2000/01/10",
+        session_coach_notes: sess['session_coach_notes'] || "NA",
+        session_customer_feedback: sess['session_customer_feedback'] || "NA",
+        program_id: sess['program_id'] || "NA",
+        coach_id: sess['coach_id'] || "NA",
+        customer_id: sess['customer_id'] || "NA",
+        exercise_tag: sess['exercise_tag'] || "NA",
+        measurement_date: sess['measurement_date'] || "2000/01/10"
     }, {new: true})
     .then(sessions => {
         if(!sessions) {
-            return res.status(404).send({
-                message: "Session not found with id " + req.params.session_id
-            });
+            reject("Session not found with id " + sess['session_id']);
         }
-        res.send(sessions);
+        resolve(sessions);
     }).catch(err => {
         if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Session not found with id " + req.params.session_id
-            });                
+            reject("Session not found with id " + sess['session_id']);                
         }
-        return res.status(500).send({
-            message: "Error updating session with id " + req.params.session_id
-        });
+        reject("Error updating session with id " + sess['session_id']);
     });
+});
 };
 
 // Delete a session with the specified session_id in the request
-exports.delete = (req, res) => {
-    Session.findByIdAndRemove(req.params.session_id)
+exports.delete = function(sessId) {
+  return new Promise(function(resolve, reject) {
+    
+    Session.findByIdAndRemove(sessId)
     .then(sessions => {
-        if(!sessions) {
-            return res.status(404).send({
-                message: "Session not found with id " + req.params.session_id
-            });
-        }
-        res.send({message: "Session deleted successfully!"});
+        if(!sessions) {reject("Session not found with id " + sessId);}
+        resolve("Session deleted successfully!");
     }).catch(err => {
         if(err.kind === 'ObjectId' || err.name === 'NotFound') {
-            return res.status(404).send({
-                message: "Session not found with id " + req.params.session_id
-            });                
+            reject("Session not found with id " + sessId);                
         }
-        return res.status(500).send({
-            message: "Could not delete session with id " + req.params.session_id
-        });
+        reject("Could not delete session with id " + sessId);
     });
+});
 };
