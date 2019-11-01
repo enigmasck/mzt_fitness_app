@@ -23,10 +23,13 @@ var express = require('express')();
 var bodyParser = require('body-parser');
 var multer  = require('multer');
 var app = require('connect')();
+var cors = require('cors'); //to enable CORS and all requests (OPTIONS,POST,GET etc..)
 app.use(express);
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use(multer()); // for parsing multipart/form-data
+app.use(multer()); // for parsing multipart/form-datav
+app.use(cors());
+
 var oas3Tools = require('oas3-tools');
 var jsyaml = require('js-yaml');
 var serverPort = 8080;
@@ -38,12 +41,13 @@ var options = {
   useStubs: process.env.NODE_ENV === 'development' // Conditionally turn on stubs (mock mode)
 };
 
-app.use(function(req, res, next) {
+/*app.use(function(req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   next();
-});
+});*/
+
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
 var spec = fs.readFileSync(path.join(__dirname,'api/swagger.yaml'), 'utf8');
@@ -66,6 +70,7 @@ oas3Tools.initializeMiddleware(swaggerDoc, function (middleware) {
 
   // Start the server
   http.createServer(app).listen(serverPort, function () {
+    console.log('CORS-enabled web server listening on port: %d', serverPort);
     console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
     console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
   });
