@@ -28,7 +28,7 @@ app.use(express);
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(multer()); // for parsing multipart/form-datav
-app.use(cors());
+app.use(cors()); //to enable CORS and all requests (OPTIONS,POST,GET etc..)
 
 var oas3Tools = require('oas3-tools');
 var jsyaml = require('js-yaml');
