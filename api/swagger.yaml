@@ -840,6 +840,24 @@ components:
       explode: false
       schema:
         type: string
+    sessionTempIdParamGet:
+        name: session_template_id
+        in: path
+        description: the id of the session template
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+    sessionTempIdParamDel:
+        name: session_template_id
+        in: query
+        description: the id of the session template
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
   schemas:
     Customer:
       type: object
@@ -1035,6 +1053,8 @@ components:
         properties:
             session_id:
                 type: object
+            session_name:
+                type: string
             session_type:
                 type: string
             session_start_date:
@@ -1051,14 +1071,14 @@ components:
                 type: object
             coach_id:
                 type: object
+            customer_id:
+                type: object
             exercise_tag:
                 type: array
                 items: {}
             measurement_date:
                 type: string
                 format: date
-            customer_id:
-                type: object
         example:
             session_id: {}
             session_type: Exercise Session

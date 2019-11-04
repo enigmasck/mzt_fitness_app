@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const SessionSchema = mongoose.Schema({
 	session_id: String,
+        session_name: String,
         session_type: String,
         session_start_date: Date,
         session_end_date: Date,
@@ -9,9 +10,9 @@ const SessionSchema = mongoose.Schema({
         session_customer_feedback: String,
         program_id: String,
         coach_id: String,
+        customer_id: String,
         exercise_tag: Array,
-        measurement_date: Date,
-        customer_id: String
+        measurement_date: Date        
 }, {
 	timestamp: true
 });
