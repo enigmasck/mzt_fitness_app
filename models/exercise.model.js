@@ -10,7 +10,8 @@ const ExerciseSchema = mongoose.Schema({
         set_break: Number,
         repetition: Number,
         sets: Number,
-        exercise_est_duration: Number,   
+        exercise_est_duration: Number,  
+        exercise_img_url: String,
         exercise_tag: Array
 }, {
 	timestamp: true

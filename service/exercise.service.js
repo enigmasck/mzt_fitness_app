@@ -43,7 +43,8 @@ exports.create = function(ex) {
             set_break: ex['set_break'] || 0,
             repetition: ex['repetition'] || 0,
             sets: ex['sets'] || 0,
-            exercise_est_duration: ex['exercise_est_duration'] || 0, 
+            exercise_est_duration: ex['exercise_est_duration'] || 0,
+            exercise_img_url: ex['exercise_img_url'] || "NA",
             exercise_tag: ex['exercise_tag'] || "NA"
         });
 
@@ -75,6 +76,7 @@ exports.update = function(ex) {
             set_break : ex['set_break'] || 0,
             repetition : ex['repetition'] || 0,
             sets : ex['sets'] || 0,
+            exercise_img_url: ex['exercise_img_url'] || "NA",
             exercise_est_duration : ex['exercise_est_duration'] || 0
         }, {new: true})
         .then(exercises => {

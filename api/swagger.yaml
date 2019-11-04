@@ -1007,6 +1007,9 @@ components:
         exercise_es_duration:
           type: integer
           description: The time allocated to perform exercise
+        exercise_img_url:
+            type: string
+            description: image that demonstrates the exercise
         exercise_tag:
           type: array
           items: {}
