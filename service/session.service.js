@@ -76,21 +76,47 @@ exports.update = function(sess) {
   return new Promise(function(resolve, reject) {
     // Validate Request
     if(!sess) {return reject("Session content can not be empty");}
-
+    var raw = {session_name: sess['session_name'], session_type: sess['session_type'], session_start_date: sess['session_start_date'], 
+        session_end_date: sess['session_end_date'], session_coach_notes: sess['session_coach_notes'],
+        session_customer_feedback: sess['session_customer_feedback'], program_id: sess['program_id'], coach_id: sess['coach_id'], 
+        customer_id: sess['customer_id'], exercise_tag: sess['exercise_tag'], measurement_date: sess['measurement_date']};
+    console.log(raw);
+    if (sess['session_name'] == null){
+        delete raw.session_name;
+    }
+    if (sess['session_type'] == null){
+        delete raw.session_type;
+    }
+    if (sess['session_start_date'] == null){
+        delete raw.session_start_date;
+    }
+    if (sess['session_end_date'] == null){
+        delete raw.session_end_date;
+    }
+    if (sess['session_coach_notes'] == null){
+        delete raw.session_coach_notes;
+    }
+    if (sess['session_customer_feedback'] == null){
+        delete raw.session_customer_feedback;
+    }
+    if (sess['program_id'] == null){
+        delete raw.program_id;
+    }
+    if (sess['coach_id'] == null){
+        delete raw.coach_id;
+    }
+    if (sess['customer_id'] == null){
+        delete raw.customer_id;
+    }
+    if (sess['exercise_tag'] == null){
+        delete raw.exercise_tag;
+    }
+    if (sess['measurement_date'] == null){
+        delete raw.measurement_date;
+    }
+    console.log(raw);
     // Find session and update it with the request body
-    Session.findByIdAndUpdate(sess['session_id'], {$set:{
-        name: sess['name'] || "Untitled Session", 
-        session_type: sess['session_type'] || "NA",
-        session_start_date: sess['session_start_date'] || "2000/01/10",
-        session_end_date: sess['session_end_date'] || "2000/01/10",
-        session_coach_notes: sess['session_coach_notes'] || "NA",
-        session_customer_feedback: sess['session_customer_feedback'] || "NA",
-        program_id: sess['program_id'] || "NA",
-        coach_id: sess['coach_id'] || "NA",
-        customer_id: sess['customer_id'] || "NA",
-        exercise_tag: sess['exercise_tag'] || "NA",
-        measurement_date: sess['measurement_date'] || "2000/01/10"
-    }}, {new: true})
+    Session.findByIdAndUpdate(sess['session_id'], raw, {new: true})
     .then(sessions => {
         if(!sessions) {
             reject("Session not found with id " + sess['session_id']);
