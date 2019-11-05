@@ -1,4 +1,5 @@
 const Program = require('../models/program.model.js');
+require('../service/checkNull.js');
 
 exports.findAll = function () {
     return new Promise(function (resolve, reject) {
@@ -59,7 +60,8 @@ exports.update = function (prog) {
         if (!prog) {
             reject("Program content can not be empty");
         }
-
+        var raw = {};
+        raw = checkNull(raw, prog);
         // Find program and update its name with the request body
         Program.findByIdAndUpdate(prog['program_id'], {
             title: prog['title'] || "NA",

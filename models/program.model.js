@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const ProgramSchema = mongoose.Schema({
     program_id: String,
-    title: String,
+    customer: {type: mongoose.Schema.Types.ObjectId, ref: 'Customer'},
+    sessions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Session'}],
     description: String,
     programSDate: Date,
     programEDate: Date,

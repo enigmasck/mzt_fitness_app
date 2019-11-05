@@ -1,4 +1,5 @@
 const Customer = require('../models/customer.model.js');
+require('../service/checkNull.js');
 
 exports.findAll = function () {
     return new Promise(function (resolve, reject) {
@@ -69,12 +70,10 @@ exports.update = function(cust) {
         if(!cust) {
             reject("Customer content can not be empty");
         }
-
+        var raw = {};
+        raw = checkNull(raw, cust);
         // Find customer and update its name with the request body
-        Customer.findByIdAndUpdate(cust['customer_id'], {
-            first_name: cust['first_name'] || "NA",
-            last_name: cust['last_name'] || "NA"
-        }, {new: true})
+        Customer.findByIdAndUpdate(cust['customer_id'], raw, {new: true})
         .then(customers => {
             if(!customers) {
                 reject("Customer not found with id " + cust['customer_id']);
