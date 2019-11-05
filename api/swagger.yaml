@@ -1070,6 +1070,9 @@ components:
         session:
             type: Object
             description: The assigned session
+        exercise_img_url:
+            type: string
+            description: image that demonstrates the exercise
         exercise_tag:
           type: array
           items: {}
