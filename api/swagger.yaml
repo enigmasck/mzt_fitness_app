@@ -542,10 +542,10 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: session.controller
-  /session/assignedSessionByExercise:
+  /session/assignExercise:
     post:
       description: Assigns exercises to session
-      operationId: assignedSessionByExercise
+      operationId: assignExercise
       requestBody:
         description: Assigns exercises to session
         required: true

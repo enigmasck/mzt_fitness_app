@@ -1,30 +1,30 @@
 const Session = require('../models/session.model.js');
-const Exercise = require('../models/exercise.model.js');
+const Exercise = require('../service/exercise.service.js');
 require('../service/checkNull.js');
 
-exports.assignedSession = function (sessId, exeId) {
+exports.assignExercise = function (exeId, sessId) {
     return new Promise(function (resolve, reject) {
-        console.log('exercise id = ' + exeId);
-        Exercise.findById(exeId)
-        .then(exercise => {
-                    if (!exercise) {
-                        reject("Exercise not found with id " + exeId);
-                    }
-                    exercise.session = sessId;
-                    console.log(exercise);
-                    exercise.populate('session');
-                    console.log(exercise);
-                });
-        
-    
-    // prints "The author is Ian Fleming"
-
-                }).catch(err => {
+        Session.findById(sessId).then(session => {
+            if (!session) {
+                reject("Session not found with id " + sessId);
+            }
+            Exercise.findOne(exeId).then(function (exer) {
+                session.exercises.push(exer);
+                Session.findById(sessId).populate('exercises').
+                        exec(function (err, sess) {
+                            if (err)
+                                return handleError(err);
+                            console.log(sess);
+                            resolve(sess);
+                        });
+            });
+        }).catch(err => {
             if (err.kind === 'ObjectId') {
                 reject("Session not found with id " + sessId);
             }
             reject("Error retrieving session with id " + sessId);
         });
+    });
 };
 
 exports.findAll = (req, res) => {
