@@ -8,8 +8,11 @@ exports.assignExercise = function (exeId, sessId) {
             if (!session) {
                 reject("Session not found with id " + sessId);
             }
+            // Find an exercise by ID
             Exercise.findOne(exeId).then(function (exer) {
+                // add the exercise to the session
                 session.exercises.push(exer);
+                // populate the session
                 Session.findById(sessId).populate('exercises').
                         exec(function (err, sess) {
                             if (err)

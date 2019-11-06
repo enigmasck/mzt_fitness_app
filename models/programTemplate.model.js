@@ -1,10 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'), Schema = mongoose.Schema;
+const Session = require('../models/session.model.js');
 
 const ProgramTemplateSchema = mongoose.Schema({
     program_template_id: String,
     title: String,
+    type: String,
     description: String,
-    programDuration: Number
+    duration: Number,
+    sessions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Session'}]
 }, {
     timestamp: true
 });

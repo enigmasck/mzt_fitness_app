@@ -41,7 +41,7 @@ exports.create = function (cust) {
             last_name: cust['last_name'] || "NA",
             signup_date: cust['signup_date'] || 0000-00-00,
             gender: cust['gender'] || "NA",
-            dob: cust['dob'] || "NA",
+            dob: cust['dob'] || 0000-00-00,
             activity_level: cust['activity_level'] || "NA",
             goal: cust['goal'] || "NA",
             phone: cust['phone'] || "NA",
