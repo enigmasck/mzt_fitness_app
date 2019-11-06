@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 const SessionTemplateSchema = mongoose.Schema({
 	session_template_id: String,
         name: String,
-        coach_id: String,
         session_type: String,
         session_coach_notes: String,
-        exercise_tag: Array,
-        program_template_id: String
+        session_duration: Number,
+        session_template_tag: Array,
+        exercises: [{type: mongoose.Schema.Types.ObjectId, ref: 'Exercise'}]
 }, {
 	timestamp: true
 },
 );
 
-module.exports = mongoose.model('session_template', SessionTemplateSchema);
+module.exports = mongoose.model('SessionTemplate', SessionTemplateSchema);

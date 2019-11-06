@@ -1,149 +1,147 @@
 const Session = require('../models/session.model.js');
+const Exercise = require('../service/exercise.service.js');
+require('../service/checkNull.js');
+
+exports.assignExercise = function (exeId, sessId) {
+    return new Promise(function (resolve, reject) {
+        Session.findById(sessId).then(session => {
+            if (!session) {
+                reject("Session not found with id " + sessId);
+            }
+            // Find an exercise by ID
+            Exercise.findOne(exeId).then(function (exer) {
+                // add the exercise to the session
+                session.exercises.push(exer);
+                // populate the session
+                Session.findById(sessId).populate('exercises').
+                        exec(function (err, sess) {
+                            if (err)
+                                return handleError(err);
+                            console.log(sess);
+                            resolve(sess);
+                        });
+            });
+        }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject("Session not found with id " + sessId);
+            }
+            reject("Error retrieving session with id " + sessId);
+        });
+    });
+};
 
 exports.findAll = (req, res) => {
     Session.find()
-    .then(sessions => {
-        res.send(sessions);
-    }).catch(err => {
+            .then(sessions => {
+                res.send(sessions);
+            }).catch(err => {
         reject("Some error occured while retrieving sessions.");
     });
 };
 
-exports.findAllByProgId = function(progId) {
-  return new Promise(function(resolve, reject) {
+exports.findAllByProgId = function (progId) {
+    return new Promise(function (resolve, reject) {
         console.log('prog id = ' + progId);
-        var query = {'program_id' : progId};
+        var query = {'program_id': progId};
         Session.find(query)
-        .then(sessions => {
-            resolve(sessions);
-        }).catch(err => {
+                .then(sessions => {
+                    resolve(sessions);
+                }).catch(err => {
             reject("Some error occured while retrieving sessions.");
         });
     });
 };
-exports.findOne = function(sessId) {
-  return new Promise(function(resolve, reject) {
-    Session.findById(sessId)
-    .then(sessions => {
-        if(!sessions) {
-            reject("Session not found with id " + sessId);            
-        }
-        resolve(sessions);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            reject("Session not found with id " + sessId);                
-        }
-        reject("Error retrieving session with id " + sessId);
+exports.findOne = function (sessId) {
+    return new Promise(function (resolve, reject) {
+        Session.findById(sessId)
+                .then(sessions => {
+                    if (!sessions) {
+                        reject("Session not found with id " + sessId);
+                    }
+                    resolve(sessions);
+                }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject("Session not found with id " + sessId);
+            }
+            reject("Error retrieving session with id " + sessId);
+        });
     });
-});
 };
 
 // Create and save a new session
-exports.create = function(sess) {
-  return new Promise(function(resolve, reject) {
-    // Validate request
-    if(!sess) {
-        resolve("Session content can not be empty");
-    }
-    console.log("exercise tags= " + sess['exercise_tag']);
-    // Create a session
-    const session = new Session({
-        name: sess['name'] || "Untitled Session", 
-        session_type: sess['session_type'] || "NA",
-        session_start_date: sess['session_start_date'] || "2000/01/10",
-        session_end_date: sess['session_end_date'] || "2000/01/10",
-        session_coach_notes: sess['session_coach_notes'] || "NA",
-        session_customer_feedback: sess['session_customer_feedback'] || "NA",
-        program_id: sess['program_id'] || "NA",
-        coach_id: sess['coach_id'] || "NA",
-        customer_id: sess['customer_id'] || "NA",
-        exercise_tag: sess['exercise_tag'] || "NA",
-        measurement_date: sess['measurement_date'] || "2000/01/10"
-    });
+exports.create = function (sess) {
+    return new Promise(function (resolve, reject) {
+        // Validate request
+        if (!sess) {
+            resolve("Session content can not be empty");
+        }
+        console.log("exercise tags= " + sess['exercise_tag']);
+        // Create a session
+        const session = new Session({
+            name: sess['name'] || "Untitled Session",
+            session_type: sess['session_type'] || "NA",
+            session_start_date: sess['session_start_date'] || "2000/01/10",
+            session_end_date: sess['session_end_date'] || "2000/01/10",
+            session_coach_notes: sess['session_coach_notes'] || "NA",
+            session_customer_feedback: sess['session_customer_feedback'] || "NA",
+            program_id: sess['program_id'] || "NA",
+            coach_id: sess['coach_id'] || "NA",
+            customer_id: sess['customer_id'] || "NA",
+            exercise_tag: sess['exercise_tag'] || "NA",
+            measurement_date: sess['measurement_date'] || "2000/01/10"
+        });
 
-    // Save the session in the database
-    session.save()
-    .then(data => {
-        resolve(data);
-    }).catch(err => {
-        reject("Some error occurred while creating the session: " + err);
+        // Save the session in the database
+        session.save()
+                .then(data => {
+                    resolve(data);
+                }).catch(err => {
+            reject("Some error occurred while creating the session: " + err);
+        });
     });
-});
 };
 
 // Update a session identified by the session_id in the request
-exports.update = function(sess) {
-  return new Promise(function(resolve, reject) {
-    // Validate Request
-    if(!sess) {return reject("Session content can not be empty");}
-    var raw = {session_name: sess['session_name'], session_type: sess['session_type'], session_start_date: sess['session_start_date'], 
-        session_end_date: sess['session_end_date'], session_coach_notes: sess['session_coach_notes'],
-        session_customer_feedback: sess['session_customer_feedback'], program_id: sess['program_id'], coach_id: sess['coach_id'], 
-        customer_id: sess['customer_id'], exercise_tag: sess['exercise_tag'], measurement_date: sess['measurement_date']};
-    console.log(raw);
-    if (sess['session_name'] == null){
-        delete raw.session_name;
-    }
-    if (sess['session_type'] == null){
-        delete raw.session_type;
-    }
-    if (sess['session_start_date'] == null){
-        delete raw.session_start_date;
-    }
-    if (sess['session_end_date'] == null){
-        delete raw.session_end_date;
-    }
-    if (sess['session_coach_notes'] == null){
-        delete raw.session_coach_notes;
-    }
-    if (sess['session_customer_feedback'] == null){
-        delete raw.session_customer_feedback;
-    }
-    if (sess['program_id'] == null){
-        delete raw.program_id;
-    }
-    if (sess['coach_id'] == null){
-        delete raw.coach_id;
-    }
-    if (sess['customer_id'] == null){
-        delete raw.customer_id;
-    }
-    if (sess['exercise_tag'] == null){
-        delete raw.exercise_tag;
-    }
-    if (sess['measurement_date'] == null){
-        delete raw.measurement_date;
-    }
-    console.log(raw);
-    // Find session and update it with the request body
-    Session.findByIdAndUpdate(sess['session_id'], raw, {new: true})
-    .then(sessions => {
-        if(!sessions) {
-            reject("Session not found with id " + sess['session_id']);
+exports.update = function (sess) {
+    return new Promise(function (resolve, reject) {
+        // Validate Request
+        if (!sess) {
+            return reject("Session content can not be empty");
         }
-        resolve(sessions);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            reject("Session not found with id " + sess['session_id']);                
-        }
-        reject("Error updating session with id " + sess['session_id']);
+        var raw = {};
+        // Find the null value and delete
+        raw = checkNull(raw, sess);
+        // Find session and update it with the request body
+        Session.findByIdAndUpdate(sess['session_id'], raw, {new : true})
+                .then(sessions => {
+                    if (!sessions) {
+                        reject("Session not found with id " + sess['session_id']);
+                    }
+                    resolve(sessions);
+                }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject("Session not found with id " + sess['session_id']);
+            }
+            reject("Error updating session with id " + sess['session_id']);
+        });
     });
-});
 };
 
 // Delete a session with the specified session_id in the request
-exports.delete = function(sessId) {
-  return new Promise(function(resolve, reject) {
-    
-    Session.findByIdAndRemove(sessId)
-    .then(sessions => {
-        if(!sessions) {reject("Session not found with id " + sessId);}
-        resolve("Session deleted successfully!");
-    }).catch(err => {
-        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
-            reject("Session not found with id " + sessId);                
-        }
-        reject("Could not delete session with id " + sessId);
+exports.delete = function (sessId) {
+    return new Promise(function (resolve, reject) {
+
+        Session.findByIdAndRemove(sessId)
+                .then(sessions => {
+                    if (!sessions) {
+                        reject("Session not found with id " + sessId);
+                    }
+                    resolve("Session deleted successfully!");
+                }).catch(err => {
+            if (err.kind === 'ObjectId' || err.name === 'NotFound') {
+                reject("Session not found with id " + sessId);
+            }
+            reject("Could not delete session with id " + sessId);
+        });
     });
-});
 };

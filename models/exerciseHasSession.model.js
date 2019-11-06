@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const ExerciseHasSessionSchema = mongoose.Schema({
-	exercise_id: String,
-        session_id: String,
-        start_time: Date,
-        completed_time: Date
+    exercise_id: String,
+    session_id: String,
+    start_time: Date,
+    completed_time: Date
 }, {
-	timestamp: true
+    timestamp: true
 });
 
 module.exports = mongoose.model('ExerciseHasSession', ExerciseHasSessionSchema);
