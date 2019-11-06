@@ -34,24 +34,10 @@ exports.create = function (cust) {
         if(!cust) {
             reject('Customer content can not be empty');
         }
-
+        var raw = {};
+        raw = checkNull(raw, cust);
         // Create a customer
-        const customer = new Customer({ 
-            first_name: cust['first_name'] || "NA",
-            last_name: cust['last_name'] || "NA",
-            signup_date: cust['signup_date'] || 0000-00-00,
-            gender: cust['gender'] || "NA",
-            dob: cust['dob'] || 0000-00-00,
-            activity_level: cust['activity_level'] || "NA",
-            goal: cust['goal'] || "NA",
-            phone: cust['phone'] || "NA",
-            email: cust['email'] || "NA",
-            address: cust['address'] || "NA",
-            health_condition: cust['health_condition'] || "NA",
-            occupation: cust['occupation'] || "NA",
-            availability: cust['availability'] || "NA",
-            commitment: cust['commitment'] || "NA"
-        });
+        const customer = new Customer(raw);
 
         // Save the customer in the database
         customer.save()

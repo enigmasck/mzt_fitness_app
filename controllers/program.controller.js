@@ -27,6 +27,18 @@ module.exports.getProgramById = function getProgramById (req, res, next) {
     });
 };
 
+module.exports.getProgramByCustomerId = function getProgramByCustomerId (req, res, next) {
+  var customerId = req.swagger.params['customer_id'].value;
+  Program.findProgramByCustomerId(customerId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+
 module.exports.updateProgram = function updateProgram (req, res, next) {
   Program.update(req.body)
     .then(function (response) {

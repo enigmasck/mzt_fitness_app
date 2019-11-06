@@ -27,6 +27,22 @@ exports.findOne = function (progId) {
     });
 };
 
+exports.getProgramByCustomerId = function (custId) {
+    return new Promise(function (resolve, reject) {
+        var query = {customer_id: custId};
+        Program.find(query)
+                .then(programs => {
+                    resolve(programs);
+                }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject('Program Not Found By Customer ID');
+            }
+            //TODO setup real error messages
+            reject('INTERNAL ERROR');
+        });
+    });
+};
+
 // Update a program identified by the programId in the request
 exports.update = function (prog) {
     return new Promise(function (resolve, reject) {
