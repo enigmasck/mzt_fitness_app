@@ -27,7 +27,7 @@ exports.findOne = function (progId) {
     });
 };
 
-exports.getProgramByCustomerId = function (custId) {
+exports.findProgramByCustomerId = function (custId) {
     return new Promise(function (resolve, reject) {
         var query = {customer_id: custId};
         Program.find(query)
