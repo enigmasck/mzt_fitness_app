@@ -26,3 +26,14 @@ module.exports.getCustomerMeasurementsById = function getCustomerMeasurementsByI
       utils.writeJson(res, response);
     });
 };
+
+// Update the measurements for customers with a goal to lose weight
+module.exports.updateMeasurement = function updateMeasurement(req, res, next) {
+    Measurement.update(req.body)
+            .then(function (response) {
+                utils.writeJson(res, response);
+            })
+            .catch(function (response) {
+                utils.writeJson(res, response);
+            });
+};

@@ -180,7 +180,7 @@ paths:
         content: 
           application/json:
             schema:
-              $ref: '#/components/schema/Measurement'
+              $ref: '#/components/schemas/Measurement'
       responses:
         200:
           description: OK Customer Measurement Obtained
