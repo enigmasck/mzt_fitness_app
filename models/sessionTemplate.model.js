@@ -6,7 +6,8 @@ const SessionTemplateSchema = mongoose.Schema({
         session_type: String,
         session_coach_notes: String,
         session_duration: Number,
-        exercise_tag: Array
+        session_template_tag: Array,
+        exercises: [{type: mongoose.Schema.Types.ObjectId, ref: 'Exercise'}]
 }, {
 	timestamp: true
 },

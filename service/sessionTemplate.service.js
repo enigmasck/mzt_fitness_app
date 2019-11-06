@@ -1,12 +1,14 @@
 const SessionTemp = require('../models/sessionTemplate.model.js');
 require('../service/checkNull.js');
 
-exports.findAll = (req, res) => {
+exports.findAll = function () {
+    return new Promise(function (resolve, reject) {
     SessionTemp.find()
             .then(sessions => {
-                res.send(sessions);
+                resolve(sessions);
             }).catch(err => {
         reject("Some error occured while retrieving session templates.");
+    });
     });
 };
 

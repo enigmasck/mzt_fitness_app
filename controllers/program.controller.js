@@ -27,16 +27,6 @@ module.exports.getProgramById = function getProgramById (req, res, next) {
     });
 };
 
-module.exports.addProgram = function addProgram (req, res, next) {
-  Program.create(req.body)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
-};
-
 module.exports.updateProgram = function updateProgram (req, res, next) {
   Program.update(req.body)
     .then(function (response) {

@@ -9,7 +9,7 @@ const SessionSchema = mongoose.Schema({
     session_coach_notes: String,
     session_customer_feedback: String,
     exercises: [{type: mongoose.Schema.Types.ObjectId, ref: 'Exercise'}],
-    exercise_tag: Array,
+    session_tag: Array,
     measurement_date: Date
 }, {
     timestamp: true

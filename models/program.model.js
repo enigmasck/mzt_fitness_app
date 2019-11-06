@@ -9,8 +9,9 @@ const ProgramSchema = mongoose.Schema({
     description: String,
     duration: Number,
     customer_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Customer'},
-    sessions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Session'}],
-    coach_id: String
+    sessions: Array,
+    coach_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Coach'},
+    staus: {type: String, enum:['IN_PROGRESS','COMPLETED','CANCELED'], default: 'IN_PROGRESS'}
 }, {
     timestamp: true
 });

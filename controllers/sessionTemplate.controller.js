@@ -14,7 +14,8 @@ module.exports.getSessionTempById = function getSessionTempById(req, res, next) 
             });
 };
 
-module.exports.getAllSessionTemp = function getAllSessionTemp(req, res, next) {
+module.exports.getAllSessionTemps = function getAllSessionTemps(req, res, next) {
+    console.log("getAllSessionTemps");
     SessionTemp.findAll()
         .then(function (response) {
             utils.writeJson(res, response);
