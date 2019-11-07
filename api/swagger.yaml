@@ -1439,14 +1439,13 @@ components:
             coach_id:
                 type: object
             session_type:
-                type: String
+                type: string
                 minLength: 1
                 maxLength: 100
             session_coach_notes:
-                type: String
-                type: array
-                items: {}
-            program_template_id:
+                type: string
                 minLength: 1
                 maxLength: 5000
-            exercise_tag:
+            program_template_id:
+                type: object
+            session_template_tag:
