@@ -4,17 +4,11 @@ require('../service/checkNull.js');
 
 exports.showInformation = function (progTempId) {
     return new Promise(function (resolve, reject) {
-        ProgramTemp.findById(progTempId).populate('sessions').exec(function (err, progTemp) {
+        ProgramTemp.findById(progTempId).populate(
+                {path: 'sessions',
+                    populate: {path: 'exercises'}}).exec(function (err, progTemp) {
             if (err)
                 return handleError(err);
-            console.log(progTemp);
-            for (var sess in progTemp.sessions) {
-                SessionTemp.findById(progTemp.sessions[sess]._id).populate('exercises').exec(function (err, sessTemp) {
-                    if (err)
-                        return handleError(err);
-                    console.log(sessTemp);
-                });
-            }
             resolve(progTemp);
         });
     });

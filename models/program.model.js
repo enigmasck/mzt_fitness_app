@@ -9,7 +9,7 @@ const ProgramSchema = mongoose.Schema({
     description: String,
     duration: Number,
     customer_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Customer'},
-    sessions: Array,
+    sessions: [{type: mongoose.Schema.Types.Object}],
     coach_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Coach'},
     status: {type: String, enum:['IN_PROGRESS','COMPLETED','CANCELED'], default: 'IN_PROGRESS'}
 }, {

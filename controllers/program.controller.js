@@ -2,7 +2,6 @@
 
 var utils = require('../utils/writer.js');
 var Program = require('../service/program.service');
-var ProgramTemp = require('../service/programTemplate.service');
 
 module.exports.assignProgramTemplate = function assignProgramTemplate(req, res, next) {
     var coachId = req.body['coach_id'];
@@ -11,7 +10,7 @@ module.exports.assignProgramTemplate = function assignProgramTemplate(req, res, 
     console.log('coach id: ' + coachId);
     console.log('customer id: ' + customerId);
     console.log('program template id: ' + programTempId);
-    ProgramTemp.assignProgramTemplate(coachId, customerId, programTempId)
+    Program.assignProgramTemplate(coachId, customerId, programTempId)
             .then(function (response) {
                 utils.writeJson(res, response);
             })
