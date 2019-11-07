@@ -11,7 +11,7 @@ const ExerciseSchema = mongoose.Schema({
     repetition: Number,
     sets: Number,
     exercise_est_duration: Number,
-    session: {type: mongoose.Schema.Types.ObjectId, ref: 'Session'},
+    session: {type: mongoose.Schema.Types.ObjectId, ref: 'SessionTemplate'},
     exercise_img_url: String,
     exercise_tag: Array
 }, {

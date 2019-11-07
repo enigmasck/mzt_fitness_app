@@ -5,7 +5,8 @@ const ProgramTemplateSchema = mongoose.Schema({
     title: String,
     type: String,
     description: String,
-    duration: Number,
+    program_template_duration: Number,
+    program_template_tag: Array,
     sessions: [{type: mongoose.Schema.Types.ObjectId, ref: 'SessionTemplate'}]
 }, {
     timestamp: true

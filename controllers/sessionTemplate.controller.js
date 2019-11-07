@@ -3,6 +3,18 @@
 var utils = require('../utils/writer.js');
 var SessionTemp = require('../service/sessionTemplate.service.js');
 
+module.exports.assignExercise = function assignExercise(req, res, next) {
+    var sessionTempId = req.body['session_template_id'];
+    var exerciseId = req.body['exercise_id'];
+    SessionTemp.assignExercise(exerciseId, sessionTempId)
+            .then(function (response) {
+                utils.writeJson(res, response);
+            })
+            .catch(function (response) {
+                utils.writeJson(res, response);
+            });
+};
+
 module.exports.getSessionTempById = function getSessionTempById(req, res, next) {
     var sessionTemplateId = req.swagger.params['session_template_id'].value;
     SessionTemp.findOne(sessionTemplateId)

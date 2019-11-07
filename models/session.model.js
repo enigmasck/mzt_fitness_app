@@ -4,6 +4,7 @@ const SessionSchema = mongoose.Schema({
     session_id: String,
     session_name: String,
     session_type: String,
+    session_duration: Number,
     session_start_date: Date,
     session_end_date: Date,
     session_coach_notes: String,

@@ -1,5 +1,35 @@
 const SessionTemp = require('../models/sessionTemplate.model.js');
+const Exercise = require('../models/exercise.model.js');
 require('../service/checkNull.js');
+
+exports.assignExercise = function (exeId, sessTempId) {
+    return new Promise(function (resolve, reject) {
+        SessionTemp.findById(sessTempId).then(sessionTemp => {
+            if (!sessionTemp) {
+                reject("Session template not found with id " + sessTempId);
+            }
+            // Find an exercise by ID
+            Exercise.findById(exeId).then(function (exer) {
+                // add the exercise to the session
+                sessionTemp['exercises'].push(exer);
+                console.log(exer);
+                // populate the session
+                SessionTemp.findById(sessTempId).populate('exercises').
+                        exec(function (err, sess) {
+                            if (err)
+                                return handleError(err);
+                            console.log(sess);
+                            resolve(sess);
+                        });
+            });
+        }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject("Session template not found with id " + sessTempId);
+            }
+            reject("Error retrieving session template with id " + sessTempId);
+        });
+    });
+};
 
 exports.findAll = function () {
     return new Promise(function (resolve, reject) {

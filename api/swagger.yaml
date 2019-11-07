@@ -200,6 +200,38 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: measurement.controller
+  
+  /program/assignProgramTemplate:
+    post:
+      description: Assigns program templates to program
+      operationId: assignProgramTemplate
+      requestBody:
+        description: Assigns program templates to program
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/parameters/programTempIdParamAssign'
+      responses:
+        200:
+          description: OK Program Info Obtained
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: program.controller
+  
   /program/getProgramById/{program_id}:
     get:
       description: Gets all program information by program ID
@@ -227,6 +259,7 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: program.controller
+
   /program/getProgramByCustomerId/{customer_id}:
     get:
       description: Gets all program information by customer ID
@@ -254,6 +287,7 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: program.controller
+
   /program/getAllPrograms:
     get:
       description: Gets list of all programs
@@ -279,36 +313,7 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: program.controller
-  /program/addProgram:
-    post:
-      description: Creates new program
-      operationId: addProgram
-      requestBody:
-        description: Add a new program
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Program'
-      responses:
-        200:
-          description: OK Program Info Obtained
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Program'
-                x-content-type: application/json
-        400:
-          description: 'Error: Bad Request'
-        401:
-          description: Unauthorized
-        403:
-          description: Forbidden
-        404:
-          description: 'Error: Not Found'
-      security:
-      - basicAuth: []
-      x-swagger-router-controller: program.controller
+      
   /program/updateProgram:
     post:
       description: Updates an existing program
@@ -338,6 +343,7 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: program.controller
+      
   /program/deleteProgram:
     delete:
       description: Deletes an existing program
@@ -363,6 +369,177 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: program.controller
+      
+  /programTemplate/assignSessionTemplate:
+    post:
+      description: Assigns session templates to program template
+      operationId: assignSessionTemplate
+      requestBody:
+        description: Assigns session templates to program template
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/parameters/sessionTempIdParamAssign'
+      responses:
+        200:
+          description: OK Program Template Info Obtained
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgramTemplate'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: programTemplate.controller
+      
+  /programTemplate/getProgramTempById/{program_template_id}:
+    get:
+      description: Gets all program template information by program ID
+      operationId: getProgramTempById
+      parameters:
+      - $ref: '#/components/parameters/programTempIdParamGet'
+      responses:
+        200:
+          description: OK Program Template Info Obtained
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgramTemplate'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: programTemplate.controller
+      
+  /programTemplate/getAllProgramTemps:
+    get:
+      description: Gets list of all program templates
+      operationId: getAllProgramTemps
+      responses:
+        200:
+          description: OK Program Templates Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProgramTemplate'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: programTemplate.controller
+      
+  /programTemplate/addProgramTemp:
+    post:
+      description: Creates new program template
+      operationId: addProgramTemp
+      requestBody:
+        description: Add a new program template
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProgramTemplate'
+      responses:
+        200:
+          description: OK Program Template Info Obtained
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgramTemplate'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: programTemplate.controller
+      
+  /programTemplate/updateProgramTemp:
+    post:
+      description: Updates an existing program template
+      operationId: updateProgramTemp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProgramTemplate'
+      responses:
+        200:
+          description: OK Program Template Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgramTemplate'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: programTemplate.controller
+      
+  /programTemplate/deleteProgramTemp:
+    delete:
+      description: Deletes an existing program template
+      operationId: deleteProgramTemp
+      parameters:
+        - $ref: '#/components/parameters/programTempIdParamDel'
+      responses:
+        200:
+          description: OK Program Template Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/parameters/programTempIdParamDel'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: programTemplate.controller
+      
   /exercise/getAllExercises:
     get:
       description: Gets list of all exercises
@@ -553,36 +730,7 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: session.controller
-  /session/assignExercise:
-    post:
-      description: Assigns exercises to session
-      operationId: assignExercise
-      requestBody:
-        description: Assigns exercises to session
-        required: true
-        content:
-          application/json:
-            schema:
-               $ref: '#/components/parameters/sessionIdParamAssign'
-      responses:
-        200:
-          description: OK Session Info Obtained
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Session'
-                x-content-type: application/json
-        400:
-          description: 'Error: Bad Request'
-        401:
-          description: Unauthorized
-        403:
-          description: Forbidden
-        404:
-          description: 'Error: Not Found'
-      security:
-      - basicAuth: []
-      x-swagger-router-controller: session.controller
+  
   /session/addSession:
     post:
       description: Creates new session
@@ -667,12 +815,44 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: session.controller
-  /sessionTemplate/getAllSessionTempByProgId/{program_id}:
+      
+  /sessionTemplate/assignExercise:
+    post:
+      description: Assigns exercises to session template
+      operationId: assignExercise
+      requestBody:
+        description: Assigns exercises to session template
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/parameters/exerciseIdParamAssign'
+      responses:
+        200:
+          description: OK Session Template Info Obtained
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionTemplate'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: sessionTemplate.controller
+      
+  /sessionTemplate/getAllSessionTempByProgId/{program_template_id}:
     get:
-      description: Gets a session template by program ID
+      description: Gets a session template by program template ID
       operationId: getAllSessionTempByProgId
       parameters:
-      - $ref: '#/components/parameters/programIdParamGet'
+      - $ref: '#/components/parameters/programTempIdParamGet'
       responses:
         200:
           description: OK Session Template Info Obtained
@@ -681,7 +861,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SessionTemp'
+                  $ref: '#/components/schemas/SessionTemplate'
                 x-content-type: application/json
         400:
           description: 'Error: Bad Request'
@@ -708,7 +888,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SessionTemp'
+                  $ref: '#/components/schemas/SessionTemplate'
                 x-content-type: application/json
         400:
           description: 'Error: Bad Request'
@@ -731,14 +911,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SessionTemp'
+              $ref: '#/components/schemas/SessionTemplate'
       responses:
         200:
           description: OK Session Info Obtained
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SessionTemp'
+                $ref: '#/components/schemas/SessionTemplate'
                 x-content-type: application/json
         400:
           description: 'Error: Bad Request'
@@ -760,14 +940,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SessionTemp'
+              $ref: '#/components/schemas/SessionTemplate'
       responses:
         200:
           description: OK Session Template Updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SessionTemp'
+                $ref: '#/components/schemas/SessionTemplate'
                 x-content-type: application/json
         400:
           description: 'Error: Bad Request'
@@ -853,6 +1033,16 @@ components:
       explode: false
       schema:
         type: string
+    exerciseIdParamAssign:
+      name: assignExercise
+      in: body
+      description: the id of the exercise
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: Array
+        items: {}
     programIdParamGet:
       name: program_id
       in: path
@@ -871,6 +1061,34 @@ components:
       explode: false
       schema:
         type: string
+    programTempIdParamAssign:
+      name: assignProgramTemp
+      in: body
+      description: the id of the program template
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: Array
+        items: {}
+    programTempIdParamGet:
+      name: program_template_id
+      in: path
+      description: the id of the program template
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    programTempIdParamDel:
+      name: program_template_id
+      in: query
+      description: the id of the program template
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
     sessionIdParamPost:
       name: session_id
       in: body
@@ -880,18 +1098,6 @@ components:
       explode: false
       schema:
         type: string
-    sessionIdParamAssign:
-      name: assign
-      in: body
-      description: the id of the session
-      required: true
-      style: simple
-      explode: false
-      schema:
-        type: Array
-        items:
-        - $ref: '#/components/parameters/sessionIdParamPost'
-        - $ref: '#/components/parameters/exerciseIdParamPost'
     sessionIdParamGet:
       name: session_id
       in: path
@@ -910,6 +1116,16 @@ components:
       explode: false
       schema:
         type: string
+    sessionTempIdParamAssign:
+      name: assignSessionTemp
+      in: body
+      description: the id of the session template
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: Array
+        items: {}
     sessionTempIdParamGet:
         name: session_template_id
         in: path
@@ -1103,27 +1319,43 @@ components:
     Program:
       type: object
       properties:
-        programId:
+        program_id:
           type: object
         title:
           type: string
+        type:
+          type: string
         description:
           type: string
-        programSDate:
+        duration:
           type: string
           format: date
-        programEDate:
-          type: string
-          format: date
-        coachId:
+        customer_id:
           type: object
-      example:
-        programId: {}
-        title: title of program XXX
-        description: description of program XXX
-        programSDate: 2019-10-11
-        programEDate: 2019-11-11
-        coachId: {}
+        sessions:
+          type: array
+          items: {}
+        coach_id:
+          type: object
+        staus:
+          type: string
+    ProgramTemplate:
+      type: object
+      properties:
+        program_template_id:
+          type: object
+        title:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        duration:
+          type: integer
+        sessions:
+          type: array
+          items:
+          - $ref: '#/components/schemas/SessionTemplate'
     Session:
         type: object
         properties:
@@ -1133,12 +1365,8 @@ components:
                 type: string
             session_type:
                 type: string
-            session_start_date:
-                type: string
-                format: date
-            session_end_date:
-                type: string
-                format: date
+            session_duration:
+                type: integer
             session_coach_notes:
                 type: string
             session_customer_feedback:
@@ -1146,26 +1374,14 @@ components:
             exercises:
                 type: array
                 items:
-                    - $ref: '#/components/schemas/Exercise'
+                - $ref: '#/components/schemas/Exercise'
             session_tag:
                 type: array
                 items: {}
             measurement_date:
                 type: string
                 format: date
-        example:
-            session_id: {}
-            session_type: Exercise Session
-            session_start_date: 2019-10-29
-            session_end_date: 2019-10-29
-            session_coach_notes: Good Job!
-            session_customer_feedback: Thank you!
-            program_id: {}
-            coach_id: {}
-            exercise_tag: {}
-            measurement_date: 2019-10-29
-            customer_id: {}
-    SessionTemp:
+    SessionTemplate:
         type: object
         properties:
             session_template_id:
@@ -1176,12 +1392,8 @@ components:
                 type: String
             session_coach_notes:
                 type: String
-            exercise_tag:
+            session_template_tag:
                 type: array
                 items: {}
             program_template_id:
                 type: object
-            
-            
-            
-            

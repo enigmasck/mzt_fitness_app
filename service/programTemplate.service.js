@@ -1,60 +1,32 @@
 const ProgramTemp = require('../models/programTemplate.model.js');
-const SessionTemplate = require('../models/sessionTemplate.model.js');
-const Program = require('../models/program.model.js');
+const SessionTemp = require('../models/sessionTemplate.model.js');
 require('../service/checkNull.js');
 
-exports.assignProgram = function (coachId, custId, progTempId) {
+exports.assignSessionTemplate = function (sessTempId, progTempId) {
     return new Promise(function (resolve, reject) {
-        console.log('coach id: ' + coachId);
-    console.log('customer id: ' + custId);
-    console.log('program template id: ' + progTempId);
         ProgramTemp.findById(progTempId).then(progTemp => {
             if (!progTemp) {
                 reject("Program template not found with id " + progTempId);
             }
-            var Sessions = [];
-            console.log(progTemp.sessions);
-            for (var session in progTemp.sessions){
-                console.log("session: "+session);
-                console.log('progTemp.sessions[session]'+progTemp.sessions[session]);
-            SessionTemplate.findById(progTemp.sessions[session]).then(sess => {
-                    if (!sess) {
-                        reject("Session templates not found with id " + progTemp.sessions[session]);
-                    }
-                console.log("[session]:" + session);
-                Sessions.push(sess);
-                console.log("Sessions[session]:" + Sessions[session]);
-                console.log("Sessions: " + Sessions);
+            // Find an session template by ID
+            SessionTemp.findById(sessTempId).then(function (sessTemp) {
+                // add the session template to the program template
+                console.log(sessTemp);
+                progTemp['sessions'].push(sessTemp);
+                // populate the program template
+                ProgramTemp.findById(progTempId).populate('sessions').
+                        exec(function (err, prog) {
+                            if (err)
+                                return handleError(err);
+                            console.log(prog);
+                            resolve(prog);
+                        });
             });
-        };
-        console.log("Sessions: "+Sessions);
-        const program = new Program({
-            title: progTemp['title'],
-            type: progTemp['type'],
-            description: progTemp['description'],
-            duration: progTemp['duration'],
-            customer_id: custId,
-            coach_id: coachId
-        });
-        // Save the program in the database
-        program.save()
-                .then(data => {
-                    console.log(data);
-        Program.findByIdAndUpdate(data._id, {'$push':{sessions: Sessions}}, {new : true})
-                .then(program => {
-                    if (!program) {
-                        reject("Session not found with id " + data._id);
-                    }
-                    resolve(program);
-                }).catch(err => {
-            reject(err.message || "Some error occurred while creating the program.");
-        });
-    });
         }).catch(err => {
             if (err.kind === 'ObjectId') {
-                reject("Session not found with id " + progTempId);
+                reject("Program template not found with id " + progTempId);
             }
-            reject("Error retrieving session with id " + progTempId);
+            reject("Error retrieving program template with id " + progTempId);
         });
     });
 };

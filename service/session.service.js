@@ -1,34 +1,5 @@
 const Session = require('../models/session.model.js');
-const Exercise = require('../service/exercise.service.js');
 require('../service/checkNull.js');
-
-exports.assignExercise = function (exeId, sessId) {
-    return new Promise(function (resolve, reject) {
-        Session.findById(sessId).then(session => {
-            if (!session) {
-                reject("Session not found with id " + sessId);
-            }
-            // Find an exercise by ID
-            Exercise.findOne(exeId).then(function (exer) {
-                // add the exercise to the session
-                session.exercises.push(exer);
-                // populate the session
-                Session.findById(sessId).populate('exercises').
-                        exec(function (err, sess) {
-                            if (err)
-                                return handleError(err);
-                            console.log(sess);
-                            resolve(sess);
-                        });
-            });
-        }).catch(err => {
-            if (err.kind === 'ObjectId') {
-                reject("Session not found with id " + sessId);
-            }
-            reject("Error retrieving session with id " + sessId);
-        });
-    });
-};
 
 exports.findAll = (req, res) => {
     Session.find()

@@ -3,17 +3,6 @@
 var utils = require('../utils/writer.js');
 var Session = require('../service/session.service');
 
-module.exports.assignExercise = function assignExercise(req, res, next) {
-    var sessionId = req.body['session_id'];
-    var exerciseId = req.body['exercise_id'];
-    Session.assignExercise(exerciseId, sessionId)
-            .then(function (response) {
-                utils.writeJson(res, response);
-            })
-            .catch(function (response) {
-                utils.writeJson(res, response);
-            });
-};
 
 module.exports.getSessionById = function getSessionById(req, res, next) {
     var sessionId = req.swagger.params['session_id'].value;
