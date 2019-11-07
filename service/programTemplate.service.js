@@ -4,23 +4,19 @@ require('../service/checkNull.js');
 
 exports.assignSessionTemplate = function (sessTempId, progTempId) {
     return new Promise(function (resolve, reject) {
-        ProgramTemp.findById(progTempId).then(progTemp => {
+        // Find an session template by ID
+        console.log("sessionTempId:" + sessTempId);
+        console.log("programTempId:" + progTempId);
+        ProgramTemp.findByIdAndUpdate(progTempId, {'$push': {sessions: sessTempId}}, {new : true}).then(progTemp => {
             if (!progTemp) {
                 reject("Program template not found with id " + progTempId);
             }
-            // Find an session template by ID
-            SessionTemp.findById(sessTempId).then(function (sessTemp) {
-                // add the session template to the program template
-                console.log(sessTemp);
-                progTemp['sessions'].push(sessTemp);
-                // populate the program template
-                ProgramTemp.findById(progTempId).populate('sessions').
-                        exec(function (err, prog) {
-                            if (err)
-                                return handleError(err);
-                            console.log(prog);
-                            resolve(prog);
-                        });
+            console.log("progTemp:" + progTemp);
+            ProgramTemp.findById(progTempId).populate('sessions').exec(function (err, prog) {
+                if (err)
+                    return handleError(err);
+                console.log(prog);
+                resolve(prog);
             });
         }).catch(err => {
             if (err.kind === 'ObjectId') {
@@ -92,7 +88,7 @@ exports.update = function (progTemp) {
         var raw = {};
         raw = checkNull(raw, progTemp);
         // Find program template and update its name with the request body
-        ProgramTemp.findByIdAndUpdate(progTemp['program_template_id'], raw, {new : true})
+        ProgramTemp.findByIdAndUpdate(progTemp['program_template_id'], raw, {new: true})
                 .then(programTemplates => {
                     if (!programTemplates) {
                         reject("Program template not found with id " + progTemp['program_template_id']);

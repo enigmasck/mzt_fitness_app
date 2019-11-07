@@ -6,6 +6,8 @@ var ProgramTemp = require('../service/programTemplate.service');
 module.exports.assignSessionTemplate = function assignSessionTemplate(req, res, next) {
     var sessionTempId = req.body['session_template_id'];
     var programTempId = req.body['program_template_id'];
+    console.log("sessionTempId:"+sessionTempId);
+    console.log("programTempId:"+programTempId);
     ProgramTemp.assignSessionTemplate(sessionTempId, programTempId)
             .then(function (response) {
                 utils.writeJson(res, response);
