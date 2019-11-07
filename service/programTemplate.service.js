@@ -2,6 +2,24 @@ const ProgramTemp = require('../models/programTemplate.model.js');
 const SessionTemp = require('../models/sessionTemplate.model.js');
 require('../service/checkNull.js');
 
+exports.showInformation = function (progTempId) {
+    return new Promise(function (resolve, reject) {
+        ProgramTemp.findById(progTempId).populate('sessions').exec(function (err, progTemp) {
+            if (err)
+                return handleError(err);
+            console.log(progTemp);
+            for (var sess in progTemp.sessions) {
+                SessionTemp.findById(progTemp.sessions[sess]._id).populate('exercises').exec(function (err, sessTemp) {
+                    if (err)
+                        return handleError(err);
+                    console.log(sessTemp);
+                });
+            }
+            resolve(progTemp);
+        });
+    });
+};
+
 exports.assignSessionTemplate = function (sessTempId, progTempId) {
     return new Promise(function (resolve, reject) {
         // Find an session template by ID
@@ -88,7 +106,7 @@ exports.update = function (progTemp) {
         var raw = {};
         raw = checkNull(raw, progTemp);
         // Find program template and update its name with the request body
-        ProgramTemp.findByIdAndUpdate(progTemp['program_template_id'], raw, {new: true})
+        ProgramTemp.findByIdAndUpdate(progTemp['program_template_id'], raw, {new : true})
                 .then(programTemplates => {
                     if (!programTemplates) {
                         reject("Program template not found with id " + progTemp['program_template_id']);

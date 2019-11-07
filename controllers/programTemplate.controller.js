@@ -3,6 +3,17 @@
 var utils = require('../utils/writer.js');
 var ProgramTemp = require('../service/programTemplate.service');
 
+module.exports.showInformation= function showInformation(req, res, next) {
+    var programTempId = req.swagger.params['program_template_id'].value;
+    ProgramTemp.showInformation(programTempId)
+            .then(function (response) {
+                utils.writeJson(res, response);
+            })
+            .catch(function (response) {
+                utils.writeJson(res, response);
+            });
+};
+
 module.exports.assignSessionTemplate = function assignSessionTemplate(req, res, next) {
     var sessionTempId = req.body['session_template_id'];
     var programTempId = req.body['program_template_id'];
