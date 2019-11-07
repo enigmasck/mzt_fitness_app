@@ -1153,31 +1153,49 @@ components:
           readOnly: true
         first_name:
           type: string
+          minLength: 1
+          maxLength: 100
         last_name:
           type: string
+          minLength: 1
+          maxLength: 100
         signup_date:
           type: string
           format: date
         gender:
           type: string
+          minLength: 1
+          maxLength: 50
         dob:
           type: string
           format: date
         activity_level:
           type: string
+          minLength: 1
+          maxLength: 100
         goal:
           type: string
+          minLength: 1
+          maxLength: 500
         phone:
           type: string
+          minLength: 1
+          maxLength: 100
         email:
           type: string
           format: email
         address1:
           type: string
+          minLength: 1
+          maxLength: 500
         address2:
           type: string
+          minLength: 1
+          maxLength: 500
         city:
           type: string
+          minLength: 1
+          maxLength: 100
         zip:
           maximum: 99999
           minimum: 10000
@@ -1185,12 +1203,20 @@ components:
           format: int64
         health_condition:
           type: string
+          minLength: 1
+          maxLength: 500
         occupation:
           type: string
+          minLength: 1
+          maxLength: 500
         availability:
           type: string
+          minLength: 1
+          maxLength: 1000
         commitment:
           type: string
+          minLength: 1
+          maxLength: 1000
       example:
         zip: 17207
         last_name: lastName
@@ -1273,14 +1299,24 @@ components:
           type: object
         name:
           type: string
+          minLength: 1
+          maxLength: 500
         description:
           type: string
+          minLength: 1
+          maxLength: 2000
         equipment_required:
           type: string
+          minLength: 1
+          maxLength: 1000
         exercise_type:
           type: string
+          minLength: 1
+          maxLength: 100
         muscles_targeted:
           type: string
+          minLength: 1
+          maxLength: 1000
         set_break:
           type: integer
           description: the time in seconds to rest between each set
@@ -1323,11 +1359,13 @@ components:
           type: object
         title:
           type: string
-        type:
-          type: string
+          minLength: 1
+          maxLength: 500
         description:
           type: string
-        duration:
+          minLength: 1
+          maxLength: 5000
+        programSDate:
           type: string
           format: date
         customer_id:
@@ -1363,14 +1401,26 @@ components:
                 type: object
             session_name:
                 type: string
+                minLength: 1
+                maxLength: 1000
             session_type:
                 type: string
-            session_duration:
-                type: integer
+                minLength: 1
+                maxLength: 1000
+            session_start_date:
+                type: string
+                format: date
+            session_end_date:
+                type: string
+                format: date
             session_coach_notes:
                 type: string
+                minLength: 1
+                maxLength: 5000
             session_customer_feedback:
                 type: string
+                minLength: 1
+                maxLength: 5000
             exercises:
                 type: array
                 items:
@@ -1390,10 +1440,13 @@ components:
                 type: object
             session_type:
                 type: String
+                minLength: 1
+                maxLength: 100
             session_coach_notes:
                 type: String
-            session_template_tag:
                 type: array
                 items: {}
             program_template_id:
-                type: object
+                minLength: 1
+                maxLength: 5000
+            exercise_tag:
