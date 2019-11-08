@@ -54,7 +54,6 @@ module.exports.getProgramByCustomerId = function getProgramByCustomerId (req, re
     });
 };
 
-
 module.exports.updateProgram = function updateProgram (req, res, next) {
   Program.update(req.body)
     .then(function (response) {
@@ -67,6 +66,21 @@ module.exports.updateProgram = function updateProgram (req, res, next) {
 
 module.exports.deleteProgram = function deleteProgram (req, res, next) {
   Program.delete(req.query['program_id'])
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.updateExerciseResult = function updateExerciseResult (req, res, next) {
+  var progId = req.body['program_id'];
+  var sessionNb = req.body['sessionNumber'];
+  var exerciseNb = req.body['exerciseNumber'];
+  var exerciseRes = req.body['exerciseResult'];
+  
+  Program.addExerciseResult(progId, sessionNb, exerciseNb, exerciseRes)
     .then(function (response) {
       utils.writeJson(res, response);
     })

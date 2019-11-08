@@ -18,37 +18,39 @@ exports.assignProgramTemplate = function (coachId, custId, progTempId) {
                     if (!progTemp) {
                         reject("Program template not found with id " + progTempId);
                     }
+                    // Add session detail into the program
                     var Sessions = [];
-
                     for (var session in progTemp.sessions){
-                    SessionTemplate.findById(progTemp.sessions[session]).then(sess => {
+                        SessionTemplate.findById(progTemp.sessions[session]).then(sess => {
                             if (!sess) {
                                 reject("Session templates not found with id " + progTemp.sessions[session]);
+                            } else {
+                                Sessions.push(sess);                  
                             }
-                        Sessions.push(sess);
+                        });
+                    };
+                    
+                    const program = new Program({
+                        title: progTemp['title'],
+                        type: progTemp['type'],
+                        description: progTemp['description'],
+                        duration: progTemp['duration'],
+                        customer_id: custId,
+                        coach_id: coachId
                     });
-                };
-                const program = new Program({
-                    title: progTemp['title'],
-                    type: progTemp['type'],
-                    description: progTemp['description'],
-                    duration: progTemp['duration'],
-                    customer_id: custId,
-                    coach_id: coachId
-                });
-                // Save the program in the database
-                program.save()
-                        .then(data => {
-                Program.findByIdAndUpdate(data._id, {'$push':{sessions: Sessions}}, {new : true})
+                    // Save the program in the database
+                    program.save()
+                    .then(data => {
+                        Program.findByIdAndUpdate(data._id, {'$push':{sessions: Sessions}}, {new : true})
                         .then(program => {
                             if (!program) {
                                 reject("Session not found with id " + data._id);
                             }
                             resolve(program);
                         }).catch(err => {
-                    reject(err.message || "Some error occurred while creating the program.");
-                });
-            });
+                            reject(err.message || "Some error occurred while creating the program.");
+                        });
+                    });
                 }).catch(err => {
                     if (err.kind === 'ObjectId') {
                         reject("Session not found with id " + progTempId);
@@ -56,10 +58,10 @@ exports.assignProgramTemplate = function (coachId, custId, progTempId) {
                     reject("Error retrieving session with id " + progTempId);
                 });
             }
-    }).catch(err => {
-        reject("ERROR_CHECK_ASSIGN: " + err);
+        }).catch(err => {
+            reject("ERROR_CHECK_ASSIGN: " + err);
+        });
     });
-});
 };
 
 exports.findAll = function () {
@@ -114,10 +116,7 @@ exports.update = function (prog) {
         var raw = {};
         raw = checkNull(raw, prog);
         // Find program and update its name with the request body
-        Program.findByIdAndUpdate(prog['program_id'], {
-            title: prog['title'] || "NA",
-            discription: prog['discription'] || "NA"
-        }, {new : true})
+        Program.findByIdAndUpdate(prog['program_id'], raw, {new : true})
                 .then(programs => {
                     if (!programs) {
                         reject("Program not found with id " + prog['program_id']);
@@ -149,3 +148,37 @@ exports.delete = function (program_id) {
         });
     });
 };
+
+// Update a program to add the results of each exercise
+exports.addExerciseResult = function (progId, sessionNb, exerciseNb, exerciseRes) {
+    return new Promise(function (resolve, reject) {
+        // Get the program
+        Program.findById(progId).then(prog => {
+            if (!prog) {
+                reject("Program template not found with id " + progId);
+            } else {
+                var exercise = prog.sessions[sessionNb].exercises[exerciseNb];
+                Program.findByIdAndUpdate(progId, 
+                {"$set": {["sessions."+sessionNb+".exercises."+exerciseNb+".result"]: exerciseRes}}
+                ,{new : true})
+                .then(prog => {
+                    console.log(exerciseRes);
+                    if (!prog) {
+                        reject("Program not found with id " + progId);
+                    }
+                    resolve(prog);
+                }).catch(err => {
+                    if (err.kind === 'ObjectId') {
+                        reject("Program not found with id " + progId);
+                    }
+                    reject("Error updating program with id " + progId);
+                });
+            }   
+        });
+    });
+};
+
+// Update a session status in a program when a session is opened or completed
+exports.updateSessionStatus = function (progId, sessionNb, sessionStatus) {
+    
+}
