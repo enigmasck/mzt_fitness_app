@@ -7,7 +7,7 @@ const CustomerSchema = mongoose.Schema({
     signup_date: {type: Date, default: Date.now()},
     gender: String,
     dob: Date,
-    activity_level: String,
+    activity_level: {type: String, enum:['SEDENTARY','LOW','MEDIUM','HIGH','ULTRA']},
     goal: String,
     phone: String,
     email: {type: String, required: true},
