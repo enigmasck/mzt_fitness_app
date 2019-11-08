@@ -367,6 +367,35 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: program.controller
+  /program/updateSessionStatus:
+    post:
+      description: Updates an the status of an exercise in one program
+      operationId: updateSessionStatus
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/parameters/programUpdateSessionStatus'
+      responses:
+        200:
+          description: OK Program Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: program.controller
   /program/deleteProgram:
     delete:
       description: Deletes an existing program
@@ -1045,7 +1074,7 @@ components:
         type: string
     exerciseIdParamPost:
       name: exercise_id
-      in: body
+      in: header
       description: the id of the exercise
       required: true
       style: simple
@@ -1071,7 +1100,7 @@ components:
         type: string
     exerciseIdParamAssign:
       name: assignExercise
-      in: body
+      in: header
       description: the id of the exercise
       required: true
       style: simple
@@ -1105,9 +1134,18 @@ components:
       schema:
         type: array
         items: {}
+    programUpdateSessionStatus:
+      name: updateSessionStatus
+      in: header
+      description: the id of the program and session number
+      required: true
+      explode: false
+      schema:
+        type: array
+        items: {}
     programTempIdParamAssign:
       name: assignProgramTemp
-      in: body
+      in: header
       description: the id of the program template
       required: true
       style: simple
@@ -1134,7 +1172,7 @@ components:
         type: string      
     sessionIdParamPost:
       name: session_id
-      in: body
+      in: header
       description: the id of the session
       required: true
       style: simple
@@ -1160,7 +1198,7 @@ components:
         type: string
     sessionTempIdParamAssign:
       name: assignSessionTemp
-      in: body
+      in: header
       description: the id of the session template
       required: true
       style: simple
@@ -1434,7 +1472,7 @@ components:
         sessions:
           type: array
           items:
-          - $ref: '#/components/schemas/SessionTemplate'
+            $ref: '#/components/schemas/SessionTemplate'
     Session:
         type: object
         properties:
@@ -1465,7 +1503,7 @@ components:
             exercises:
                 type: array
                 items:
-                - $ref: '#/components/schemas/Exercise'
+                  $ref: '#/components/schemas/Exercise'
             session_tag:
                 type: array
                 items: {}

@@ -88,3 +88,16 @@ module.exports.updateExerciseResult = function updateExerciseResult (req, res, n
       utils.writeJson(res, response);
     });
 };
+
+module.exports.updateSessionStatus = function updateSessionStatus (req, res, next) {
+  var progId = req.body['program_id'];
+  var sessionNb = req.body['sessionNumber'];
+  
+  Program.updateSessStat(progId, sessionNb)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
