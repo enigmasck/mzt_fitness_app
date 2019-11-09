@@ -989,7 +989,7 @@ paths:
   /sessionTemplate/deleteSessionTemp:
     delete:
       description: Deletes an existing session template
-      operationId: deleteSession
+      operationId: deleteSessionTemp
       parameters:
         - $ref: '#/components/parameters/sessionTempIdParamDel'
       responses:
