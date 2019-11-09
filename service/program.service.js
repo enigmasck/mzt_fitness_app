@@ -68,10 +68,7 @@ exports.update = function (prog) {
         var raw = {};
         raw = checkNull(raw, prog);
         // Find program and update its name with the request body
-        Program.findByIdAndUpdate(prog['program_id'], {
-            title: prog['title'] || "NA",
-            discription: prog['discription'] || "NA"
-        }, {new : true})
+        Program.findByIdAndUpdate(prog['program_id'], raw, {new : true})
                 .then(programs => {
                     if (!programs) {
                         reject("Program not found with id " + prog['program_id']);
@@ -100,6 +97,82 @@ exports.delete = function (program_id) {
                 reject("Program not found with id " + program_id);
             }
             reject("Could not delete program with id " + program_id);
+        });
+    });
+};
+
+// Update a program to add the results of each exercise
+exports.addExerciseResult = function (progId, sessionNb, exerciseNb, exerciseRes) {
+    return new Promise(function (resolve, reject) {
+        // Get the program
+        Program.findById(progId).then(prog => {
+            if (!prog) {
+                reject("Program template not found with id " + progId);
+            } else {
+                var exercise = prog.sessions[sessionNb].exercises[exerciseNb];
+                Program.findByIdAndUpdate(progId,
+                        {"$set": {["sessions." + sessionNb + ".exercises." + exerciseNb + ".result"]: exerciseRes}}
+                , {new : true})
+                        .then(prog => {
+                            console.log(exerciseRes);
+                            if (!prog) {
+                                reject("Program not found with id " + progId);
+                            }
+                            resolve(prog);
+                        }).catch(err => {
+                    if (err.kind === 'ObjectId') {
+                        reject("Program not found with id " + progId);
+                    }
+                    reject("Error updating program with id " + progId);
+                });
+            }
+        });
+    });
+};
+
+// Update a session status in a program when a session is opened or completed
+exports.updateSessStat = function (progId, sessionNb) {
+    return new Promise(function (resolve, reject) {
+        // Get the program
+        Program.findById(progId).then(prog => {
+            if (!prog) {
+                reject("Program template not found with id " + progId);
+            } else {
+                if (prog.sessions[sessionNb].session_status === 'CLOSED') {
+                    Program.findByIdAndUpdate(progId,
+                            {"$set": {["sessions." + sessionNb + ".session_status"]: "OPENED"}}
+                    , {new : true})
+                            .then(prog => {
+                                if (!prog) {
+                                    reject("Program not found with id " + progId);
+                                }
+                                resolve(prog);
+                            }).catch(err => {
+                        if (err.kind === 'ObjectId') {
+                            reject("Program not found with id " + progId);
+                        }
+                        reject("Error updating program with id " + progId);
+                    });
+                }
+                else{
+                    if(prog.sessions[sessionNb].session_status === 'OPENED'){
+                        Program.findByIdAndUpdate(progId,
+                                {"$set": {["sessions." + sessionNb + ".session_status"]: "COMPLETED"}}
+                        , {new : true})
+                                .then(prog => {
+                                    if (!prog) {
+                                        reject("Program not found with id " + progId);
+                                    }
+                                    resolve(prog);
+                                }).catch(err => {
+                            if (err.kind === 'ObjectId') {
+                                reject("Program not found with id " + progId);
+                            }
+                            reject("Error updating program with id " + progId);
+                        });
+                    }
+                }
+            }
         });
     });
 };

@@ -6,6 +6,31 @@ info:
 servers:
 - url: /
 paths:
+  /coach/getAllCoaches:
+    get:
+      description: Gets list of all coaches
+      operationId: getAllCoaches
+      responses:
+        200:
+          description: OK Coach Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Coach'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: coach.controller
   /customer/getCustomerById/{customer_id}:
     get:
       description: Gets all customer information by customer ID
@@ -199,8 +224,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: measurement.controller
-  
+      x-swagger-router-controller: measurement.controller  
   /program/assignProgramTemplate:
     post:
       description: Assigns program templates to program
@@ -230,8 +254,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: program.controller
-  
+      x-swagger-router-controller: program.controller 
   /program/getProgramById/{program_id}:
     get:
       description: Gets all program information by program ID
@@ -259,7 +282,6 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: program.controller
-
   /program/getProgramByCustomerId/{customer_id}:
     get:
       description: Gets all program information by customer ID
@@ -287,7 +309,6 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: program.controller
-
   /program/getAllPrograms:
     get:
       description: Gets list of all programs
@@ -312,8 +333,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: program.controller
-      
+      x-swagger-router-controller: program.controller    
   /program/updateProgram:
     post:
       description: Updates an existing program
@@ -342,8 +362,65 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
+      x-swagger-router-controller: program.controller  
+  /program/updateExerciseResult:
+    post:
+      description: Updates an existing program to add exercise result
+      operationId: updateExerciseResult
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/parameters/programAddExerciseResult'
+      responses:
+        200:
+          description: OK Program Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
       x-swagger-router-controller: program.controller
-      
+  /program/updateSessionStatus:
+    post:
+      description: Updates an the status of an exercise in one program
+      operationId: updateSessionStatus
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/parameters/programUpdateSessionStatus'
+      responses:
+        200:
+          description: OK Program Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: program.controller
   /program/deleteProgram:
     delete:
       description: Deletes an existing program
@@ -368,8 +445,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: program.controller
-      
+      x-swagger-router-controller: program.controller   
   /programTemplate/showInformation/{program_template_id}:
     get:
       description: Gets all program template information by program ID
@@ -394,8 +470,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: programTemplate.controller
-      
+      x-swagger-router-controller: programTemplate.controller    
   /programTemplate/assignSessionTemplate:
     post:
       description: Assigns session templates to program template
@@ -425,8 +500,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: programTemplate.controller
-      
+      x-swagger-router-controller: programTemplate.controller     
   /programTemplate/getProgramTempById/{program_template_id}:
     get:
       description: Gets all program template information by program ID
@@ -451,8 +525,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: programTemplate.controller
-      
+      x-swagger-router-controller: programTemplate.controller    
   /programTemplate/getAllProgramTemps:
     get:
       description: Gets list of all program templates
@@ -477,8 +550,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: programTemplate.controller
-      
+      x-swagger-router-controller: programTemplate.controller     
   /programTemplate/addProgramTemp:
     post:
       description: Creates new program template
@@ -508,8 +580,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: programTemplate.controller
-      
+      x-swagger-router-controller: programTemplate.controller     
   /programTemplate/updateProgramTemp:
     post:
       description: Updates an existing program template
@@ -538,8 +609,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: programTemplate.controller
-      
+      x-swagger-router-controller: programTemplate.controller     
   /programTemplate/deleteProgramTemp:
     delete:
       description: Deletes an existing program template
@@ -564,8 +634,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: programTemplate.controller
-      
+      x-swagger-router-controller: programTemplate.controller     
   /exercise/getAllExercises:
     get:
       description: Gets list of all exercises
@@ -755,8 +824,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: session.controller
-  
+      x-swagger-router-controller: session.controller 
   /session/addSession:
     post:
       description: Creates new session
@@ -840,8 +908,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: session.controller
-      
+      x-swagger-router-controller: session.controller      
   /sessionTemplate/assignExercise:
     post:
       description: Assigns exercises to session template
@@ -871,8 +938,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: sessionTemplate.controller
-      
+      x-swagger-router-controller: sessionTemplate.controller      
   /sessionTemplate/getAllSessionTempByProgId/{program_template_id}:
     get:
       description: Gets a session template by program template ID
@@ -1028,13 +1094,12 @@ components:
       in: query
       description: the id of the customer
       required: true
-      style: simple
       explode: false
       schema:
         type: string
     exerciseIdParamPost:
       name: exercise_id
-      in: body
+      in: header
       description: the id of the exercise
       required: true
       style: simple
@@ -1055,19 +1120,18 @@ components:
       in: query
       description: the id of the exercise
       required: true
-      style: simple
       explode: false
       schema:
         type: string
     exerciseIdParamAssign:
       name: assignExercise
-      in: body
+      in: header
       description: the id of the exercise
       required: true
       style: simple
       explode: false
       schema:
-        type: Array
+        type: array
         items: {}
     programIdParamGet:
       name: program_id
@@ -1083,19 +1147,36 @@ components:
       in: query
       description: the id of the program
       required: true
-      style: simple
       explode: false
       schema:
         type: string
+    programAddExerciseResult:
+      name: addExerciseResult
+      in: header
+      description: the id of the program, session number and exercise number
+      required: true
+      explode: false
+      schema:
+        type: array
+        items: {}
+    programUpdateSessionStatus:
+      name: updateSessionStatus
+      in: header
+      description: the id of the program and session number
+      required: true
+      explode: false
+      schema:
+        type: array
+        items: {}
     programTempIdParamAssign:
       name: assignProgramTemp
-      in: body
+      in: header
       description: the id of the program template
       required: true
       style: simple
       explode: false
       schema:
-        type: Array
+        type: array
         items: {}
     programTempIdParamGet:
       name: program_template_id
@@ -1111,13 +1192,12 @@ components:
       in: query
       description: the id of the program template
       required: true
-      style: simple
       explode: false
       schema:
-        type: string
+        type: string      
     sessionIdParamPost:
       name: session_id
-      in: body
+      in: header
       description: the id of the session
       required: true
       style: simple
@@ -1138,19 +1218,18 @@ components:
       in: query
       description: the id of the session
       required: true
-      style: simple
       explode: false
       schema:
         type: string
     sessionTempIdParamAssign:
       name: assignSessionTemp
-      in: body
+      in: header
       description: the id of the session template
       required: true
       style: simple
       explode: false
       schema:
-        type: Array
+        type: array
         items: {}
     sessionTempIdParamGet:
         name: session_template_id
@@ -1166,11 +1245,55 @@ components:
         in: query
         description: the id of the session template
         required: true
-        style: simple
         explode: false
         schema:
           type: string
   schemas:
+    Coach:
+      type: object
+      properties:
+        coach_is:
+          type: object
+          readOnly: true
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        phone:
+          type: string
+          minLength: 1
+          maxLength: 100
+        email:
+          type: string
+          format: email
+        address1:
+          type: string
+          minLength: 1
+          maxLength: 500
+        address2:
+          type: string
+          minLength: 1
+          maxLength: 500
+        city:
+          type: string
+          minLength: 1
+          maxLength: 100
+        country:
+          type: string
+          minLength: 1
+          maxLength: 100
+        motto:
+          type: string
+          minLength: 1
+          maxLength: 100
+        coachcol:
+          type: string
+          minLength: 1
+          maxLength: 100
     Customer:
       type: object
       properties:
@@ -1356,7 +1479,7 @@ components:
           type: integer
           description: The time allocated to perform exercise
         session:
-            type: Object
+            type: object
             description: The assigned session
         exercise_img_url:
             type: string
@@ -1419,7 +1542,7 @@ components:
         sessions:
           type: array
           items:
-          - $ref: '#/components/schemas/SessionTemplate'
+            $ref: '#/components/schemas/SessionTemplate'
     Session:
         type: object
         properties:
@@ -1450,7 +1573,7 @@ components:
             exercises:
                 type: array
                 items:
-                - $ref: '#/components/schemas/Exercise'
+                  $ref: '#/components/schemas/Exercise'
             session_tag:
                 type: array
                 items: {}
@@ -1475,3 +1598,4 @@ components:
             program_template_id:
                 type: object
             session_template_tag:
+                type: object
