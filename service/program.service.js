@@ -158,12 +158,10 @@ exports.addExerciseResult = function (progId, sessionNb, exerciseNb, exerciseRes
             if (!prog) {
                 reject("Program template not found with id " + progId);
             } else {
-                var exercise = prog.sessions[sessionNb].exercises[exerciseNb];
                 Program.findByIdAndUpdate(progId,
                         {"$set": {["sessions." + sessionNb + ".exercises." + exerciseNb + ".result"]: exerciseRes}}
                 , {new : true})
                         .then(prog => {
-                            console.log(exerciseRes);
                             if (!prog) {
                                 reject("Program not found with id " + progId);
                             }
