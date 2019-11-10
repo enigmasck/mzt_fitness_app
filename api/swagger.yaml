@@ -195,6 +195,33 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: measurement.controller
+  /customer/getCustomerMeasurementsByIdAndDate:
+    get:
+      description: Gets a customer's measurements by id and date.
+      operationId: getCustomerMeasurementsByIdAndDate
+      parameters:
+      - $ref: '#/components/schemas/Measurement'
+      responses:
+        200:
+          description: OK Customer Measurement Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Measurement'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: measurement.controller
   /customer/addMeasurement:
     post:
       description: Create a new customer's measurement
@@ -225,6 +252,35 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: measurement.controller  
+  /customer/updateMeasurement:
+    post:
+      description: Update a customer's measurement (if goal is weight loss)
+      operationId: updateMeasurement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/parameters/addMeasurementParam'
+      responses:
+        200:
+          description: OK Customer Measurement Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Measurement'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: measurement.controller 
   /program/assignProgramTemplate:
     post:
       description: Assigns program templates to program
@@ -1097,6 +1153,15 @@ components:
       explode: false
       schema:
         type: string
+    addMeasurementParam:
+      name: addMeasurement
+      in: header
+      description: the id of the customer, measurement date and measurements to add
+      required: true
+      explode: false
+      schema:
+        type: array
+        items: {}
     exerciseIdParamPost:
       name: exercise_id
       in: header
