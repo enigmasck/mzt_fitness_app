@@ -1022,6 +1022,31 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: sessionTemplate.controller
+  /sessionTemplate/getAllSessionTemps:
+    get:
+      description: Gets all session templates
+      operationId: getAllSessionTemps
+      responses:
+        200:
+          description: OK Session Template Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SessionTemplate'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: sessionTemplate.controller
   /sessionTemplate/getSessionTempById/{session_template_id}:
     get:
       description: Gets an session template by ID
