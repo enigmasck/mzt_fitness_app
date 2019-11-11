@@ -53,6 +53,7 @@ async function createProgram(progTempId, custId, coachId){
         console.log('BEFORE SAVE program = ' + program);
         
         program.save().then(data => {
+            console.log('program BEFORE RETURN = ' + program);
             return program;
         }).catch(err => {
            console.log('ERROR DURING SAVE: ' + err); 
