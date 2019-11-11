@@ -9,7 +9,8 @@ exports.assignProgramTemplate = function (coachId, custId, progTempId) {
     return new Promise(function (resolve, reject) {
         try{
             var createProgRes = createProgram(progTempId, custId, coachId);
-            resolve(createProgRes);
+            //console.log('createProgRes='+createProgRes);
+            resolve({});
         }catch(err){
             reject(err);
         }
