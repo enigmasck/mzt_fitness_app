@@ -146,53 +146,40 @@ global.getTempSessionId = getTempSessionId;
  * @returns: {array[SessionTemplate]
  * @error: Caught error message
  */
-function getTempSessionData(sessionIds){
-    return new Promise(function (resolve, reject) {
-    SessionTemplate.findById(sessionIds).then(sTemp => {
-        if (!sTemp) {
-            reject("Session templates not found with id " + sessionIds);
-        }
-        if(Array.isArray(sTemp)){
-            var newSessions = [];
-        
-            for(var idx in sTemp){
-                var newSession = new Session({
-                    name: sTemp[idx]['name'],
-                    session_type: sTemp[idx]['session_type'],
-                    session_status: sTemp[idx]['session_status'],
-                    session_coach_notes: sTemp[idx]['session_coach_notes'],
-                    session_template_duration: sTemp[idx]['session_template_duration'],
-                    session_template_tag: sTemp[idx]['session_template_tag'],
-                    exercises: sTemp[idx]['exercises'],
-                    program_template_id: sTemp[idx]['program_template_id']
-                });
-                newSessions.push(newSession);
-            }
-            resolve(newSessions);
-            resolve(sTemp);
-        }else{
-            var newSession = new Session({
-                    name: sTemp['name'],
-                    session_type: sTemp['session_type'],
-                    session_status: sTemp['session_status'],
-                    session_coach_notes: sTemp['session_coach_notes'],
-                    session_template_duration: sTemp['session_template_duration'],
-                    session_template_tag: sTemp['session_template_tag'],
-                    exercises: sTemp['exercises'],
-                    program_template_id: sTemp['program_template_id']
-                });
+async function getTempSessionData(sessionIds){
+    var sessions = [];
+    console.log("BEFORE FOR LOOP ---- ALL SESSION IDs = " + sessionIds);
+    for(var sid in sessionIds){
+        console.log('BEFORE QUERY IN FOR LOOP SESSION ID = ' + sessionIds[sid] );
+        var sessionData = await getOneTempSessionData(sessionIds[sid]);
+        console.log('AFTER QUERY IN FOR LOOP SESSION ID = ' + sessionIds[sid] );
+        sessions.push(sessionData);
+    }
+    return sessions;
+};
+global.getTempSessionData = getTempSessionData;
 
-            var newArray = [];
-            newArray.push(newSession);
-            resolve(newArray);
-        }
+function getOneTempSessionData(sessionId){
+    return new Promise(function (resolve, reject) {
+    SessionTemplate.findById(sessionId).then(sTemp => {
+        var newSession = new Session({
+            name: sTemp['name'],
+            session_type: sTemp['session_type'],
+            session_status: sTemp['session_status'],
+            session_coach_notes: sTemp['session_coach_notes'],
+            session_template_duration: sTemp['session_template_duration'],
+            session_template_tag: sTemp['session_template_tag'],
+            exercises: sTemp['exercises'],
+            program_template_id: sTemp['program_template_id']
+        });
+        resolve(newSession);
     }).catch(err => {
-        console.log('getTempSessionData --- ERROR = ' + err);
+        console.log('getOneTempSessionData --- ERROR = ' + err);
         reject(err);
     });
 });
 };
-global.getTempSessionData = getTempSessionData;
+global.getOneTempSessionData = getOneTempSessionData;
 
 /*
  * @function: getExercises
