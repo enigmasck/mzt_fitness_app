@@ -11,7 +11,7 @@ const ProgramSchema = mongoose.Schema({
     customer_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Customer'},
     sessions: [{type: mongoose.Schema.Types.Object}],
     coach_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Coach'},
-    status: {type: String, enum:['IN_PROGRESS','COMPLETED','CANCELED'], default: 'IN_PROGRESS'}
+    status: {type: String, enum:['ASSIGNED','IN_PROGRESS','COMPLETED','CANCELED'], default: 'ASSIGNED'}
 }, {
     timestamp: true
 });

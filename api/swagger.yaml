@@ -1274,6 +1274,8 @@ components:
           type: string
           minLength: 1
           maxLength: 100
+        status:
+          type: string
         goal:
           type: string
           minLength: 1

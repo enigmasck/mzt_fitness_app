@@ -8,6 +8,7 @@ const Session = require('../models/session.model.js');
 const ProgramTemp = require('../models/programTemplate.model.js');
 const SessionTemplate = require('../models/sessionTemplate.model.js');
 const Exercise = require('../models/exercise.model.js');
+const Customer = require('../models/customer.model.js');
 
 /*
  * @function: createProgram
@@ -36,18 +37,19 @@ async function createProgram(progTempId, custId, coachId){
             var exerciseData = await getExercises(tempSessData[sess].exercises);
             tempSessData[sess].exercises = exerciseData;
         }
-
+        
         const program = new Program({
             title: tempProg.title,
             type: tempProg['type'],
             description: tempProg['description'],
             duration: tempProg['duration'],
-            status: 'ASSIGNED',
             customer_id: custId,
             coach_id: coachId,
             sessions: tempSessData
         });
 
+        var update = await updateCustomerStatus(custId);
+        console.log(update);
         
         program.save().then(data => {
             return program;
@@ -223,4 +225,26 @@ function getExercises(exerciseId){
 });
 };
 global.getExercises = getExercises;
+
+/*
+ * @function: updateCustomerStatus
+ * @arugments: {string} custId
+ * @description: update the status of a customer: NONE->ASSIGNED
+ * @returns: {string}: {ASSIGNED}
+ * @error: Caught error message
+ */
+function updateCustomerStatus(custId){
+    return new Promise(function (resolve, reject) {
+    Customer.findByIdAndUpdate(custId, {status: "ASSIGNED"}, {new: true})
+        .then(customers => {
+            if(!customers) {
+                reject("Customer not found with id " + custId);
+            }
+            resolve("ASSIGNED");
+        }).catch(err => {
+            reject(err);
+        });
+});
+};
+global.updateCustomerStatus = updateCustomerStatus;
 
