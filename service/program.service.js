@@ -5,6 +5,11 @@ const Exercise = require('../models/exercise.model.js');
 require('../service/checkNull.js');
 require('../helpers/program.helpers.js');
 
+/*
+ * @function: assignProgramTemplate
+ * @description: Will assign a program template to a customer, making it one of their
+ *  programs in the database.
+ */
 exports.assignProgramTemplate = function (coachId, custId, progTempId) {
     return new Promise(function (resolve, reject) {
         try{
@@ -17,6 +22,11 @@ exports.assignProgramTemplate = function (coachId, custId, progTempId) {
 
 });
 };
+
+/*
+ * @function: findAll
+ * @description: Get all programs
+ */
 exports.findAll = function () {
     return new Promise(function (resolve, reject) {
         Program.find()
@@ -28,6 +38,10 @@ exports.findAll = function () {
     });
 };
 
+/*
+ * @function: findOne
+ * @description: Find a program for a given program ID
+ */
 exports.findOne = function (progId) {
     return new Promise(function (resolve, reject) {
         Program.findById(progId)
@@ -43,6 +57,10 @@ exports.findOne = function (progId) {
     });
 };
 
+/*
+ * @function: findProgramByCustomerId
+ * @description: Find a program for a given customer ID
+ */
 exports.findProgramByCustomerId = function (custId) {
     return new Promise(function (resolve, reject) {
         var query = {customer_id: custId};
@@ -59,7 +77,11 @@ exports.findProgramByCustomerId = function (custId) {
     });
 };
 
-// Update a program identified by the programId in the request
+
+/*
+ * @function: update
+ * @description: Update a program identified by the programId in the request
+ */
 exports.update = function (prog) {
     return new Promise(function (resolve, reject) {
         // Validate Request
@@ -84,7 +106,10 @@ exports.update = function (prog) {
     });
 };
 
-// Delete a program with the specified programId in the request
+/*
+ * @function: delete
+ * @description: Delete a program with the specified programId in the request
+ */
 exports.delete = function (program_id) {
     return new Promise(function (resolve, reject) {
         Program.findByIdAndRemove(program_id)
@@ -102,7 +127,11 @@ exports.delete = function (program_id) {
     });
 };
 
-// Update a program to add the results of each exercise
+/*
+ * @function: addExerciseResult
+ * @argument {string} progId, {int} sessionNb, {int} exerciseNb, {JSON} exerciseRes
+ * @description: Adds an exercise result for a given program, session, and exercise
+ */
 exports.addExerciseResult = function (progId, sessionNb, exerciseNb, exerciseRes) {
     return new Promise(function (resolve, reject) {
         // Get the program
@@ -129,7 +158,11 @@ exports.addExerciseResult = function (progId, sessionNb, exerciseNb, exerciseRes
     });
 };
 
-// Update a session status in a program when a session is opened or completed
+/*
+ * @function: updateSessStat
+ * @argument {string} progId, {int} sessionNb
+ * @description: Update a session status in a program when a session is opened or completed
+ */
 exports.updateSessStat = function (progId, sessionNb) {
     return new Promise(function (resolve, reject) {
         // Get the program

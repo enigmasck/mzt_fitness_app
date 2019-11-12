@@ -7,9 +7,7 @@ module.exports.assignProgramTemplate = function assignProgramTemplate(req, res, 
     var coachId = req.body['coach_id'];
     var customerId = req.body['customer_id'];
     var programTempId = req.body['program_template_id'];
-    console.log('coach id: ' + coachId);
-    console.log('customer id: ' + customerId);
-    console.log('program template id: ' + programTempId);
+
     Program.assignProgramTemplate(coachId, customerId, programTempId)
             .then(function (response) {
                 utils.writeJson(res, response);
@@ -20,7 +18,6 @@ module.exports.assignProgramTemplate = function assignProgramTemplate(req, res, 
 };
 
 module.exports.getAllPrograms = function getAllPrograms (req, res, next) {
-  console.log('getAllPrograms');
   Program.findAll().then(function (response) {
       utils.writeJson(res, response);
     })

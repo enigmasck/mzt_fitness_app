@@ -10,12 +10,12 @@ const SessionTemplate = require('../models/sessionTemplate.model.js');
 const Exercise = require('../models/exercise.model.js');
 
 /*
- * Function: createProgram
- * Parameters: progTempId (String), custId (String), coachId (String)
- * Purpose: Helps in creating a program from program template and assigning a
+ * @function: createProgram
+ * @arguments: {string }progTempId, {string} custId, {string} coachId
+ * @description: Helps in creating a program from program template and assigning a
  *  customer to this program. Will save new Program Model in database.
- * Returns: Program
- * Exceptions: 
+ * @returns {program} : a program modal with session and exercise data, not references
+ * @error:
  *  - If customer has program in progress: CUSTOMER_HAS_IN_PROGRESS
  *  - Missing/incorrect programTemplateId: "Program template not found with id " + progTempId
  *  - Missing/incorrect sessionTemplateId: "Session templates not found with id " + sessionIds
@@ -65,11 +65,11 @@ async function createProgram(progTempId, custId, coachId){
 global.createProgram = createProgram;
 
 /*
- * Function: checkCustomerProgramStatus
- * Parameters: String: custId
- * Purpose: Check to see if a customer has a program with status: IN_PROGRESS
- * Returns: Promise - String : {IN_PROGRESS, NONE}
- * Exceptions: Caught error message
+ * @function: checkCustomerProgramStatus
+ * @arugments: {string} custId
+ * @description: Check to see if a customer has a program with status: IN_PROGRESS
+ * @returns: {string}: {IN_PROGRESS, NONE}
+ * @error: Caught error message
  */
 function checkCustomerProgramStatus(custId){
     return new Promise(function (resolve, reject) {
@@ -89,11 +89,11 @@ function checkCustomerProgramStatus(custId){
 global.checkCustomerProgramStatus = checkCustomerProgramStatus;
 
 /*
- * Function: getTempProg
- * Parameters: String: progTempId
- * Purpose: Gets a program template
- * Returns: Promise - Model : ProgramTemplate
- * Exceptions: Caught error message
+ * @function: getTempProg
+ * @argument: {string} progTempId
+ * @description: Gets a program template
+ * @returns: Promise - Model : ProgramTemplate
+ * @error: Caught error message
  */
 function getTempProg(progTempId){
     return new Promise(function (resolve, reject) {
@@ -112,13 +112,13 @@ function getTempProg(progTempId){
 global.getTempProg = getTempProg;
 
 /*
- * Function: getTempSessionId
- * Parameters: String: progTempId
- * Purpose: Gets a session template(s) from a given program template. If taken
+ * @function: getTempSessionId
+ * @argument: {string} progTempId
+ * @description: Gets a session template(s) from a given program template. If taken
  *  from a template it will be reference to a SessionTemplate, it is getting
  *  a list of ObjectIds that reference to a SessionTemplate
- * Returns: Promise - Array Session Template ObjectIds
- * Exceptions: Caught error message
+ * @returns: {array[SessionTemplate]}
+ * @error: Caught error message
  */
 function getTempSessionId(progTempId){
     return new Promise(function (resolve, reject) {
@@ -137,12 +137,12 @@ function getTempSessionId(progTempId){
 global.getTempSessionId = getTempSessionId;
 
 /*
- * Function: getTempSessionData
- * Parameters: String: sessionIds
- * Purpose: Gets a session template(s) from a given program template ID. This will
+ * @function: getTempSessionData
+ * @argument {string/array[string]} sessionIds
+ * @description: Gets a session template(s) from a given program template ID. This will
  *  return the actual list of session data from a SessionTemplate
- * Returns: Promise - Array of Model : SessionTemplate
- * Exceptions: Caught error message
+ * @returns: {array[SessionTemplate]
+ * @error: Caught error message
  */
 function getTempSessionData(sessionIds){
     return new Promise(function (resolve, reject) {
@@ -193,11 +193,11 @@ function getTempSessionData(sessionIds){
 global.getTempSessionData = getTempSessionData;
 
 /*
- * Function: getExercises
- * Parameters: String: exerciseId
- * Purpose: Get an exercise for a given exerciseId
- * Returns: Promise - Array of Model : Exercise
- * Exceptions: Caught error message
+ * @function: getExercises
+ * @arugment: String: exerciseId
+ * @description: Get an exercise for a given exerciseId
+ * @returns {array[Exercise]}
+ * @error: Caught error message
  *  - Reject : If Missing/Incorrect exerciseId
  */
 function getExercises(exerciseId){
