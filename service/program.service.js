@@ -15,7 +15,7 @@ exports.assignProgramTemplate = function (coachId, custId, progTempId) {
         try{
             var createProgRes = createProgram(progTempId, custId, coachId);
             //console.log('createProgRes='+createProgRes);
-            resolve({});
+            resolve(createProgRes);
         }catch(err){
             reject(err);
         }

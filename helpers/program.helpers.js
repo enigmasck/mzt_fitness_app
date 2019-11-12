@@ -51,13 +51,15 @@ async function createProgram(progTempId, custId, coachId){
         var update = await updateCustomerStatus(custId);
         console.log(update);
         
-        program.save().then(data => {
-            return program;
+        var saveSuccess = false;
+        var programSave = await program.save().then(data => {
+            saveSuccess = true;
         }).catch(err => {
            console.log('ERROR DURING SAVE: ' + err); 
             return 'ERROR_DURING_SAVE';
         });
         
+        if(saveSuccess === true){return program;}
         
     }else{
         return 'CUSTOMER_HAS_IN_PROGRESS';
@@ -75,7 +77,7 @@ global.createProgram = createProgram;
  */
 function checkCustomerProgramStatus(custId){
     return new Promise(function (resolve, reject) {
-    var currProgQuery = {customer_id: custId, status: "IN_PROGRESS"};
+    var currProgQuery = {customer_id: custId, $or: [{status: "IN_PROGRESS"}, {status: "ASSIGNED"}]};
     Program.findOne(currProgQuery).then(currProg => {
         if(currProg !== null){
             resolve(currProg.status);
@@ -148,11 +150,8 @@ global.getTempSessionId = getTempSessionId;
  */
 async function getTempSessionData(sessionIds){
     var sessions = [];
-    console.log("BEFORE FOR LOOP ---- ALL SESSION IDs = " + sessionIds);
     for(var sid in sessionIds){
-        console.log('BEFORE QUERY IN FOR LOOP SESSION ID = ' + sessionIds[sid] );
         var sessionData = await getOneTempSessionData(sessionIds[sid]);
-        console.log('AFTER QUERY IN FOR LOOP SESSION ID = ' + sessionIds[sid] );
         sessions.push(sessionData);
     }
     return sessions;
@@ -189,29 +188,30 @@ global.getOneTempSessionData = getOneTempSessionData;
  * @error: Caught error message
  *  - Reject : If Missing/Incorrect exerciseId
  */
-function getExercises(exerciseId){
+async function getExercises(exerciseIds){
+        var exercises = [];
+        for(var eIdx in exerciseIds){
+            var eData = await getOneExercise(exerciseIds[eIdx]);
+            exercises.push(eData);
+        }
+        return exercises;
+};
+global.getExercises = getExercises;
+
+function getOneExercise(exerciseId){
     return new Promise(function (resolve, reject) {
-        
     Exercise.findById(exerciseId).then(eTemp => {
-            console.log('found exercises ' + exerciseId);
-            console.log('eTemp ' + eTemp);
             if (!eTemp) {
                 reject("exercises not found with id " + exerciseId);
             }
-            if(Array.isArray(eTemp)){
-                resolve(eTemp);
-            }else{
-                var newArray = [];
-                newArray.push(eTemp);
-                resolve(newArray);
-            }
+             resolve(eTemp);
         }).catch(err => {
             console.log('insertExerciseIntoSessions --- ERROR = ' + err);
             reject(err);
         });
 });
 };
-global.getExercises = getExercises;
+global.getOneExercise = getOneExercise;
 
 /*
  * @function: updateCustomerStatus
