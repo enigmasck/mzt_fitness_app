@@ -9,51 +9,47 @@ const ProgramTemp = require('../models/programTemplate.model.js');
 const SessionTemplate = require('../models/sessionTemplate.model.js');
 const Exercise = require('../models/exercise.model.js');
 
+/*
+ * Function: createProgram
+ * Parameters: progTempId (String), custId (String), coachId (String)
+ * Purpose: Helps in creating a program from program template and assigning a
+ *  customer to this program. Will save new Program Model in database.
+ * Returns: Program
+ * Exceptions: 
+ *  - If customer has program in progress: CUSTOMER_HAS_IN_PROGRESS
+ *  - Missing/incorrect programTemplateId: "Program template not found with id " + progTempId
+ *  - Missing/incorrect sessionTemplateId: "Session templates not found with id " + sessionIds
+ *  - Missing/incorrect exerciseID: "exercises not found with id " + exerciseId 
+ */
 async function createProgram(progTempId, custId, coachId){
     
-    console.log('----------START CREATE PROG------------');
-    
     var progStatus = await checkCustomerProgramStatus(custId);
-    console.log('progStatus = ' + progStatus);
     
     if(progStatus === 'NONE'){
         var tempProg = await getTempProg(progTempId);
-        console.log('tempProg = ' + tempProg);
         
         var tempSessId = await getTempSessionId(progTempId);
-        console.log('tempSessId = ' + tempSessId);
         
         var tempSessData = await getTempSessionData(tempSessId);
-        if(Array.isArray(tempSessData)){
-            console.log(' IS ARRAY tempSessData = ' + tempSessData);
-        }else{
-            console.log('tempSessData = ' + tempSessData);
-        }
 
         for(var sess in tempSessData){
-            console.log('sess = ' + sess);
-            console.log('exercise ids = ' + tempSessData[sess].exercises);
             var exerciseData = await getExercises(tempSessData[sess].exercises);
-            console.log('exerciseData=' + exerciseData);
             tempSessData[sess].exercises = exerciseData;
         }
-        console.log('tempSessData with exercise data= ' + tempSessData);
-        console.log('tempProg before new program= ' + tempProg);
+
         const program = new Program({
             title: tempProg.title,
             type: tempProg['type'],
             description: tempProg['description'],
             duration: tempProg['duration'],
-            status: 'IN_PROGRESS',
+            status: 'ASSIGNED',
             customer_id: custId,
             coach_id: coachId,
             sessions: tempSessData
         });
 
-        console.log('BEFORE SAVE program = ' + program);
         
         program.save().then(data => {
-            console.log('program BEFORE RETURN = ' + program);
             return program;
         }).catch(err => {
            console.log('ERROR DURING SAVE: ' + err); 
@@ -64,11 +60,17 @@ async function createProgram(progTempId, custId, coachId){
     }else{
         return 'CUSTOMER_HAS_IN_PROGRESS';
     }
-    //return 'UNKNOWN_ERROR';
-    console.log('----------END CREATE PROG------------');
+
 }
 global.createProgram = createProgram;
 
+/*
+ * Function: checkCustomerProgramStatus
+ * Parameters: String: custId
+ * Purpose: Check to see if a customer has a program with status: IN_PROGRESS
+ * Returns: Promise - String : {IN_PROGRESS, NONE}
+ * Exceptions: Caught error message
+ */
 function checkCustomerProgramStatus(custId){
     return new Promise(function (resolve, reject) {
     var currProgQuery = {customer_id: custId, status: "IN_PROGRESS"};
@@ -86,6 +88,13 @@ function checkCustomerProgramStatus(custId){
 };
 global.checkCustomerProgramStatus = checkCustomerProgramStatus;
 
+/*
+ * Function: getTempProg
+ * Parameters: String: progTempId
+ * Purpose: Gets a program template
+ * Returns: Promise - Model : ProgramTemplate
+ * Exceptions: Caught error message
+ */
 function getTempProg(progTempId){
     return new Promise(function (resolve, reject) {
     var query = {'_id' : progTempId};
@@ -102,6 +111,15 @@ function getTempProg(progTempId){
 };
 global.getTempProg = getTempProg;
 
+/*
+ * Function: getTempSessionId
+ * Parameters: String: progTempId
+ * Purpose: Gets a session template(s) from a given program template. If taken
+ *  from a template it will be reference to a SessionTemplate, it is getting
+ *  a list of ObjectIds that reference to a SessionTemplate
+ * Returns: Promise - Array Session Template ObjectIds
+ * Exceptions: Caught error message
+ */
 function getTempSessionId(progTempId){
     return new Promise(function (resolve, reject) {
     ProgramTemp.findById(progTempId).then(progTemp => {
@@ -112,22 +130,27 @@ function getTempSessionId(progTempId){
 
     }).catch(err => {
         console.log('getTempSession IDs --- ERROR = ' + err);
-        return err;
+        reject(err);
     });
 });
 };
 global.getTempSessionId = getTempSessionId;
 
-
+/*
+ * Function: getTempSessionData
+ * Parameters: String: sessionIds
+ * Purpose: Gets a session template(s) from a given program template ID. This will
+ *  return the actual list of session data from a SessionTemplate
+ * Returns: Promise - Array of Model : SessionTemplate
+ * Exceptions: Caught error message
+ */
 function getTempSessionData(sessionIds){
     return new Promise(function (resolve, reject) {
     SessionTemplate.findById(sessionIds).then(sTemp => {
         if (!sTemp) {
             reject("Session templates not found with id " + sessionIds);
         }
-        console.log('IN getTempSessionData ------ sTemp = ' + sTemp);
         if(Array.isArray(sTemp)){
-            console.log('IN getTempSessionData is array');
             var newSessions = [];
         
             for(var idx in sTemp){
@@ -144,9 +167,6 @@ function getTempSessionData(sessionIds){
                 newSessions.push(newSession);
             }
             resolve(newSessions);
-            console.log('IN getTempSessionData NOT array');
-            console.log('sTemp = ' + sTemp);
-            
             resolve(sTemp);
         }else{
             var newSession = new Session({
@@ -166,13 +186,20 @@ function getTempSessionData(sessionIds){
         }
     }).catch(err => {
         console.log('getTempSessionData --- ERROR = ' + err);
-        return err;
+        reject(err);
     });
 });
 };
 global.getTempSessionData = getTempSessionData;
 
-
+/*
+ * Function: getExercises
+ * Parameters: String: exerciseId
+ * Purpose: Get an exercise for a given exerciseId
+ * Returns: Promise - Array of Model : Exercise
+ * Exceptions: Caught error message
+ *  - Reject : If Missing/Incorrect exerciseId
+ */
 function getExercises(exerciseId){
     return new Promise(function (resolve, reject) {
         
@@ -191,7 +218,7 @@ function getExercises(exerciseId){
             }
         }).catch(err => {
             console.log('insertExerciseIntoSessions --- ERROR = ' + err);
-            return err;
+            reject(err);
         });
 });
 };
