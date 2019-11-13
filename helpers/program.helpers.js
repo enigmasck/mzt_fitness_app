@@ -28,9 +28,7 @@ async function createProgram(progTempId, custId, coachId){
     
     if(progStatus === 'NONE'){
         var tempProg = await getTempProg(progTempId);
-        
         var tempSessId = await getTempSessionId(progTempId);
-        
         var tempSessData = await getTempSessionData(tempSessId);
 
         for(var sess in tempSessData){

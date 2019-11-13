@@ -1020,7 +1020,94 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: sessionTemplate.controller
-
+  /notification/activate:
+    post:
+      description: Creates a new notification
+      operationId: activate
+      requestBody:
+        description: Add a new notifcation
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      responses:
+        200:
+          description: OK Notification Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: notification.controller
+  /notification/deactivate:
+    delete:
+      description: Deletes an existing notification
+      operationId: deactivate
+      parameters:
+        - $ref: '#/components/parameters/notifCustIdParam'
+        - $ref: '#/components/parameters/notifCoachIdParam'
+        - $ref: '#/components/parameters/notifForIdParam'
+        - $ref: '#/components/parameters/notifTypeIdParam'
+      responses:
+        200:
+          description: OK Exercise Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/parameters/notifIdParamDel'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: notification.controller
+  /notification/checkNotification:
+    get:
+      description: check to see if a notifcation is active
+      operationId: checkNotification
+      parameters:
+        - $ref: '#/components/parameters/notifCustIdParam'
+        - $ref: '#/components/parameters/notifCoachIdParam'
+        - $ref: '#/components/parameters/notifForIdParam'
+        - $ref: '#/components/parameters/notifTypeIdParam'
+      responses:
+        200:
+          description: OK Notification Active
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notifcation'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: notification.controller
 components:
   parameters:
     customerIdParamGet:
@@ -1200,6 +1287,40 @@ components:
         explode: false
         schema:
           type: string
+    notifCustIdParam:
+        name: customer_id
+        in: query
+        description: the id of customer to delete notification
+        required: false
+        explode: false
+        schema:
+          type: string
+    notifCoachIdParam:
+        name: coach_id
+        in: query
+        description: the id of coach to delete notification
+        required: false
+        explode: false
+        schema:
+          type: string
+    notifForIdParam:
+        name: notify_for
+        in: query
+        description: who is the notification intended for
+        required: true
+        explode: false
+        schema:
+          type: string
+    notifTypeIdParam:
+        name: notify_for
+        in: query
+        description: type of notification
+        required: true
+        explode: false
+        schema:
+          type: string
+       
+
   schemas:
     Coach:
       type: object
@@ -1553,3 +1674,18 @@ components:
                 type: object
             session_template_tag:
                 type: object
+    Notification:
+        type: object
+        properties:
+            notification_id:
+                type: object
+            coach_id:
+                type: object
+            customer_id:
+                type: object
+            notify_for:
+                type: string
+            notify_type:
+                type: string
+            msg:
+                type: string
