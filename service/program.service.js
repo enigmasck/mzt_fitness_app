@@ -2,6 +2,7 @@ const Program = require('../models/program.model.js');
 const ProgramTemp = require('../models/programTemplate.model.js');
 const SessionTemplate = require('../models/sessionTemplate.model.js');
 const Exercise = require('../models/exercise.model.js');
+const Customer = require('../models/customer.model.js');
 require('../service/checkNull.js');
 require('../helpers/program.helpers.js');
 
@@ -158,18 +159,40 @@ exports.addExerciseResult = function (progId, sessionNb, exerciseNb, exerciseRes
     });
 };
 
-exports.coachUpdateSessStat = function (progId, sessionNb) {
+function updateCustomerStatus(custId, status){
     return new Promise(function (resolve, reject) {
-        // Get the program
-        Program.findById(progId).then(prog => {
-            if (!prog) {
-                reject("Program template not found with id " + progId);
-            } else {
-                
+        Customer.findByIdAndUpdate(custId, {"$set": {status: status}}, {new : true})
+            .then(cust => {
+                if (!cust) {
+                    reject("Customer not found with id " + custId);
+                }
+                resolve(cust);
+            }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject("Customer not found with id " + custId);
             }
-        })
-    })
-    }
+            reject("Error updating customer with id " + custId);
+        });
+    });
+};
+
+function updateProgramStatus(progId, status){
+    return new Promise(function (resolve, reject) {
+        Program.findByIdAndUpdate(progId,
+            {"$set": {status: status}}, {new : true})
+            .then(prog => {
+                if (!prog) {
+                    reject("Program not found with id " + progId);
+                }
+                resolve(prog);
+            }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject("Program not found with id " + progId);
+            }
+            reject("Error updating program with id " + progId);
+        });
+    });
+};
 
 /*
  * @function: updateSessStat
@@ -184,36 +207,15 @@ exports.customerUpdateProgramStat = function (progId) {
                 reject("Program template not found with id " + progId);
             } else {
                 if (program.status === 'ASSIGNED') {
-                    Program.findByIdAndUpdate(progId,
-                            {"$set": {status: "IN_PROGRESS"}}
-                    , {new : true})
-                            .then(prog => {
-                                if (!prog) {
-                                    reject("Program not found with id " + progId);
-                                }
-                                resolve(prog);
-                            }).catch(err => {
-                        if (err.kind === 'ObjectId') {
-                            reject("Program not found with id " + progId);
-                        }
-                        reject("Error updating program with id " + progId);
-                    });
+                    var prog = updateProgramStatus(progId, "IN_PROGRESS");
+                    var cust = updateCustomerStatus(program.customer_id,"IN_PROGRESS");
+                    resolve(prog);
                 }
                 else{
                     if (program.status === 'IN_PROGRESS') {
-                        Program.findByIdAndUpdate(progId,
-                                {"$set": {status: "COMPLETED"}}, {new : true})
-                                .then(prog => {
-                                    if (!prog) {
-                                        reject("Program not found with id " + progId);
-                                    }
-                                    resolve(prog);
-                                }).catch(err => {
-                            if (err.kind === 'ObjectId') {
-                                reject("Program not found with id " + progId);
-                            }
-                            reject("Error updating program with id " + progId);
-                        });
+                        var prog = updateProgramStatus(progId, "COMPLETED");
+                        var cust = updateCustomerStatus(program.customer_id,"NONE");
+                        resolve(prog);
                     }
                 }
             }
@@ -229,36 +231,15 @@ exports.coachUpdateProgramStat = function (progId) {
                 reject("Program template not found with id " + progId);
             } else {
                 if (program.status === 'ASSIGNED') {
-                    Program.findByIdAndUpdate(progId,
-                            {"$set": {status: "CANCELED"}}
-                    , {new : true})
-                            .then(prog => {
-                                if (!prog) {
-                                    reject("Program not found with id " + progId);
-                                }
-                                resolve(prog);
-                            }).catch(err => {
-                        if (err.kind === 'ObjectId') {
-                            reject("Program not found with id " + progId);
-                        }
-                        reject("Error updating program with id " + progId);
-                    });
+                    var prog = updateProgramStatus(progId, "CANCELED");
+                    var cust = updateCustomerStatus(program.customer_id,"NONE");
+                    resolve(prog);
                 }
                 else{
                     if (program.status === 'IN_PROGRESS') {
-                        Program.findByIdAndUpdate(progId,
-                                {"$set": {status: "CANCELED"}}, {new : true})
-                                .then(prog => {
-                                    if (!prog) {
-                                        reject("Program not found with id " + progId);
-                                    }
-                                    resolve(prog);
-                                }).catch(err => {
-                            if (err.kind === 'ObjectId') {
-                                reject("Program not found with id " + progId);
-                            }
-                            reject("Error updating program with id " + progId);
-                        });
+                        var prog = updateProgramStatus(progId, "CANCELED");
+                        var cust = updateCustomerStatus(program.customer_id,"NONE");
+                        resolve(prog);
                     }
                 }
             }
@@ -288,6 +269,52 @@ exports.customerUpdateSessStat = function (progId, sessionNb) {
                         }
                         reject("Error updating program with id " + progId);
                     });
+                }
+            }
+        });
+    });
+};
+
+exports.coachUpdateSessStat = function (progId, sessionNb) {
+    return new Promise(function (resolve, reject) {
+        // Get the program
+        Program.findById(progId).then(prog => {
+            if (!prog) {
+                reject("Program template not found with id " + progId);
+            } else {
+                if (prog.sessions[sessionNb].session_status === 'OPENED') {
+                    Program.findByIdAndUpdate(progId,
+                            {"$set": {["sessions." + sessionNb + ".session_status"]: "CLOSED"}}
+                    , {new : true})
+                            .then(prog => {
+                                if (!prog) {
+                                    reject("Program not found with id " + progId);
+                                }
+                                resolve(prog);
+                            }).catch(err => {
+                        if (err.kind === 'ObjectId') {
+                            reject("Program not found with id " + progId);
+                        }
+                        reject("Error updating program with id " + progId);
+                    });
+                }
+                else{
+                    if (prog.sessions[sessionNb].session_status === 'CLOSED') {
+                        Program.findByIdAndUpdate(progId,
+                                {"$set": {["sessions." + sessionNb + ".session_status"]: "OPENED"}}
+                        , {new : true})
+                                .then(prog => {
+                                    if (!prog) {
+                                        reject("Program not found with id " + progId);
+                                    }
+                                    resolve(prog);
+                                }).catch(err => {
+                            if (err.kind === 'ObjectId') {
+                                reject("Program not found with id " + progId);
+                            }
+                            reject("Error updating program with id " + progId);
+                        });
+                    }
                 }
             }
         });
