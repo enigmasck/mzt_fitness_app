@@ -10,6 +10,7 @@ exports.create = function (Custmeasurement) {
         // Create a measurement
         const measurement = new Measurement({
             customer_id: Custmeasurement['customer_id'],
+            program_id: Custmeasurement['program_id'],
             measurement_date: Custmeasurement['measurement_date'],
             heartRate1: Custmeasurement['heartRate1'],
             heartRate2: Custmeasurement['heartRate2'],
@@ -27,40 +28,40 @@ exports.create = function (Custmeasurement) {
     });
 };
 
-// Retrieve a list of measurements by customer ID
-exports.findByCustomerId = function (customer_id) {
+// Retrieve a list of measurements by customer ID and program ID
+exports.findByCustomerIdAndProgramId = function (customer_id, program_id) {
     return new Promise(function (resolve, reject) {
-        var query = {'customer_id': customer_id};
+        var query = {'customer_id': customer_id,'program_id':program_id};
         Measurement.find(query)
         .then(measurements => {
             if (!measurements){
-                reject("Measurement not found with customer id " + customer_id);
+                reject("Measurement not found with customer id " + customer_id + " and program id " + program_id);
             }
             resolve(measurements);
         }).catch(err => {
             if (err.kind === 'ObjectId') {
-                reject("Measurement not found with customer id " + customer_id);
+                reject("Measurement not found with customer id " + customer_id + " and program id " + program_id);
             }
-            reject('Some error occured while retrieving the measurements with customer id ' + customer_id);
+            reject('Some error occured while retrieving the measurements with customer id ' + customer_id + " and program id " + program_id);
         });
     });
 };
 
-// Retrieve a list of measurements by customer ID
-exports.findByCustomerIdAndMeasurementDate = function (customer_id, measurement_date) {
+// Retrieve one measurement, by customer ID, date of measurement and program ID
+exports.findByCustomerIdAndMeasurementDateAndProgramId = function (customer_id, measurement_date, program_id) {
     return new Promise(function (resolve, reject) {
-        var query = {'customer_id': customer_id,'measurement_date': measurement_date};
+        var query = {'customer_id': customer_id,'measurement_date': measurement_date,'program_id':program_id};
         Measurement.find(query)
         .then(measurements => {
             if (!measurements){
-                reject("Measurement not found with customer id " + customer_id + " and measurement date " + measurement_date);
+                reject("Measurement not found with customer id " + customer_id + ", measurement date " + measurement_date + " and program id " + program_id);
             }
             resolve(measurements);
         }).catch(err => {
             if (err.kind === 'ObjectId') {
-                reject("Measurement not found with customer id " + customer_id + " and measurement date " + measurement_date);
+                reject("Measurement not found with customer id " + customer_id + " and measurement date " + measurement_date + " and program id " + program_id);
             }
-            reject('Some error occured while retrieving the measurements with customer id ' + customer_id + " and measurement date " + measurement_date);
+            reject('Some error occured while retrieving the measurements with customer id ' + customer_id + " and measurement date " + measurement_date + " and program id " + program_id);
         });
     });
 };
@@ -69,16 +70,14 @@ exports.findByCustomerIdAndMeasurementDate = function (customer_id, measurement_
 // Update the measurement for customers with a goal to lose weight
 exports.update = function (measu){
     return new Promise(function (resolve, reject) {
-        var query = {'customer_id': measu['customer_id'],'measurement_date':  measu['measurement_date']};
+        var query = {'customer_id': measu['customer_id'],'measurement_date':  measu['measurement_date'],'program_id':measu['program_id']};
         Measurement.findOne(query)
         .then(m => {
             if (!m){
-                reject("Measurement not found with customer id " + measu['customer_id'] + " and measurement date " + measu['measurement_date']);
+                reject("Measurement not found with customer id " + measu['customer_id'] + ", measurement date " + measu['measurement_date'] + " and program id " + measu['program_id']);
             } else {
                 var raw = {};
                 raw = checkNull(raw, measu); 
-                console.log("WHAT IS TO BE UPDATED: " + m);
-                console.log("TO ADD: "+ measu );
                 Measurement.findByIdAndUpdate(m['_id'], raw, {new : true})
                 .then(measurements => {
                     if (!measurements) {
@@ -95,9 +94,9 @@ exports.update = function (measu){
             } 
         }).catch(err => {
             if (err.kind === 'ObjectId') {
-                reject("Measurement not found with customer id " + measu['customer_id'] + " and measurement date " + measu['measurement_date']);
+                reject("Measurement not found with customer id " + measu['customer_id'] + ", measurement date " + measu['measurement_date'] + " and program id " + measu['program_id']);
             }
-            reject('Some error occured while retrieving the measurements with customer id ' + measu['customer_id'] + " and measurement date " + measu['measurement_date']);
+            reject('Some error occured while retrieving the measurements with customer id ' + measu['customer_id'] + ", measurement date " + measu['measurement_date'] + " and program id " + measu['program_id']);
         });   
     });
 };

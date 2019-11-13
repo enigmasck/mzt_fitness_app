@@ -14,10 +14,11 @@ module.exports.addMeasurement = function addMeasurement (req, res, next) {
     });
 };
 
-// Retrieve all the measurements for a customer (by its ID)
+// Retrieve all the measurements for a customer (by its ID)and by program Id
 module.exports.getCustomerMeasurementsById = function getCustomerMeasurementsById (req, res, next) {
-    var customerId = req.swagger.params['customer_id'].value;
-    Measurement.findByCustomerId(customerId)
+    var custId = req.body['customer_id'];
+    var progId = req.body['program_id'];
+    Measurement.findByCustomerIdAndProgramId(custId, progId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -26,12 +27,13 @@ module.exports.getCustomerMeasurementsById = function getCustomerMeasurementsByI
     });
 };
 
-// Retrieve all the measurements for a customer (by its ID)
+// Retrieve one measurement for a customer (by its ID), by program ID and by measurement date
 module.exports.getCustomerMeasurementsByIdAndDate = function getCustomerMeasurementsByIdAndDate (req, res, next) {
     var custId = req.body['customer_id'];
     var measurementDate = req.body['measurement_date'];
+    var progId = req.body['program_id'];
     
-    Measurement.findByCustomerIdAndMeasurementDate(custId, measurementDate)
+    Measurement.findByCustomerIdAndMeasurementDateAndProgramId(custId, measurementDate, progId)
     .then(function (response) {
       utils.writeJson(res, response);
     })

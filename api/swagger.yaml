@@ -167,13 +167,13 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: customer.controller
-  /customer/getCustomerMeasurementsById/{customer_id}:
+  /customer/getCustomerMeasurementsById:
     get:
       description: Gets list of a customer's measurements by their id. This returns
         multiple measurements if there exists more than 1
       operationId: getCustomerMeasurementsById
       parameters:
-      - $ref: '#/components/parameters/customerIdParamGet'
+      - $ref: '#/components/schemas/Measurement'
       responses:
         200:
           description: OK Customer Measurement Obtained

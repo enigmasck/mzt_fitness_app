@@ -3,7 +3,8 @@ const Customer = require('../models/customer.model.js');
 
 const MeasurementSchema = mongoose.Schema({
     measurement_id: String,
-    customer_id: String,
+    customer_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Customer'},
+    program_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Program'},
     measurement_date: {type: Date, default: Date.now()},
     heartRate1: Number, 
     heartRate2: Number, 
