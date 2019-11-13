@@ -86,11 +86,46 @@ module.exports.updateExerciseResult = function updateExerciseResult (req, res, n
     });
 };
 
-module.exports.updateSessionStatus = function updateSessionStatus (req, res, next) {
+module.exports.coachUpdateProgramStatus = function coachUpdateProgramStatus (req, res, next) {
+  var progId = req.body['program_id'];
+  Program.coachUpdateProgramStat(progId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.customerUpdateProgramStatus = function customerUpdateProgramStatus (req, res, next) {
+  var progId = req.body['program_id'];
+  Program.customerUpdateProgramStat(progId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.coachUpdateSessionStatus = function coachUpdateSessionStatus (req, res, next) {
   var progId = req.body['program_id'];
   var sessionNb = req.body['sessionNumber'];
   
-  Program.updateSessStat(progId, sessionNb)
+  Program.coachUpdateSessStat(progId, sessionNb)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.customerUpdateSessionStatus = function customerUpdateSessionStatus (req, res, next) {
+  var progId = req.body['program_id'];
+  var sessionNb = req.body['sessionNumber'];
+  
+  Program.customerUpdateSessStat(progId, sessionNb)
     .then(function (response) {
       utils.writeJson(res, response);
     })
