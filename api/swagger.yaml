@@ -1407,15 +1407,13 @@ components:
         schema:
           type: string
     notifTypeIdParam:
-        name: notify_for
+        name: notify_type
         in: query
         description: type of notification
         required: true
         explode: false
         schema:
           type: string
-       
-
   schemas:
     Coach:
       type: object
