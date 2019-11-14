@@ -8,9 +8,10 @@ exports.create = function (Custmeasurement) {
             resolve("Measurement content can not be empty");
         }
         // Create a measurement
-        const measurement = new Measurement({
+        const NEW_MEASURMENT = new Measurement({
             customer_id: Custmeasurement['customer_id'],
             program_id: Custmeasurement['program_id'],
+            session_id: Custmeasurement['session_id'],
             measurement_date: Custmeasurement['measurement_date'],
             heartRate1: Custmeasurement['heartRate1'],
             heartRate2: Custmeasurement['heartRate2'],
@@ -19,7 +20,7 @@ exports.create = function (Custmeasurement) {
         });
 
         // Save the measurement in the database
-        measurement.save()
+        NEW_MEASURMENT.save()
                 .then(data => {
                     resolve(data);
                 }).catch(err => {
@@ -67,13 +68,14 @@ exports.findByCustomerIdAndMeasurementDateAndProgramId = function (customer_id, 
 };
 
 // Update the measurement for customers with a goal to lose weight OR to get coach feedback
-exports.update = function (measu){
+exports.updateMeasurement = function (measu){
     return new Promise(function (resolve, reject) {
-        var query = {'customer_id': measu['customer_id'],'measurement_date':  measu['measurement_date'],'program_id':measu['program_id']};
+        var query = {'customer_id': measu['customer_id'],'session_id':measu['session_id'],'program_id':measu['program_id']};
         Measurement.findOne(query)
         .then(m => {
             if (!m){
-                reject("Measurement not found with customer id " + measu['customer_id'] + ", measurement date " + measu['measurement_date'] + " and program id " + measu['program_id']);
+                reject("Measurement not found with customer id " + measu['customer_id'] 
+                        + ", session_id " + measu['session_id'] + " and program id " + measu['program_id']);
             } else {
                 var raw = {};
                 raw = checkNull(raw, measu); 
@@ -93,9 +95,48 @@ exports.update = function (measu){
             } 
         }).catch(err => {
             if (err.kind === 'ObjectId') {
-                reject("Measurement not found with customer id " + measu['customer_id'] + ", measurement date " + measu['measurement_date'] + " and program id " + measu['program_id']);
+                reject("Measurement not found with customer id " + measu['customer_id'] + ", session_id " 
+                        + measu['session_id'] + " and program id " + measu['program_id']);
             }
-            reject('Some error occured while retrieving the measurements with customer id ' + measu['customer_id'] + ", measurement date " + measu['measurement_date'] + " and program id " + measu['program_id']);
+            reject('Some error occured while retrieving the measurements with customer id ' + measu['customer_id'] 
+                    + ", session_id " + measu['session_id'] + " and program id " + measu['program_id']);
         });   
     });
 };
+
+exports.updateFocusFeedback = function (feedBack){
+    return new Promise(function (resolve, reject) {
+        var query = {'customer_id': feedBack['customer_id'], 'session_id':feedBack['session_id'], 'program_id':feedBack['program_id']};
+        Measurement.findOne(query)
+        .then(m => {
+            if (!m){
+                reject("Measurement not found with customer id " + feedBack['customer_id'] + ", session_id " 
+                        + feedBack['session_id'] + " and program id " + feedBack['program_id']);
+            } else {
+                var raw = {};
+                raw = checkNull(raw, feedBack); 
+                Measurement.findByIdAndUpdate(m['_id'], raw, {new : true})
+                .then(measurements => {
+                    if (!measurements) {
+                        reject("Measurement not found with id " + measurements['_id']);
+                    }
+                    console.log("UPDATE FOCUS FEEDBACK MEASUREMENT ID: " + measurements['_id']);
+                    resolve(measurements);
+                }).catch(err => {
+                    if (err.kind === 'ObjectId') {
+                        reject("Measurement not found with id " + m['_id']);
+                    }
+                    reject("Error updating program with id " + m['_id']);
+                });  
+            } 
+        }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject("Measurement not found with customer id " + feedBack['customer_id'] + ", session_id " + 
+                        feedBack['session_id'] + " and program id " + feedBack['program_id']);
+            }
+            reject('Some error occured while retrieving the measurements with customer id ' + feedBack['customer_id'] 
+                    + ", session_id " + feedBack['session_id'] + " and program id " + feedBack['program_id']);
+        });   
+    });
+};
+

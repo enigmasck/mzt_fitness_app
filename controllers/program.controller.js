@@ -11,8 +11,13 @@ module.exports.assignProgramTemplate = function assignProgramTemplate(req, res, 
 
     Program.assignProgramTemplate(coachId, customerId, programTempId)
             .then(function (response) {
+                var newNotificationJson = {"customer_id":customerId, 
+                                            "coach_id":coachId,
+                                            "notify_for":"CUSTOMER",
+                                            "notify_type":"PROGRAM_ASSIGNED",
+                                            "msg":"You have been assigned to a new program."};
                 // ACTIVATE NOTIFICATION FOR CUSTOMER
-                Notification.addNotification({"customer_id":customerId, "coach_id":coachId,"notify_for":"CUSTOMER","notify_type":"PROGRAM_ASSIGNED"});
+                Notification.addNotification(newNotificationJson);
                 utils.writeJson(res, response);       
             })
             .catch(function (response) {

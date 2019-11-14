@@ -5,6 +5,7 @@ const MeasurementSchema = mongoose.Schema({
     measurement_id: String,
     customer_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Customer'},
     program_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Program'},
+    session_id: {type: mongoose.Schema.Types.ObjectId},
     measurement_date: {type: Date, default: Date.now()},
     heartRate1: Number, 
     heartRate2: Number, 
