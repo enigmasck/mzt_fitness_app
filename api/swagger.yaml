@@ -1182,7 +1182,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Notifcation'
+                  $ref: '#/components/schemas/Notification'
                 x-content-type: application/json
         400:
           description: 'Error: Bad Request'
