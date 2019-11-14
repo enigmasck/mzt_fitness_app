@@ -27,6 +27,7 @@ exports.deleteNotification = function (custId, coachId, notifFor, notifType) {
         });
     });
 };
+
 exports.find = function (custId, coachId, notifFor, notifType) {
     return new Promise(function (resolve, reject) {
         console.log("customer_id = " + custId);
@@ -34,6 +35,21 @@ exports.find = function (custId, coachId, notifFor, notifType) {
         console.log("for = " + notifFor);
         console.log("type = " + notifType);
         var query = {customer_id : custId, coach_id: coachId, notify_for: notifFor, notify_type: notifType};
+        NOTIFICATION.find(query)
+                .then(notif => {
+                    resolve(notif);
+                }).catch(err => {
+            reject('ERROR : ' + err);
+        });
+    });
+};
+
+exports.findAll = function (custId, coachId, notifFor) {
+    return new Promise(function (resolve, reject) {
+        console.log("customer_id = " + custId);
+        console.log("coach = " + coachId);
+        console.log("for = " + notifFor);
+        var query = {customer_id : custId, coach_id: coachId, notify_for: notifFor};
         NOTIFICATION.find(query)
                 .then(notif => {
                     resolve(notif);

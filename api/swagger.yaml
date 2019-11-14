@@ -1225,6 +1225,36 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: notification.controller
+      
+  /notification/checkAllNotification:
+    get:
+      description: Check all notifications for a given customer/coach
+      operationId: checkAllNotification
+      parameters:
+        - $ref: '#/components/parameters/notifCustIdParam'
+        - $ref: '#/components/parameters/notifCoachIdParam'
+        - $ref: '#/components/parameters/notifForIdParam'
+      responses:
+        200:
+          description: OK Notification Active
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: notification.controller
 components:
   parameters:
     customerIdParamGet:

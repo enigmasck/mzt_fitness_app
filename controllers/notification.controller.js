@@ -40,3 +40,16 @@ module.exports.checkNotification = function checkNotification (req, res, next) {
     });
 
 };
+
+module.exports.checkAllNotification = function checkAllNotification (req, res, next) {
+  var custId = req.query['customer_id'];
+  var coachId = req.query['coach_id'];
+  var notifFor = req.query['notify_for'];
+  Notification.findAll(custId, coachId, notifFor).then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+
+};
