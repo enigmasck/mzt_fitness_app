@@ -3,6 +3,7 @@ const ProgramTemp = require('../models/programTemplate.model.js');
 const SessionTemplate = require('../models/sessionTemplate.model.js');
 const Exercise = require('../models/exercise.model.js');
 const Customer = require('../models/customer.model.js');
+const NOTIFICATION_SERVICE = require('../service/notification.service');
 require('../service/checkNull.js');
 require('../helpers/program.helpers.js');
 
@@ -308,6 +309,15 @@ exports.coachUpdateSessStat = function (progId, sessionNb) {
                                         reject("Program not found with id " + progId);
                                     }
                                     resolve(prog);
+                                    //activate notification that a focus session has been opened
+                                    if(prog.sessions[sessionNb].session_type === 'focus'){
+                                        var newNotificationJson = {"customer_id":prog.customer_id, 
+                                            "coach_id":prog.coach_id,
+                                            "notify_for":"CUSTOMER",
+                                            "notify_type":"FOCUS_SESSION_OPENED",
+                                            "msg":"Your coach has opened a new focus session for you."};
+                                        NOTIFICATION_SERVICE.addNotification(newNotificationJson);
+                                    }
                                 }).catch(err => {
                             if (err.kind === 'ObjectId') {
                                 reject("Program not found with id " + progId);
