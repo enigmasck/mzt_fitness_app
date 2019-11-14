@@ -16,8 +16,8 @@ module.exports.addMeasurement = function addMeasurement (req, res, next) {
 
 // Retrieve all the measurements for a customer (by its ID)and by program Id
 module.exports.getCustomerMeasurementsById = function getCustomerMeasurementsById (req, res, next) {
-    var custId = req.body['customer_id'];
-    var progId = req.body['program_id'];
+    var custId = req.query['customer_id'];
+    var progId = req.query['program_id'];
     Measurement.findByCustomerIdAndProgramId(custId, progId)
     .then(function (response) {
       utils.writeJson(res, response);

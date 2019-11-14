@@ -2,7 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var Program = require('../service/program.service');
-var Notification = require('../service/program.service');
+var Notification = require('../service/notification.service');
 
 module.exports.assignProgramTemplate = function assignProgramTemplate(req, res, next) {
     var coachId = req.body['coach_id'];
