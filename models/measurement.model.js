@@ -16,7 +16,8 @@ const MeasurementSchema = mongoose.Schema({
     hips: Number,
     thigh: Number,
     waist: Number,
-    dickson_metric: Number
+    dickson_metric: Number,
+    coach_feedback: String
 }, {
 	timestamp: true
 });

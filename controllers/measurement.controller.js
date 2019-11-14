@@ -42,7 +42,7 @@ module.exports.getCustomerMeasurementsByIdAndDate = function getCustomerMeasurem
     });
 };
 
-// Update the measurements for customers with a goal to lose weight
+// Update the measurements for customers with a goal to lose weight OR to add coach feedback
 module.exports.updateMeasurement = function updateMeasurement(req, res, next) {
     Measurement.update(req.body)
     .then(function (response) {
