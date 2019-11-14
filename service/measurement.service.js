@@ -66,8 +66,7 @@ exports.findByCustomerIdAndMeasurementDateAndProgramId = function (customer_id, 
     });
 };
 
-
-// Update the measurement for customers with a goal to lose weight
+// Update the measurement for customers with a goal to lose weight OR to get coach feedback
 exports.update = function (measu){
     return new Promise(function (resolve, reject) {
         var query = {'customer_id': measu['customer_id'],'measurement_date':  measu['measurement_date'],'program_id':measu['program_id']};

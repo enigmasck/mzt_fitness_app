@@ -280,7 +280,7 @@ paths:
           description: 'Error: Not Found'
       security:
       - basicAuth: []
-      x-swagger-router-controller: measurement.controller 
+      x-swagger-router-controller: measurement.controller  
   /program/assignProgramTemplate:
     post:
       description: Assigns program templates to program
@@ -1182,7 +1182,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Notifcation'
+                  $ref: '#/components/schemas/Notification'
                 x-content-type: application/json
         400:
           description: 'Error: Bad Request'

@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var Program = require('../service/program.service');
+var Notification = require('../service/program.service');
 
 module.exports.assignProgramTemplate = function assignProgramTemplate(req, res, next) {
     var coachId = req.body['coach_id'];
@@ -10,7 +11,9 @@ module.exports.assignProgramTemplate = function assignProgramTemplate(req, res, 
 
     Program.assignProgramTemplate(coachId, customerId, programTempId)
             .then(function (response) {
-                utils.writeJson(res, response);
+                // ACTIVATE NOTIFICATION FOR CUSTOMER
+                Notification.addNotification({"customer_id":customerId, "coach_id":coachId,"notify_for":"CUSTOMER","notify_type":"PROGRAM_ASSIGNED"});
+                utils.writeJson(res, response);       
             })
             .catch(function (response) {
                 utils.writeJson(res, response);
