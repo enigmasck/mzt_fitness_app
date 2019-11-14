@@ -1319,8 +1319,6 @@ components:
         explode: false
         schema:
           type: string
-       
-
   schemas:
     Coach:
       type: object
