@@ -1255,6 +1255,59 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: notification.controller
+  /challenge/getChallengeById/{challenge_id}:
+    get:
+      description: Gets all challenge information by challenge ID
+      operationId: getChallengeById
+      parameters:
+      - $ref: '#/components/parameters/challengeIdParamGet'
+      responses:
+        200:
+          description: OK Challenge Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Challenge'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: challenge.controller
+  /challenge/getAllChallenges:
+    get:
+      description: Gets list of all challenges
+      operationId: getAllChallenges
+      responses:
+        200:
+          description: OK Challenge Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Challenge'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: challenge.controller
+
 components:
   parameters:
     customerIdParamGet:
@@ -1489,6 +1542,15 @@ components:
         in: query
         description: type of notification
         required: true
+        explode: false
+        schema:
+          type: string
+    challengeIdParamGet:
+        name: challenge_id
+        in: path
+        description: the id of the challenge
+        required: true
+        style: simple
         explode: false
         schema:
           type: string
@@ -1863,3 +1925,33 @@ components:
                 type: string
             msg:
                 type: string
+    Challenge:
+      type: object
+      properties:
+        challenge_id:
+          type: object
+          readOnly: true
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: The name of the challenge
+        type:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: 'The type of the challenge: Lifestyle, Eating, Fitness, Attendance'
+        difficulty:
+          type: string
+          format: date
+          description: 'The difficulty of the challenge: EASY, MODERATE, DIFFICULT, EXTREMELY DIFFICULT'
+        description:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: The description of the challenge
+        points:
+          type: integer
+          format: date
+          description: The number of points the challenge is worth
+
