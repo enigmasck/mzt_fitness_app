@@ -113,9 +113,7 @@ exports.updateFocusFeedback = function (feedBack){
                 reject("Measurement not found with customer id " + feedBack['customer_id'] + ", session_id " 
                         + feedBack['session_id'] + " and program id " + feedBack['program_id']);
             } else {
-                var raw = {};
-                raw = checkNull(raw, feedBack); 
-                Measurement.findByIdAndUpdate(m['_id'], raw, {new : true})
+                Measurement.findByIdAndUpdate(m['_id'], {coach_feedback: feedBack['feedback']}, {new : true})
                 .then(measurements => {
                     if (!measurements) {
                         reject("Measurement not found with id " + measurements['_id']);
