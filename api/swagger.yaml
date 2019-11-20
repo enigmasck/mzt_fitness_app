@@ -1225,7 +1225,6 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: notification.controller
-      
   /notification/checkAllNotification:
     get:
       description: Check all notifications for a given customer/coach
@@ -1307,7 +1306,58 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: challenge.controller
-
+  /offer/getOfferById/{offer_id}:
+    get:
+      description: Gets all offer information by offer ID
+      operationId: getOfferById
+      parameters:
+      - $ref: '#/components/parameters/offerIdParamGet'
+      responses:
+        200:
+          description: OK Offer Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Offer'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: offer.controller
+  /offer/getAllOffers:
+    get:
+      description: Gets list of all offers
+      operationId: getAllOffers
+      responses:
+        200:
+          description: OK Offer Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Offer'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: offer.controller
 components:
   parameters:
     customerIdParamGet:
@@ -1547,6 +1597,15 @@ components:
           type: string
     challengeIdParamGet:
         name: challenge_id
+        in: path
+        description: the id of the challenge
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+    offerIdParamGet:
+        name: offer_id
         in: path
         description: the id of the challenge
         required: true
@@ -1954,4 +2013,35 @@ components:
           type: integer
           format: date
           description: The number of points the challenge is worth
+    Offer:
+      type: object
+      properties:
+        offer_id:
+          type: object
+          readOnly: true
+        offer_name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: The name of the offer
+        offer_description:
+          type: string
+          minLength: 1
+          maxLength: 5000
+          description: 'Description of the offer'
+        sponser_name:
+          type: string
+          format: date
+          minLength: 1
+          maxLength: 150
+          description: 'The sponsor name that made the offer or reward'
+        website_url:
+          type: string
+          minLength: 1
+          description: Website of the sponsor
+        points:
+          type: integer
+          format: date
+          description: The total numbers of points required to redeem the offer
+
 
