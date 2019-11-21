@@ -11,4 +11,4 @@ const OfferTransactionSchema = mongoose.Schema({
     timestamp: true
 });
 
-module.exports = mongoose.model('OfferTransaction', OfferTransactionSchema);
+module.exports = mongoose.model('Offer_Transaction', OfferTransactionSchema);

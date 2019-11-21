@@ -1,4 +1,4 @@
-const OFFER_TRANS = require('../models/offer.model.js');
+const OFFER_TRANS = require('../models/offer.transaction.model.js');
 const ERROR_MSG = require('../message.strings/error.strings.js');
 require('../service/checkNull.js');
 
@@ -38,7 +38,8 @@ exports.getTotalPoints = function (custId) {
             console.log("customer id = " + custId);
             console.log("total points = " + totPts);
             for(var i in totPts){
-                console.log("max points = " + totPts[i].maxBalance);
+                console.log("i = " + i)
+                console.log("max points = " + totPts[i]['_id']);
             }
             var totEarned = totPts._id['EARNED'].totalPoints;
             var totRedeem = totPts._id['REDEEMED'].totalPoints;
