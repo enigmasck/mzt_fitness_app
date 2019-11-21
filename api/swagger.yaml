@@ -1205,10 +1205,9 @@ paths:
         200:
           description: OK Exercise Deleted
           content:
-            application/json:
+            text/plain:
               schema:
-                $ref: '#/components/parameters/notifIdParamDel'
-                x-content-type: application/json
+                  type: string
         400:
           description: 'Error: Bad Request'
         401:
