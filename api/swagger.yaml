@@ -1435,6 +1435,96 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: offer.transaction.controller
+  /offerTransaction/challengeCustomer:
+    post:
+      description: 'Customer Challenges themselves to a new challenge. Requires customer_id and challenge_id'
+      operationId: challengeCustomer
+      requestBody:
+        description: Adds a new challenge in the offer transactions
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfferTransaction'
+      responses:
+        200:
+          description: OK Offer Transaction Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferTransaction'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: offer.transaction.controller
+  /offerTransaction/redeemPoints:
+    post:
+      description: 'Customer redeems their points for an offer. Requires customer_id and offer_id'
+      operationId: redeemPoints
+      requestBody:
+        description: Adds a new challenge in the offer transactions
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfferTransaction'
+      responses:
+        200:
+          description: OK Offer Transaction Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferTransaction'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: offer.transaction.controller
+  /offerTransaction/validateChallenge:
+    post:
+      description: 'Coach validates a specific instance of a challenge. Requires offer_transaction_id'
+      operationId: validateChallenge
+      requestBody:
+        description: Adds a new challenge in the offer transactions
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfferTransaction'
+      responses:
+        200:
+          description: OK Offer Transaction Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferTransaction'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: offer.transaction.controller
 components:
   parameters:
     customerIdParamGet:
