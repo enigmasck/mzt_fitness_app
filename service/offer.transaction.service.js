@@ -84,30 +84,45 @@ exports.getTotalPoints = function (custId) {
     return new Promise(function (resolve, reject) {
         var query = [
             {
-                $match: {"customer_id": custId}
+                $match: {"customer_id": custId, transaction_type: {$in: ["EARNED","REDEEMED"]}}
             },
             {
                 $group: {
-                    _id: "transaction_type",
+                    _id: "$transaction_type",
                     totalPoints: {$sum: "$points"}
                 }
+            },
+            {
+                $sort: {transaction_type: -1}
             }
-        ];
-        
-        var qTest = [
-            { $group: { _id: null, maxBalance: { $max: '$points' }}},
-            { $project: { _id: 0, maxBalance: 1 }}
         ];
         OFFER_TRANS.aggregate(query).then(totPts => {
-            console.log("customer id = " + custId);
-            console.log("total points = " + totPts);
+            var totEarned = 0;
+            var totRedeem = 0;
+
             for(var i in totPts){
-                console.log("i = " + i)
-                console.log("max points = " + totPts[i]['_id']);
+                try{
+                    if(totPts[i]['_id'] === 'EARNED'){
+                        totEarned = totPts[i]['totalPoints']
+                    }
+                }catch(err){
+                    totEarned = 0;
+                }
+                try{
+                    if(totPts[i]['_id'] === 'REDEEMED'){
+                        totRedeem = totPts[i]['totalPoints']
+                    }
+                }catch(err){
+                    totRedeem = 0;
+                }
             }
-            var totEarned = totPts._id['EARNED'].totalPoints;
-            var totRedeem = totPts._id['REDEEMED'].totalPoints;
-            resolve(totEarned - totRedeem);
+            
+            var totalPoints = {
+                totalPoints: Number(totEarned - totRedeem),
+                totalEarned: totEarned,
+                totalRedeemed: totRedeem
+            };
+            resolve(totalPoints);
         }).catch(err => {
             if (err.kind === 'ObjectId') {
                 reject(ERROR_MSG.WARN_NO_ID);

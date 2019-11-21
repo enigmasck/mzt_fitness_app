@@ -1420,10 +1420,12 @@ paths:
         200:
           description: OK Offer Transaction Total Points Info Obtained
           content:
-            text/plain:
+            application/json:
               schema:
-                type: integer
-                format: int64
+                type: array
+                items:
+                  $ref: '#/components/schemas/OfferTransactionTotalPoints'
+                x-content-type: application/json
         400:
           description: 'Error: Bad Request'
         401:
@@ -2241,6 +2243,20 @@ components:
         points:
           type: integer
           description: The total numbers of points required to redeem the offer
+    OfferTransactionTotalPoints:
+      type: object
+      properties:
+        totalPoints:
+          type: integer
+          description: The total numbers of points required to redeem the offer
+        totalPointsEarned:
+          type: integer
+          description: The sum of total points earned by a customer
+        totalPointsRedeemed:
+          type: integer
+          description: The sum of total points redeemed by a customer
+
+        
         
 
 
