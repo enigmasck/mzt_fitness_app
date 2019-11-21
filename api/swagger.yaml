@@ -1358,6 +1358,58 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: offer.controller
+  /offerTransaction/getAllTransByCustomerId/{customer_id}:
+    get:
+      description: Gets list of all offer transactions
+      operationId: getAllTransByCustomerId
+      parameters:
+      - $ref: '#/components/parameters/offerTransCustIdParamGet'
+      responses:
+        200:
+          description: OK Offer Transaction Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OfferTransaction'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: offer.transaction.controller
+  /offerTransaction/getTotalPoints/{customer_id}:
+    get:
+      description: Get the total points (Earned - Redeemed) for a given customer id
+      operationId: getTotalPoints
+      parameters:
+      - $ref: '#/components/parameters/offerTransCustIdParamGet'
+      responses:
+        200:
+          description: OK Offer Transaction Total Points Info Obtained
+          content:
+            text/plain:
+              schema:
+                type: integer
+                format: int64
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: offer.transaction.controller
 components:
   parameters:
     customerIdParamGet:
@@ -1613,6 +1665,15 @@ components:
         explode: false
         schema:
           type: string
+    offerTransCustIdParamGet:
+      name: customer_id
+      in: path
+      description: the id of the customer
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
   schemas:
     Coach:
       type: object
@@ -2011,7 +2072,6 @@ components:
           description: The description of the challenge
         points:
           type: integer
-          format: date
           description: The number of points the challenge is worth
     Offer:
       type: object
@@ -2041,7 +2101,31 @@ components:
           description: Website of the sponsor
         points:
           type: integer
-          format: date
           description: The total numbers of points required to redeem the offer
+    OfferTransaction:
+      type: object
+      properties:
+        offer_transaction_id:
+          type: object
+          readOnly: true
+        customer_id:
+          type: string
+          description: The name of the offer
+        challenge_id:
+          type: string
+          description: 'Description of the challenge transction. Only present when the transaction is EARNED. The customer earns points from a challenge.'
+        offer_id:
+          type: string
+          description: 'Description of the offer transction. Only present when the transaction is REDEEMED. The customer redeems the points for an offer.'
+        transcation_type:
+          type: string
+          format: date
+          minLength: 1
+          maxLength: 50
+          description: 'The type of the transaction. It can either be positive positive (Earned) or negative points (Redeemed)'
+        points:
+          type: integer
+          description: The total numbers of points required to redeem the offer
+        
 
 
