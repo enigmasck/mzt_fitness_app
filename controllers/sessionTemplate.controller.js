@@ -15,6 +15,17 @@ module.exports.assignExercise = function assignExercise(req, res, next) {
             });
 };
 
+module.exports.showInformation= function showInformation(req, res, next) {
+    var sessionTempId = req.swagger.params['session_template_id'].value;
+    SessionTemp.showInformation(sessionTempId)
+            .then(function (response) {
+                utils.writeJson(res, response);
+            })
+            .catch(function (response) {
+                utils.writeJson(res, response);
+            });
+};
+
 module.exports.getSessionTempById = function getSessionTempById(req, res, next) {
     var sessionTemplateId = req.swagger.params['session_template_id'].value;
     SessionTemp.findOne(sessionTemplateId)

@@ -24,6 +24,17 @@ exports.assignExercise = function (exeId, sessTempId) {
     });
 };
 
+exports.showInformation = function (sessTempId) {
+    return new Promise(function (resolve, reject) {
+        SessionTemp.findById(sessTempId).populate(
+                {path: 'exercises'}).exec(function (err, sessTemp) {
+            if (err)
+                return handleError(err);
+            resolve(sessTemp);
+        });
+    });
+};
+
 exports.findAll = function () {
     return new Promise(function (resolve, reject) {
     SessionTemp.find()
