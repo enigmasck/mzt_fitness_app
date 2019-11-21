@@ -195,6 +195,24 @@ function updateProgramStatus(progId, status){
     });
 };
 
+function updateSessionStatus(progId, sessionNb, status){
+    return new Promise(function (resolve, reject) {
+        Program.findByIdAndUpdate(progId,
+            {"$set": {["sessions." + sessionNb + ".session_status"]: status}}
+    , {new : true})
+            .then(prog => {
+                if (!prog) {
+                    reject("Program not found with id " + progId);
+                }
+                resolve(prog);
+            }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject("Program not found with id " + progId);
+            }
+            reject("Error updating program with id " + progId);
+        });
+    });
+};
 /*
  * @function: updateSessStat
  * @argument {string} progId, {int} sessionNb
@@ -251,26 +269,19 @@ exports.coachUpdateProgramStat = function (progId) {
 exports.customerUpdateSessStat = function (progId, sessionNb) {
     return new Promise(function (resolve, reject) {
         // Get the program
-        Program.findById(progId).then(prog => {
-            if (!prog) {
+        Program.findById(progId).then(program => {
+            if (!program) {
                 reject("Program template not found with id " + progId);
             } else {
-                if (prog.sessions[sessionNb].session_status === 'OPENED') {
-                    Program.findByIdAndUpdate(progId,
-                            {"$set": {["sessions." + sessionNb + ".session_status"]: "COMPLETED"}}
-                    , {new : true})
-                            .then(prog => {
-                                if (!prog) {
-                                    reject("Program not found with id " + progId);
-                                }
-                                resolve(prog);
-                            }).catch(err => {
-                        if (err.kind === 'ObjectId') {
-                            reject("Program not found with id " + progId);
-                        }
-                        reject("Error updating program with id " + progId);
-                    });
+                if (program.sessions[sessionNb].session_status === 'OPENED') {
+                    var prog = updateSessionStatus(progId, sessionNb, 'COMPLETED');
                 }
+                if(program.sessions[sessionNb+1].session_status === 'CLOSED'){
+                    if(program.sessions[sessionNb+1].session_type === 'regular'){
+                        var prog = updateSessionStatus(progId, sessionNb+1, 'OPENED');
+                    }
+                }
+                resolve(prog);
             }
         });
     });
@@ -284,48 +295,23 @@ exports.coachUpdateSessStat = function (progId, sessionNb) {
                 reject("Program template not found with id " + progId);
             } else {
                 if (prog.sessions[sessionNb].session_status === 'OPENED') {
-                    Program.findByIdAndUpdate(progId,
-                            {"$set": {["sessions." + sessionNb + ".session_status"]: "CLOSED"}}
-                    , {new : true})
-                            .then(prog => {
-                                if (!prog) {
-                                    reject("Program not found with id " + progId);
-                                }
-                                resolve(prog);
-                            }).catch(err => {
-                        if (err.kind === 'ObjectId') {
-                            reject("Program not found with id " + progId);
-                        }
-                        reject("Error updating program with id " + progId);
-                    });
+                    var program = updateSessionStatus(progId, sessionNb, 'CLOSED');
                 }
                 else{
                     if (prog.sessions[sessionNb].session_status === 'CLOSED') {
-                        Program.findByIdAndUpdate(progId,
-                                {"$set": {["sessions." + sessionNb + ".session_status"]: "OPENED"}}
-                        , {new : true})
-                                .then(prog => {
-                                    if (!prog) {
-                                        reject("Program not found with id " + progId);
-                                    }
-                                    resolve(prog);
-                                    //activate notification that a focus session has been opened
-                                    if(prog.sessions[sessionNb].session_type === 'focus'){
-                                        var newNotificationJson = {"customer_id":prog.customer_id, 
-                                            "coach_id":prog.coach_id,
-                                            "notify_for":"CUSTOMER",
-                                            "notify_type":"FOCUS_SESSION_OPENED",
-                                            "msg":"Your coach has opened a new focus session for you."};
-                                        NOTIFICATION_SERVICE.addNotification(newNotificationJson);
-                                    }
-                                }).catch(err => {
-                            if (err.kind === 'ObjectId') {
-                                reject("Program not found with id " + progId);
-                            }
-                            reject("Error updating program with id " + progId);
-                        });
+                        var program = updateSessionStatus(progId, sessionNb, 'OPENED');
+                        //activate notification that a focus session has been opened
+                        if(prog.sessions[sessionNb].session_type === 'focus'){
+                            var newNotificationJson = {"customer_id":prog.customer_id, 
+                                "coach_id":prog.coach_id,
+                                "notify_for":"CUSTOMER",
+                                "notify_type":"FOCUS_SESSION_OPENED",
+                                "msg":"Your coach has opened a new focus session for you."};
+                            NOTIFICATION_SERVICE.addNotification(newNotificationJson);
+                        }
                     }
                 }
+                resolve(program);
             }
         });
     });
