@@ -25,14 +25,15 @@ exports.findByCustAndTransType = function (custId,transType) {
             customer_id: custId,
             transaction_type : {$in: transType}
         };
-        OFFER_TRANS.find(query).then(offerTrans => {
+        OFFER_TRANS.find(query).populate(
+                {path: 'challenge_id'}).then(offerTrans => {
             resolve(offerTrans);
         }).catch(err => {
             if (err.kind === 'ObjectId') {
                 reject(ERROR_MSG.WARN_NO_ID);
             }
             reject(ERROR_MSG.INTERNAL_ERROR);
-        });
+        }); 
     });
 };
 
