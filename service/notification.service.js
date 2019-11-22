@@ -14,10 +14,6 @@ exports.addNotification = function (newNotif) {
 
 exports.deleteNotification = function (custId, coachId, notifFor, notifType) {
     return new Promise(function (resolve, reject) {
-        console.log("customer_id = " + custId);
-        console.log("coach = " + coachId);
-        console.log("for = " + notifFor);
-        console.log("type = " + notifType);
         var query = {customer_id : custId, coach_id: coachId, notify_for: notifFor, notify_type: notifType};
         NOTIFICATION.deleteOne(query)
                 .then(notif => {
