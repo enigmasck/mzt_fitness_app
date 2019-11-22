@@ -5,7 +5,7 @@ var offerTrans = require('../service/offer.transaction.service');
 
 module.exports.getAllTransByCustomerId = function getAllTransByCustomerId (req, res, next) {
     var custId = req.swagger.params['customer_id'].value;
-    offerTrans.findOne(custId).then(function (response) {
+    offerTrans.findByCustId(custId).then(function (response) {
         utils.writeJson(res, response);
     })
     .catch(function (response) {

@@ -277,7 +277,7 @@ exports.customerUpdateSessStat = function (progId, sessionNb) {
             } else {
                 if (program.sessions[sessionNb].session_status === 'OPENED') {
                     var prog = updateSessionStatus(progId, sessionNb, 'COMPLETED');
-                    if (program.sessions[sessionNb + 1].session_type === 'focus') {
+                    if (program.sessions[sessionNb].session_type === 'focus') {
                         var newNotificationJson = {"customer_id": prog.customer_id,
                             "coach_id": prog.coach_id,
                             "notify_for": NOTIFY.NOTIF_FOR_COACH,
@@ -286,9 +286,11 @@ exports.customerUpdateSessStat = function (progId, sessionNb) {
                         NOTIFICATION_SERVICE.addNotification(newNotificationJson);
                     }
                 }
-                if (program.sessions[sessionNb + 1].session_status === 'CLOSED') {
-                    if (program.sessions[sessionNb + 1].session_type === 'regular') {
-                        var prog = updateSessionStatus(progId, sessionNb + 1, 'OPENED');
+                if(program.sessions.length-1 > sessionNb){
+                    if (program.sessions[sessionNb + 1].session_status === 'CLOSED') {
+                        if (program.sessions[sessionNb + 1].session_type === 'regular') {
+                            var prog = updateSessionStatus(progId, sessionNb + 1, 'OPENED');
+                        }
                     }
                 }
                 resolve(prog);

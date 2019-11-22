@@ -4,9 +4,10 @@ const OFFER = require('../models/offer.model.js');
 const ERROR_MSG = require('../message.strings/error.strings.js');
 require('../service/checkNull.js');
 
-exports.findOne = function (custId) {
+exports.findByCustId = function (custId) {
     return new Promise(function (resolve, reject) {
-        OFFER_TRANS.findById(custId).then(offerTrans => {
+        var query = {customer_id:custId};
+        OFFER_TRANS.find(query).then(offerTrans => {
             resolve(offerTrans);
         }).catch(err => {
             if (err.kind === 'ObjectId') {
