@@ -7,7 +7,6 @@ var mongoose = require('mongoose');
 
 exports.findByCustId = function (custId) {
     return new Promise(function (resolve, reject) {
-        console.log("TEST ERROR MESSAGE=" + ERROR_MSG.WARN_NO_ID);
         var query = {customer_id:custId};
         OFFER_TRANS.find(query).then(offerTrans => {
             resolve(offerTrans);

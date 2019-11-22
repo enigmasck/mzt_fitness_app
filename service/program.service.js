@@ -6,7 +6,7 @@ const Customer = require('../models/customer.model.js');
 const NOTIFICATION_SERVICE = require('../service/notification.service');
 require('../service/checkNull.js');
 require('../helpers/program.helpers.js');
-const NOTIFY = require('../message.strings/notification.strings.js')
+const NOTIFY = require('../message.strings/notification.strings.js');
 
 /*
  * @function: assignProgramTemplate
@@ -278,8 +278,8 @@ exports.customerUpdateSessStat = function (progId, sessionNb) {
                 if (program.sessions[sessionNb].session_status === 'OPENED') {
                     var prog = updateSessionStatus(progId, sessionNb, 'COMPLETED');
                     if (program.sessions[sessionNb].session_type === 'focus') {
-                        var newNotificationJson = {"customer_id": prog.customer_id,
-                            "coach_id": prog.coach_id,
+                        var newNotificationJson = {"customer_id": program.customer_id,
+                            "coach_id": program.coach_id,
                             "notify_for": NOTIFY.NOTIF_FOR_COACH,
                             "notify_type": NOTIFY.NOTIF_TYPE_FOCUS_SESSION_COMPLETED,
                             "msg": NOTIFY.NOTIF_MSG_FOCUS_SESSION_COMPLETED};
@@ -293,7 +293,7 @@ exports.customerUpdateSessStat = function (progId, sessionNb) {
                         }
                     }
                 }
-                resolve(prog);
+                resolve(program);
             }
         });
     });
@@ -315,9 +315,9 @@ exports.coachUpdateSessStat = function (progId, sessionNb) {
                         if (prog.sessions[sessionNb].session_type === 'focus') {
                             var newNotificationJson = {"customer_id": prog.customer_id,
                                 "coach_id": prog.coach_id,
-                                "notify_for": "CUSTOMER",
-                                "notify_type": "FOCUS_SESSION_OPENED",
-                                "msg": "Your coach has opened a new focus session for you."};
+                                "notify_for": NOTIFY.NOTIF_FOR_CUST,
+                                "notify_type": NOTIFY.NOTIF_TYPE_FOCUS_SESSION_OPENED,
+                                "msg": NOTIFY.NOTIF_MSG_FOCUS_SESSION_OPENED};
                             NOTIFICATION_SERVICE.addNotification(newNotificationJson);
                         }
                     }
