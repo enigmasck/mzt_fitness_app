@@ -4,7 +4,7 @@ const OfferSchema = mongoose.Schema({
     offer_id: String,
     offer_name: String,
     offer_description: String,
-    sponser_name: String,
+    sponsor_name: String,
     website_url: String,
     points: Number
 }, {
