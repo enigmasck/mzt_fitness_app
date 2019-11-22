@@ -17,6 +17,24 @@ exports.findOne = function (custId) {
     });
 };
 
+exports.findByCustAndTransType = function (custId,transType) {
+    return new Promise(function (resolve, reject) {
+        
+        var query = {
+            customer_id: custId,
+            transaction_type : {$in: transType}
+        };
+        OFFER_TRANS.find(query).then(offerTrans => {
+            resolve(offerTrans);
+        }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject(ERROR_MSG.WARN_NO_ID);
+            }
+            reject(ERROR_MSG.INTERNAL_ERROR);
+        });
+    });
+};
+
 exports.challengeCustomer = function (custId, challengeId) {
     return new Promise(function (resolve, reject) {
         CHALLENGE.findById(challengeId).then(challenge => {

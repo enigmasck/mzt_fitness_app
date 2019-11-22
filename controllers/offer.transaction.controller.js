@@ -13,6 +13,17 @@ module.exports.getAllTransByCustomerId = function getAllTransByCustomerId (req, 
     });
 };
 
+module.exports.findByCustAndTransType = function findByCustAndTransType (req, res, next) {
+    var custId = req.swagger.params['customer_id'].value;
+    var transType = req.swagger.params['transaction_type'].value;
+    offerTrans.findByCustAndTransType(custId,transType).then(function (response) {
+        utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+        utils.writeJson(res, response);
+    });
+};
+
 module.exports.challengeCustomer = function challengeCustomer (req, res, next) {
     var custId = req.body['customer_id'];
     var challengeId = req.body['challenge_id'];
