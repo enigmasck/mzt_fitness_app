@@ -3,6 +3,7 @@
 var utils = require('../utils/writer.js');
 var Measurement = require('../service/measurement.service');
 const NOTIFICATION_SERVICE = require('../service/notification.service');
+const NOTIFY = require('../message.strings/notification.strings.js')
 
 // Create a new measurement for a customer
 module.exports.addMeasurement = function addMeasurement (req, res, next) {
@@ -60,11 +61,12 @@ module.exports.updateFocusFeedback = function updateFocusFeedback(req, res, next
     Measurement.updateFocusFeedback(req.body)
     .then(function (response) {
         //add notifcation that focus session feedback is available
-        var newNotificationJson = {"customer_id":customerId, 
+        var newNotificationJson = {
+                "customer_id":customerId, 
                 "coach_id":coachId,
-                "notify_for":"CUSTOMER",
-                "notify_type":"FOCUS_SESSION_FEEDBACK",
-                "msg":"You have new focus session feedback waiting for you!"};
+                "notify_for":NOTIFY.NOTIF_FOR_CUST,
+                "notify_type":NOTIFY.NOTIF_TYPE_FOCUS_SESSION_FEEDBACK,
+                "msg":NOTIFY.NOTIF_MSG_FOCUS_SESSION_FEEDBACK};
         NOTIFICATION_SERVICE.addNotification(newNotificationJson);
         utils.writeJson(res, response);
     })

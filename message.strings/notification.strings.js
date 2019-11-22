@@ -9,6 +9,10 @@ const NOTIF_FOR_COACH = 'COACH';
 
 //notify type
 const NOTIF_TYPE_FOCUS_SESSION_OPENED = "FOCUS_SESSION_OPENED";
+const NOTIF_TYPE_FOCUS_SESSION_COMPLETED = "FOCUS_SESSION_COMPLETED";
+const NOTIF_TYPE_FOCUS_SESSION_FEEDBACK = "FOCUS_SESSION_FEEDBACK";
 
-//notif
+//notif messages
 const NOTIF_MSG_FOCUS_SESSION_OPENED = "Your coach has opened a new focus session for you.";
+const NOTIF_MSG_FOCUS_SESSION_COMPLETED = "One of your clients has completed a focus session.";
+const NOTIF_MSG_FOCUS_SESSION_FEEDBACK = "You have new focus session feedback waiting for you!";

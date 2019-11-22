@@ -6,6 +6,7 @@ const Customer = require('../models/customer.model.js');
 const NOTIFICATION_SERVICE = require('../service/notification.service');
 require('../service/checkNull.js');
 require('../helpers/program.helpers.js');
+const NOTIFY = require('../message.strings/notification.strings.js')
 
 /*
  * @function: assignProgramTemplate
@@ -14,15 +15,15 @@ require('../helpers/program.helpers.js');
  */
 exports.assignProgramTemplate = function (coachId, custId, progTempId) {
     return new Promise(function (resolve, reject) {
-        try{
+        try {
             var createProgRes = createProgram(progTempId, custId, coachId);
             //console.log('createProgRes='+createProgRes);
             resolve(createProgRes);
-        }catch(err){
+        } catch (err) {
             reject(err);
         }
 
-});
+    });
 };
 
 /*
@@ -160,59 +161,62 @@ exports.addExerciseResult = function (progId, sessionNb, exerciseNb, exerciseRes
     });
 };
 
-function updateCustomerStatus(custId, status){
+function updateCustomerStatus(custId, status) {
     return new Promise(function (resolve, reject) {
         Customer.findByIdAndUpdate(custId, {"$set": {status: status}}, {new : true})
-            .then(cust => {
-                if (!cust) {
-                    reject("Customer not found with id " + custId);
-                }
-                resolve(cust);
-            }).catch(err => {
+                .then(cust => {
+                    if (!cust) {
+                        reject("Customer not found with id " + custId);
+                    }
+                    resolve(cust);
+                }).catch(err => {
             if (err.kind === 'ObjectId') {
                 reject("Customer not found with id " + custId);
             }
             reject("Error updating customer with id " + custId);
         });
     });
-};
+}
+;
 
-function updateProgramStatus(progId, status){
+function updateProgramStatus(progId, status) {
     return new Promise(function (resolve, reject) {
         Program.findByIdAndUpdate(progId,
-            {"$set": {status: status}}, {new : true})
-            .then(prog => {
-                if (!prog) {
-                    reject("Program not found with id " + progId);
-                }
-                resolve(prog);
-            }).catch(err => {
+                {"$set": {status: status}}, {new : true})
+                .then(prog => {
+                    if (!prog) {
+                        reject("Program not found with id " + progId);
+                    }
+                    resolve(prog);
+                }).catch(err => {
             if (err.kind === 'ObjectId') {
                 reject("Program not found with id " + progId);
             }
             reject("Error updating program with id " + progId);
         });
     });
-};
+}
+;
 
-function updateSessionStatus(progId, sessionNb, status){
+function updateSessionStatus(progId, sessionNb, status) {
     return new Promise(function (resolve, reject) {
         Program.findByIdAndUpdate(progId,
-            {"$set": {["sessions." + sessionNb + ".session_status"]: status}}
-    , {new : true})
-            .then(prog => {
-                if (!prog) {
-                    reject("Program not found with id " + progId);
-                }
-                resolve(prog);
-            }).catch(err => {
+                {"$set": {["sessions." + sessionNb + ".session_status"]: status}}
+        , {new : true})
+                .then(prog => {
+                    if (!prog) {
+                        reject("Program not found with id " + progId);
+                    }
+                    resolve(prog);
+                }).catch(err => {
             if (err.kind === 'ObjectId') {
                 reject("Program not found with id " + progId);
             }
             reject("Error updating program with id " + progId);
         });
     });
-};
+}
+;
 /*
  * @function: updateSessStat
  * @argument {string} progId, {int} sessionNb
@@ -227,13 +231,12 @@ exports.customerUpdateProgramStat = function (progId) {
             } else {
                 if (program.status === 'ASSIGNED') {
                     var prog = updateProgramStatus(progId, "IN_PROGRESS");
-                    var cust = updateCustomerStatus(program.customer_id,"IN_PROGRESS");
+                    var cust = updateCustomerStatus(program.customer_id, "IN_PROGRESS");
                     resolve(prog);
-                }
-                else{
+                } else {
                     if (program.status === 'IN_PROGRESS') {
                         var prog = updateProgramStatus(progId, "COMPLETED");
-                        var cust = updateCustomerStatus(program.customer_id,"NONE");
+                        var cust = updateCustomerStatus(program.customer_id, "NONE");
                         resolve(prog);
                     }
                 }
@@ -251,13 +254,12 @@ exports.coachUpdateProgramStat = function (progId) {
             } else {
                 if (program.status === 'ASSIGNED') {
                     var prog = updateProgramStatus(progId, "CANCELED");
-                    var cust = updateCustomerStatus(program.customer_id,"NONE");
+                    var cust = updateCustomerStatus(program.customer_id, "NONE");
                     resolve(prog);
-                }
-                else{
+                } else {
                     if (program.status === 'IN_PROGRESS') {
                         var prog = updateProgramStatus(progId, "CANCELED");
-                        var cust = updateCustomerStatus(program.customer_id,"NONE");
+                        var cust = updateCustomerStatus(program.customer_id, "NONE");
                         resolve(prog);
                     }
                 }
@@ -275,10 +277,18 @@ exports.customerUpdateSessStat = function (progId, sessionNb) {
             } else {
                 if (program.sessions[sessionNb].session_status === 'OPENED') {
                     var prog = updateSessionStatus(progId, sessionNb, 'COMPLETED');
+                    if (program.sessions[sessionNb + 1].session_type === 'focus') {
+                        var newNotificationJson = {"customer_id": prog.customer_id,
+                            "coach_id": prog.coach_id,
+                            "notify_for": NOTIFY.NOTIF_FOR_COACH,
+                            "notify_type": NOTIFY.NOTIF_TYPE_FOCUS_SESSION_COMPLETED,
+                            "msg": NOTIFY.NOTIF_MSG_FOCUS_SESSION_COMPLETED};
+                        NOTIFICATION_SERVICE.addNotification(newNotificationJson);
+                    }
                 }
-                if(program.sessions[sessionNb+1].session_status === 'CLOSED'){
-                    if(program.sessions[sessionNb+1].session_type === 'regular'){
-                        var prog = updateSessionStatus(progId, sessionNb+1, 'OPENED');
+                if (program.sessions[sessionNb + 1].session_status === 'CLOSED') {
+                    if (program.sessions[sessionNb + 1].session_type === 'regular') {
+                        var prog = updateSessionStatus(progId, sessionNb + 1, 'OPENED');
                     }
                 }
                 resolve(prog);
@@ -296,17 +306,16 @@ exports.coachUpdateSessStat = function (progId, sessionNb) {
             } else {
                 if (prog.sessions[sessionNb].session_status === 'OPENED') {
                     var program = updateSessionStatus(progId, sessionNb, 'CLOSED');
-                }
-                else{
+                } else {
                     if (prog.sessions[sessionNb].session_status === 'CLOSED') {
                         var program = updateSessionStatus(progId, sessionNb, 'OPENED');
                         //activate notification that a focus session has been opened
-                        if(prog.sessions[sessionNb].session_type === 'focus'){
-                            var newNotificationJson = {"customer_id":prog.customer_id, 
-                                "coach_id":prog.coach_id,
-                                "notify_for":"CUSTOMER",
-                                "notify_type":"FOCUS_SESSION_OPENED",
-                                "msg":"Your coach has opened a new focus session for you."};
+                        if (prog.sessions[sessionNb].session_type === 'focus') {
+                            var newNotificationJson = {"customer_id": prog.customer_id,
+                                "coach_id": prog.coach_id,
+                                "notify_for": "CUSTOMER",
+                                "notify_type": "FOCUS_SESSION_OPENED",
+                                "msg": "Your coach has opened a new focus session for you."};
                             NOTIFICATION_SERVICE.addNotification(newNotificationJson);
                         }
                     }
