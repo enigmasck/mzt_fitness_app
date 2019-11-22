@@ -39,28 +39,37 @@ exports.findByCustAndTransType = function (custId,transType) {
 
 exports.challengeCustomer = function (custId, challengeId) {
     return new Promise(function (resolve, reject) {
-        CHALLENGE.findById(challengeId).then(challenge => {
-            //console.log('challenge = ' + challenge);
-            offerTransRec = new OFFER_TRANS({
-                customer_id : custId,
-                challenge_id : challengeId,
-                transaction_type : 'IN_PROGRESS',
-                points : challenge.points
-            });
-            offerTransRec.save().then(offerTrans => {
-                resolve(offerTransRec);
-            }).catch(err => {
-                if (err.kind === 'ObjectId') {
-                    reject(ERROR_MSG.WARN_NO_ID);
-                }
-                reject(ERROR_MSG.INTERNAL_ERROR);
-            });
-        }).catch(err => {
-            if (err.kind === 'ObjectId') {
-                reject(ERROR_MSG.WARN_NO_ID);
+        var queryInProg = {customer_id:custId,transaction_type:"IN_PROGRESS"};
+        OFFER_TRANS.find(queryInProg).then(offerTrans => {
+            
+            if(offerTrans.length < 1){
+                CHALLENGE.findById(challengeId).then(challenge => {
+                //console.log('challenge = ' + challenge);
+                offerTransRec = new OFFER_TRANS({
+                    customer_id : custId,
+                    challenge_id : challengeId,
+                    transaction_type : 'IN_PROGRESS',
+                    points : challenge.points
+                });
+                offerTransRec.save().then(offerTrans => {
+                    resolve(offerTransRec);
+                }).catch(err => {
+                    if (err.kind === 'ObjectId') {
+                        reject(ERROR_MSG.WARN_NO_ID);
+                    }
+                    reject(ERROR_MSG.INTERNAL_ERROR);
+                });
+                }).catch(err => {
+                    if (err.kind === 'ObjectId') {
+                        reject(ERROR_MSG.WARN_NO_ID);
+                    }
+                    reject(ERROR_MSG.INTERNAL_ERROR);
+                });
+            }else{
+                resolve(ERROR_MSG.WARN_ONLY_ONE_CHALLENGE);
             }
-            reject(ERROR_MSG.INTERNAL_ERROR);
         });
+
     });
 };
 
