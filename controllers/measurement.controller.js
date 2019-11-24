@@ -3,7 +3,7 @@
 var utils = require('../utils/writer.js');
 var Measurement = require('../service/measurement.service');
 const NOTIFICATION_SERVICE = require('../service/notification.service');
-const NOTIFY = require('../message.strings/notification.strings.js')
+const NOTIFY = require('../message.strings/notification.strings.js');
 
 // Create a new measurement for a customer
 module.exports.addMeasurement = function addMeasurement (req, res, next) {
