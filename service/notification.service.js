@@ -29,7 +29,7 @@ exports.deleteNotification = function (custId, coachId, notifFor, notifType) {
 exports.find = function (custId, coachId, notifFor, notifType) {
     return new Promise(function (resolve, reject) {
         var query = {customer_id : custId, coach_id: coachId, notify_for: notifFor, notify_type: notifType};
-        NOTIFICATION.find(query).then(notif => {
+        NOTIFICATION.find(query).populate({path: 'customer_id'}).then(notif => {
             resolve(notif);
         }).catch(err => {
             reject('ERROR : ' + err);
