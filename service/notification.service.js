@@ -77,7 +77,7 @@ exports.findAll = function (custId, coachId, notifFor) {
         console.log("for = " + notifFor);
         var query = {customer_id : custId, coach_id: coachId, notify_for: notifFor};
         NOTIFICATION.find(query)
-                .then(notif => {
+                .populate({path: 'customer_id'}).then(notif => {
                     resolve(notif);
                 }).catch(err => {
             reject('ERROR : ' + err);
