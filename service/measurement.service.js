@@ -8,16 +8,10 @@ exports.create = function (Custmeasurement) {
             resolve("Measurement content can not be empty");
         }
         // Create a measurement
-        const NEW_MEASURMENT = new Measurement({
-            customer_id: Custmeasurement['customer_id'],
-            program_id: Custmeasurement['program_id'],
-            session_id: Custmeasurement['session_id'],
-            measurement_date: Custmeasurement['measurement_date'],
-            heartRate1: Custmeasurement['heartRate1'],
-            heartRate2: Custmeasurement['heartRate2'],
-            heartRate3: Custmeasurement['heartRate3'],
-            dickson_metric: (((Custmeasurement['heartRate2']-70)+2*(Custmeasurement['heartRate3']-Custmeasurement['heartRate1']))/10)
-        });
+        var raw = {};
+        raw = checkNull(raw, Custmeasurement); 
+        raw['dickson_metric'] = (((Custmeasurement['heartRate2']-70)+2*(Custmeasurement['heartRate3']-Custmeasurement['heartRate1']))/10);
+        const NEW_MEASURMENT = new Measurement(raw);
 
         // Save the measurement in the database
         NEW_MEASURMENT.save()
