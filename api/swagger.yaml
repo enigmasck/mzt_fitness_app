@@ -1583,6 +1583,33 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: offer.transaction.controller
+  /performance/getPerformanceIndicators/{customer_id}:
+    get:
+      description: Gets all offer information by offer ID
+      operationId: getAllPerformanceIndicators
+      parameters:
+      - $ref: '#/components/parameters/perfIndicCustIdParamGet'
+      responses:
+        200:
+          description: OK Performance Indicators Info Obtained
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PerformanceIndicator'
+                x-content-type: application/json
+        400:
+          description: 'Error: Bad Request'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: 'Error: Not Found'
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: performance.controller
 components:
   parameters:
     customerIdParamGet:
@@ -1849,6 +1876,15 @@ components:
         schema:
           type: string
     offerTransCustIdParamGet:
+      name: customer_id
+      in: path
+      description: the id of the customer
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    perfIndicCustIdParamGet:
       name: customer_id
       in: path
       description: the id of the customer
