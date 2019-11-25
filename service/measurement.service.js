@@ -11,6 +11,7 @@ exports.create = function (Custmeasurement) {
         var raw = {};
         raw = checkNull(raw, Custmeasurement); 
         raw['dickson_metric'] = (((Custmeasurement['heartRate2']-70)+2*(Custmeasurement['heartRate3']-Custmeasurement['heartRate1']))/10);
+        raw['coach_feedback'] = '';
         const NEW_MEASURMENT = new Measurement(raw);
 
         // Save the measurement in the database
