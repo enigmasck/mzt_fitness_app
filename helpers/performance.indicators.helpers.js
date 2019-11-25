@@ -1,13 +1,26 @@
 const PROGRAM = require('../models/program.model.js');
+const MEASUREMENT = require('../models/measurement.model.js');
 const SESSION = require('../models/session.model.js');
 var mongoose = require('mongoose');
 
 async function getPerformanceIndicators(custId){
-    console.log("getPerformanceIndicators");
     var cntSess = await getTotalCompletedSessions(custId);
-    console.log("cntSess = " + cntSess);
+    var dIndcImprove = await getImproveDicksonIndic(custId);
+
     var indicators = {
-        cntSession : cntSess
+        cntSession : { 
+            indc: cntSess, 
+            name: "Total Sessions Completed", 
+            msg: "You have completed " + cntSess + " sessions.", 
+            displayIndc: cntSess > 0 ? "TRUE":"FALSE" 
+        },
+        dicksonIndcImprove: {
+            indc: dIndcImprove,
+            name: "Dickson Indicator Improvement",
+            msg: "Your Dickson Indicator has improved by " + dIndcImprove,
+            displayIndc: dIndcImprove > 0 ? "TRUE":"FALSE" 
+        }
+
     };
     
     return indicators;
@@ -23,23 +36,21 @@ global.getPerformanceIndicators = getPerformanceIndicators;
  */
 function getTotalCompletedSessions(custId){
     return new Promise(function (resolve, reject) {
-    console.log("getTotalCompletedSessions");
     try{
-        var query = [
-            {
-                $match: {"customer_id": mongoose.Types.ObjectId(custId), "sessions.session_status": "COMPLETED"}
-            },
-            {
-                $group: {
-                    _id: null,
-                    count: {$sum: 1}
+
+        var query = {"customer_id":custId};
+        var cntSessTot = 0;
+        PROGRAM.find(query).then(cntSess => {
+            for(var i in cntSess){
+                for(var k in cntSess[i].sessions){
+                    var indSess = cntSess[i].sessions[k];
+                    console.log("session="+indSess);
+                    if(indSess.session_type === "regular" && indSess.session_status === "COMPLETED"){
+                        cntSessTot++;
+                    }
                 }
             }
-        ];
-        PROGRAM.aggregate(query).then(cntSess => {
-            console.log("cntSess="+cntSess);
-            console.log("keys="+Object.keys(cntSess));
-            resolve(cntSess[0].count);
+            resolve(cntSessTot);
         }).catch(err => {
             resolve(0);
         });
@@ -50,4 +61,33 @@ function getTotalCompletedSessions(custId){
 });
 };
 global.getTotalCompletedSessions = getTotalCompletedSessions;
+
+function getImproveDicksonIndic(custId){
+    return new Promise(function (resolve, reject) {
+        var indicDiff = -1;
+
+        try{
+
+        var query = {
+            $match: {"customer_id":custId},
+            $sort: {"measurement_date": -1}
+        };
+        MEASUREMENT.find(query).then(msr => {
+            var msrLen = msr.length;
+            if(msrLen >= 2){
+                indicDiff = msr[msrLen-1].dickson_metric - msr[msrLen-2].dickson_metric;
+            }
+
+            resolve(indicDiff);
+        }).catch(err => {
+            console.log(err);
+            resolve(-1);
+        });
+    }catch(err){
+        console.log(err);
+        resolve(-1);
+    }
+    
+});
+};
 
