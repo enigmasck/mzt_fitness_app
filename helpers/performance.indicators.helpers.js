@@ -20,7 +20,6 @@ async function getPerformanceIndicators(custId){
             msg: "Your Dickson Indicator has improved by " + dIndcImprove + " units.",
             displayIndc: dIndcImprove > 0 ? "TRUE":"FALSE" 
         }
-
     };
     
     return indicators;
@@ -76,6 +75,35 @@ function getImproveDicksonIndic(custId){
             }
 
             resolve(indicDiff);
+        }).catch(err => {
+            console.log(err);
+            resolve(-1);
+        });
+    }catch(err){
+        console.log(err);
+        resolve(-1);
+    }
+    
+});
+};
+
+function getImprovePushups(custId){
+    return new Promise(function (resolve, reject) {
+        var indicDiff = -1;
+    try{
+        var query = {"customer_id":custId, status: {$in: ["COMPLETED","IN_PROGRESS"]}};
+        var sortQuery = {create_timestamp: -1};
+        var cntSessTot = 0;
+        PROGRAM.find(query).sort(sortQuery).then(prog => {
+            
+            for(var k in prog[0].sessions){
+                var indSess = prog[0].sessions[k];
+                console.log("session="+indSess);
+                if(indSess.session_type === "regular" && indSess.session_status === "COMPLETED"){
+                    cntSessTot++;
+                }
+            }
+            resolve(cntSessTot);
         }).catch(err => {
             console.log(err);
             resolve(-1);
