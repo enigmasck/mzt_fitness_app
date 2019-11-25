@@ -15,7 +15,7 @@ const NOTIF_TYPE_FOCUS_SESSION_APPROACH = "FOCUS_SESSION_APPROACH";
 
 //notif messages
 const NOTIF_MSG_FOCUS_SESSION_OPENED = "Your coach has opened a new focus session for you.";
-const NOTIF_MSG_FOCUS_SESSION_COMPLETED = "One of your clients has completed a focus session.";
+const NOTIF_MSG_FOCUS_SESSION_COMPLETED = " has completed a focus session.";
 const NOTIF_MSG_FOCUS_SESSION_FEEDBACK = "You have new focus session feedback waiting for you!";
 const NOTIF_MSG_FOCUS_SESSION_APPROACH = "One of your clients has an upcoming focus session.";
 
