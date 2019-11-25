@@ -17,7 +17,7 @@ async function getPerformanceIndicators(custId){
         dicksonIndcImprove: {
             indc: dIndcImprove,
             name: "Dickson Indicator Improvement",
-            msg: "Your Dickson Indicator has improved by " + dIndcImprove,
+            msg: "Your Dickson Indicator has improved by " + dIndcImprove + " units.",
             displayIndc: dIndcImprove > 0 ? "TRUE":"FALSE" 
         }
 
@@ -66,13 +66,10 @@ function getImproveDicksonIndic(custId){
     return new Promise(function (resolve, reject) {
         var indicDiff = -1;
 
-        try{
-
-        var query = {
-            $match: {"customer_id":custId},
-            $sort: {"measurement_date": -1}
-        };
-        MEASUREMENT.find(query).then(msr => {
+    try{
+        var query = { "customer_id":custId};
+        var sortQuery = {"measurement_date": -1};
+        MEASUREMENT.find(query).sort(sortQuery).then(msr => {
             var msrLen = msr.length;
             if(msrLen >= 2){
                 indicDiff = msr[msrLen-1].dickson_metric - msr[msrLen-2].dickson_metric;
