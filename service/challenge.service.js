@@ -12,6 +12,19 @@ exports.findAll = function () {
     });
 };
 
+exports.find5RandomChallenge = function () {
+    return new Promise(function (resolve, reject) {
+        var query = [{$sample: {size: 5}}];
+        Challenge.aggregate(query).then(challenges => {
+            console.log("random5="+challenges);
+            resolve(challenges);
+        }).catch(err => {
+            reject('IT WAS REJECTED');
+        });
+    });
+};
+
+
 exports.findOne = function (custId) {
     return new Promise(function (resolve, reject) {
         Challenge.findById(custId)

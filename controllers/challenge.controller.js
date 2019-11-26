@@ -13,6 +13,15 @@ module.exports.getAllChallenges = function getAllChallenges (req, res, next) {
 
 };
 
+module.exports.get5RandomChallenges = function get5RandomChallenges (req, res, next) {
+  Challenge.find5RandomChallenge().then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
 module.exports.getChallengeById = function getChallengeById (req, res, next) {
   var challenge_id = req.swagger.params['challenge_id'].value;
   Challenge.findOne(challenge_id)
