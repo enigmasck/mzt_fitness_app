@@ -1357,10 +1357,10 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: challenge.controller
-  /challenge/getRandom5Challenges:
+  /challenge/getRandom6Challenges:
     get:
-      description: Get random 5 challenges for the challenge lottery page
-      operationId: get5RandomChallenges
+      description: Get random 6 challenges for the challenge lottery page
+      operationId: get6RandomChallenges
       responses:
         200:
           description: OK Challenge Info Obtained
