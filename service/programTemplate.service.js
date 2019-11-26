@@ -41,10 +41,16 @@ exports.assignSessionTemplate = function (sessTempId, progTempId) {
 
 exports.findAll = function () {
     return new Promise(function (resolve, reject) {
-        ProgramTemp.find()
-                .then(programTemplates => {
-                    resolve(programTemplates);
-                }).catch(err => {
+        var populateQuery = { 
+            path: 'sessions',
+            populate: {
+              path: 'exercises',
+              model: 'Exercise'
+            }   
+        };
+        ProgramTemp.find().populate(populateQuery).then(programTemplates => {
+            resolve(programTemplates);
+        }).catch(err => {
             reject('IT WAS REJECTED');
         });
     });
