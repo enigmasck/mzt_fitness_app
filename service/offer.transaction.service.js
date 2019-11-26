@@ -8,7 +8,8 @@ var mongoose = require('mongoose');
 exports.findByCustId = function (custId) {
     return new Promise(function (resolve, reject) {
         var query = {customer_id:custId};
-        OFFER_TRANS.find(query).then(offerTrans => {
+        OFFER_TRANS.find(query).populate(
+                {path: 'challenge_id'}).then(offerTrans => {
             resolve(offerTrans);
         }).catch(err => {
             if (err.kind === 'ObjectId') {
@@ -21,7 +22,6 @@ exports.findByCustId = function (custId) {
 
 exports.findByCustAndTransType = function (custId,transType) {
     return new Promise(function (resolve, reject) {
-        
         var query = {
             customer_id: custId,
             transaction_type : {$in: transType}
