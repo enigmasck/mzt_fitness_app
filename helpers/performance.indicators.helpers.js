@@ -2,10 +2,12 @@ const PROGRAM = require('../models/program.model.js');
 const MEASUREMENT = require('../models/measurement.model.js');
 const SESSION = require('../models/session.model.js');
 var mongoose = require('mongoose');
+var utils = require('../utils/logger.js');
 
 async function getPerformanceIndicators(custId){
     var cntSess = await getTotalCompletedSessions(custId);
     var dIndcImprove = await getImproveDicksonIndic(custId);
+    var improvePushups = await getImprovePushups(custId);
 
     var indicators = {
         cntSession : { 
@@ -43,7 +45,6 @@ function getTotalCompletedSessions(custId){
             for(var i in cntSess){
                 for(var k in cntSess[i].sessions){
                     var indSess = cntSess[i].sessions[k];
-                    console.log("session="+indSess);
                     if(indSess.session_type === "regular" && indSess.session_status === "COMPLETED"){
                         cntSessTot++;
                     }
@@ -86,28 +87,76 @@ function getImproveDicksonIndic(custId){
     
 });
 };
-
+/*
+ * Work in Progress: Not sure if I will get this working by deadline, not sure 
+ * if it's worth the effort. For now it's returning -1 and will not be displayed 
+ */
 function getImprovePushups(custId){
     return new Promise(function (resolve, reject) {
-        var indicDiff = -1;
+    
+    console.log("In getImprovePushups");
+    var currPush = -1;
+    var prevPush = -1;
     try{
-        var query = {"customer_id":custId, 
-            "status": {$in: ["COMPLETED","IN_PROGRESS"]},
-            "sessions.$.session_type": "focus",
-            "sessions.$.session_type": "COMPLETED",
-            "sessions.exercises.result": { $exists: true, $ne: null }
-        };
-        var sortQuery = {create_timestamp: -1};
-
-        PROGRAM.find(query,{"sessions.$.exercises":1}).sort(sortQuery).then(prog => {
-            for(var i in prog){
-                console.log("");
+        var query = {"customer_id":custId};
+        
+        var sortQuery = {measurement_date: -1};
+        
+        /*MEASUREMENT.find(query).sort(sortQuery).then(msr => {         
+            console.log("msr="+msr);
+            if(msr.length >= 2){
+                var sess = getSession(msr.session_id);
+                if(sess !== -1){
+                    console.log("sess="+sess);
+                    var curr = msr[0].sessions;
+                    var prev = msr[1].sessions;
+                }
             }
-            resolve((currFocusSession-prevFocusSession));
         }).catch(err => {
             console.log(err);
             resolve(-1);
-        });
+        });*/
+        /*var query = {"customer_id":custId, 
+            "status": {$in: ["COMPLETED","IN_PROGRESS"]},
+            "sessions": {$elemMatch: { session_type: "focus", session_status: "COMPLETED" }} 
+            //"sessions.session_status": "COMPLETED"
+            //"sessions.exercises.name": "Half push-ups",
+            //"sessions.exercises.result": { $exists: true, $ne: null }
+        };
+        var sortQuery = {create_timestamp: -1};
+        var projectQuery = {"sessions":1};*/
+
+        /*PROGRAM.find(query,projectQuery).sort(sortQuery).then(prog => {
+            console.log("prog="+prog);
+            for(var i in prog){
+                var sess = prog[i].sessions;
+                console.log("sess="+sess.status);
+                if(sess.session_type === "focus" && sess.session_status === "COMPLETED"){
+                    for(var k in sess){
+                        var ex = sess[k].exercises;
+                        for(var r in ex){
+                            if(ex[r].name === "Half push-ups" && currPush === -1 && prevPush === -1){
+                                currPush = ex[r].result;
+                            }
+                            if(ex[r].name === "Half push-ups" && currPush !== -1 && prevPush === -1){
+                                prevPush = ex[r].result;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if(currPush !== -1 && prevPush !== -1)
+                resolve(currPush - prevPush);
+            else
+                resolve(-1);
+            resolve(-1);
+
+        }).catch(err => {
+            console.log(err);
+            resolve(-1);
+        });*/
+        resolve(-1);
     }catch(err){
         console.log(err);
         resolve(-1);
