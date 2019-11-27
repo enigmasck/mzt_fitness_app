@@ -12,11 +12,11 @@ exports.findAll = function () {
     });
 };
 
-exports.find5RandomChallenge = function () {
+exports.find6RandomChallenge = function () {
     return new Promise(function (resolve, reject) {
-        var query = [{$sample: {size: 5}}];
+        var query = [{$sample: {size: 6}}];
         Challenge.aggregate(query).then(challenges => {
-            console.log("random5="+challenges);
+            console.log("random6="+challenges);
             resolve(challenges);
         }).catch(err => {
             reject('IT WAS REJECTED');

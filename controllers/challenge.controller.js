@@ -13,8 +13,8 @@ module.exports.getAllChallenges = function getAllChallenges (req, res, next) {
 
 };
 
-module.exports.get5RandomChallenges = function get5RandomChallenges (req, res, next) {
-  Challenge.find5RandomChallenge().then(function (response) {
+module.exports.get6RandomChallenges = function get6RandomChallenges (req, res, next) {
+  Challenge.find6RandomChallenge().then(function (response) {
       utils.writeJson(res, response);
     })
     .catch(function (response) {
