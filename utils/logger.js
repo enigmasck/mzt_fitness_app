@@ -7,11 +7,11 @@
 
 //display a JSON object to console
 var displayJson = exports.displayJson = function(json) {
-    for(var i in displayJson){
-        if(isObject(displayJson[i])){
+    for(var i in json){
+        /*if(isObject(json[i])){
             displayJson(json);
-        }
-        console.log("key= " + i +", value=",displayJson[i]);
+        }*/
+        console.log("key= " + i +", value=",json[i]);
     }
 };
 
