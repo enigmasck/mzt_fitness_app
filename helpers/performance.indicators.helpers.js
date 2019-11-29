@@ -21,7 +21,8 @@ async function getPerformanceIndicators(custId){
             name: "Dickson Indicator Improvement",
             msg: "Your Dickson Indicator has improved by " + dIndcImprove + " units.",
             displayIndc: dIndcImprove > 0 ? "TRUE":"FALSE" 
-        }
+        },
+        pushupsImprove:{improvePushups}
     };
     
     return indicators;
@@ -87,11 +88,53 @@ function getImproveDicksonIndic(custId){
     
 });
 };
+
+
+function getImprovePushups(custId){
+    return new Promise(function (resolve, reject) {
+        console.log('customer Id: '+custId);
+        var pushups = [];
+        var custIdObj = mongoose.Types.ObjectId(custId);
+        var aggQuery = [
+            {$unwind:{path: "$sessions", includeArrayIndex: "SIndex"}},
+            {$unwind: {path: "$sessions.exercises", includeArrayIndex: "EIndex" }},
+
+            {$match: {"sessions.session_type":"focus", "status": "COMPLETED" || "IN_PROGRESS", 
+                    "sessions.session_status": "COMPLETED", "customer_id": custIdObj}},
+            {$group: {_id:"$SIndex", exercise: {$push:{index:"$EIndex",result: "$sessions.exercises.result"}}}},
+            {$project: {"exercise": 1, _id: 1}}];
+        // Get the program
+        PROGRAM.aggregate(aggQuery).then(prog => {
+            /*console.log("prog="+prog);
+            for(var i in prog){
+                console.log("i="+i);
+                var exercises = prog[i].exercise;
+                for(var k in exercises){
+                    console.log("log k="+k);
+                    console.log("exercises[k]="+exercises[k]);
+                    if(exercises[k].result === "Half push-ups"){
+                        pushups.append(exercises[k].result.result);
+                    }
+                }
+                
+            }*/
+            if (!prog) {
+                reject("Program template not found with id " + custId);
+            } else {
+                resolve(prog);
+            }
+        }).catch(err => {
+            console.log(err);
+            resolve(-1);
+        });
+    });
+};
+
 /*
  * Work in Progress: Not sure if I will get this working by deadline, not sure 
  * if it's worth the effort. For now it's returning -1 and will not be displayed 
  */
-function getImprovePushups(custId){
+/*function getImprovePushups(custId){
     return new Promise(function (resolve, reject) {
     
     console.log("In getImprovePushups");
@@ -102,7 +145,7 @@ function getImprovePushups(custId){
         
         var sortQuery = {measurement_date: -1};
         
-        /*MEASUREMENT.find(query).sort(sortQuery).then(msr => {         
+        MEASUREMENT.find(query).sort(sortQuery).then(msr => {         
             console.log("msr="+msr);
             if(msr.length >= 2){
                 var sess = getSession(msr.session_id);
@@ -115,8 +158,8 @@ function getImprovePushups(custId){
         }).catch(err => {
             console.log(err);
             resolve(-1);
-        });*/
-        /*var query = {"customer_id":custId, 
+        });
+        var query = {"customer_id":custId, 
             "status": {$in: ["COMPLETED","IN_PROGRESS"]},
             "sessions": {$elemMatch: { session_type: "focus", session_status: "COMPLETED" }} 
             //"sessions.session_status": "COMPLETED"
@@ -155,7 +198,7 @@ function getImprovePushups(custId){
         }).catch(err => {
             console.log(err);
             resolve(-1);
-        });*/
+        });
         resolve(-1);
     }catch(err){
         console.log(err);
@@ -163,5 +206,5 @@ function getImprovePushups(custId){
     }
     
 });
-};
+};*/
 
