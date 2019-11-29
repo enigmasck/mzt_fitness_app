@@ -8,7 +8,12 @@ async function getPerformanceIndicators(custId){
     var cntSess = await getTotalCompletedSessions(custId);
     var dIndcImprove = await getImproveDicksonIndic(custId);
     var improvePushups = await getImprovePushups(custId);
-
+    var improvePlanks = await getImprovePlanks(custId);
+    var improveLunges = await getImproveLunges(custId);
+    var improveCrunches = await getImproveCrunches(custId);
+    var improveSquats = await getImproveSquats(custId);
+    var improveTriceps = await getImproveTriceps(custId);
+    
     var indicators = {
         cntSession : { 
             indc: cntSess, 
@@ -22,7 +27,13 @@ async function getPerformanceIndicators(custId){
             msg: "Your Dickson Indicator has improved by " + dIndcImprove + " units.",
             displayIndc: dIndcImprove > 0 ? "TRUE":"FALSE" 
         },
-        pushupsImprove:{improvePushups}
+        // first session result, second session result, third session result
+        planksImprove: improvePlanks,
+        lungesImprove: improveLunges,
+        crunchesImprove: improveCrunches,
+        pushupsImprove: improvePushups,
+        squatsImprove: improveSquats,
+        tricepsImprove: improveTriceps
     };
     
     return indicators;
@@ -89,35 +100,22 @@ function getImproveDicksonIndic(custId){
 });
 };
 
-
-function getImprovePushups(custId){
+function getImprovePlanks(custId){
     return new Promise(function (resolve, reject) {
         console.log('customer Id: '+custId);
-        var pushups = [];
         var custIdObj = mongoose.Types.ObjectId(custId);
         var aggQuery = [
             {$unwind:{path: "$sessions", includeArrayIndex: "SIndex"}},
             {$unwind: {path: "$sessions.exercises", includeArrayIndex: "EIndex" }},
 
-            {$match: {"sessions.session_type":"focus", "status": "COMPLETED" || "IN_PROGRESS", 
-                    "sessions.session_status": "COMPLETED", "customer_id": custIdObj}},
-            {$group: {_id:"$SIndex", exercise: {$push:{index:"$EIndex",result: "$sessions.exercises.result"}}}},
-            {$project: {"exercise": 1, _id: 1}}];
+            {$match: {"sessions.session_type":"focus", "status": {$in:["COMPLETED","IN_PROGRESS"]}, 
+                    "sessions.session_status": "COMPLETED", "sessions.exercises.name": "Plank","customer_id": custIdObj}},
+            // Sorted by SIndex DESC
+            {$sort:{"SIndex": 1}},
+            {$group: {_id:{program: "$title", status: "$status"}, exercise: {$push:"$sessions.exercises.result"}}},
+            {$project: {"exercise": 1}}];
         // Get the program
         PROGRAM.aggregate(aggQuery).then(prog => {
-            /*console.log("prog="+prog);
-            for(var i in prog){
-                console.log("i="+i);
-                var exercises = prog[i].exercise;
-                for(var k in exercises){
-                    console.log("log k="+k);
-                    console.log("exercises[k]="+exercises[k]);
-                    if(exercises[k].result === "Half push-ups"){
-                        pushups.append(exercises[k].result.result);
-                    }
-                }
-                
-            }*/
             if (!prog) {
                 reject("Program template not found with id " + custId);
             } else {
@@ -130,6 +128,145 @@ function getImprovePushups(custId){
     });
 };
 
+function getImproveLunges(custId){
+    return new Promise(function (resolve, reject) {
+        console.log('customer Id: '+custId);
+        var custIdObj = mongoose.Types.ObjectId(custId);
+        var aggQuery = [
+            {$unwind:{path: "$sessions", includeArrayIndex: "SIndex"}},
+            {$unwind: {path: "$sessions.exercises", includeArrayIndex: "EIndex" }},
+
+            {$match: {"sessions.session_type":"focus", "status": {$in:["COMPLETED","IN_PROGRESS"]}, 
+                    "sessions.session_status": "COMPLETED", "sessions.exercises.name": "Lunges","customer_id": custIdObj}},
+            // Sorted by SIndex DESC
+            {$sort:{"SIndex": 1}},
+            {$group: {_id:{program: "$title", status: "$status"}, exercise: {$push:"$sessions.exercises.result"}}},
+            {$project: {"exercise": 1}}];
+        // Get the program
+        PROGRAM.aggregate(aggQuery).then(prog => {
+            if (!prog) {
+                reject("Program template not found with id " + custId);
+            } else {
+                resolve(prog);
+            }
+        }).catch(err => {
+            console.log(err);
+            resolve(-1);
+        });
+    });
+};
+
+function getImproveCrunches(custId){
+    return new Promise(function (resolve, reject) {
+        console.log('customer Id: '+custId);
+        var custIdObj = mongoose.Types.ObjectId(custId);
+        var aggQuery = [
+            {$unwind:{path: "$sessions", includeArrayIndex: "SIndex"}},
+            {$unwind: {path: "$sessions.exercises", includeArrayIndex: "EIndex" }},
+
+            {$match: {"sessions.session_type":"focus", "status": {$in:["COMPLETED","IN_PROGRESS"]}, 
+                    "sessions.session_status": "COMPLETED", "sessions.exercises.name": "Crunches","customer_id": custIdObj}},
+            // Sorted by SIndex DESC
+            {$sort:{"SIndex": 1}},
+            {$group: {_id:{program: "$title", status: "$status"}, exercise: {$push:"$sessions.exercises.result"}}},
+            {$project: {"exercise": 1}}];
+        // Get the program
+        PROGRAM.aggregate(aggQuery).then(prog => {
+            if (!prog) {
+                reject("Program template not found with id " + custId);
+            } else {
+                resolve(prog);
+            }
+        }).catch(err => {
+            console.log(err);
+            resolve(-1);
+        });
+    });
+};
+
+function getImprovePushups(custId){
+    return new Promise(function (resolve, reject) {
+        console.log('customer Id: '+custId);
+        var custIdObj = mongoose.Types.ObjectId(custId);
+        var aggQuery = [
+            {$unwind:{path: "$sessions", includeArrayIndex: "SIndex"}},
+            {$unwind: {path: "$sessions.exercises", includeArrayIndex: "EIndex" }},
+
+            {$match: {"sessions.session_type":"focus", "status": {$in:["COMPLETED","IN_PROGRESS"]}, 
+                    "sessions.session_status": "COMPLETED", "sessions.exercises.name": "Half push-ups","customer_id": custIdObj}},
+            // Sorted by SIndex DESC
+            {$sort:{"SIndex": 1}},
+            {$group: {_id:{program: "$title", status: "$status"}, exercise: {$push:"$sessions.exercises.result"}}},
+            {$project: {"exercise": 1}}];
+        // Get the program
+        PROGRAM.aggregate(aggQuery).then(prog => {
+            if (!prog) {
+                reject("Program template not found with id " + custId);
+            } else {
+                resolve(prog);
+            }
+        }).catch(err => {
+            console.log(err);
+            resolve(-1);
+        });
+    });
+};
+
+function getImproveSquats(custId){
+    return new Promise(function (resolve, reject) {
+        console.log('customer Id: '+custId);
+        var custIdObj = mongoose.Types.ObjectId(custId);
+        var aggQuery = [
+            {$unwind:{path: "$sessions", includeArrayIndex: "SIndex"}},
+            {$unwind: {path: "$sessions.exercises", includeArrayIndex: "EIndex" }},
+
+            {$match: {"sessions.session_type":"focus", "status": {$in:["COMPLETED","IN_PROGRESS"]}, 
+                    "sessions.session_status": "COMPLETED", "sessions.exercises.name": "Squats","customer_id": custIdObj}},
+            // Sorted by SIndex DESC
+            {$sort:{"SIndex": 1}},
+            {$group: {_id:{program: "$title", status: "$status"}, exercise: {$push:"$sessions.exercises.result"}}},
+            {$project: {"exercise": 1}}];
+        // Get the program
+        PROGRAM.aggregate(aggQuery).then(prog => {
+            if (!prog) {
+                reject("Program template not found with id " + custId);
+            } else {
+                resolve(prog);
+            }
+        }).catch(err => {
+            console.log(err);
+            resolve(-1);
+        });
+    });
+};
+
+function getImproveTriceps(custId){
+    return new Promise(function (resolve, reject) {
+        console.log('customer Id: '+custId);
+        var custIdObj = mongoose.Types.ObjectId(custId);
+        var aggQuery = [
+            {$unwind:{path: "$sessions", includeArrayIndex: "SIndex"}},
+            {$unwind: {path: "$sessions.exercises", includeArrayIndex: "EIndex" }},
+
+            {$match: {"sessions.session_type":"focus", "status": {$in:["COMPLETED","IN_PROGRESS"]}, 
+                    "sessions.session_status": "COMPLETED", "sessions.exercises.name": "Triceps dips","customer_id": custIdObj}},
+            // Sorted by SIndex DESC
+            {$sort:{"SIndex": 1}},
+            {$group: {_id:{program: "$title", status: "$status"}, exercise: {$push:"$sessions.exercises.result"}}},
+            {$project: {"exercise": 1}}];
+        // Get the program
+        PROGRAM.aggregate(aggQuery).then(prog => {
+            if (!prog) {
+                reject("Program template not found with id " + custId);
+            } else {
+                resolve(prog);
+            }
+        }).catch(err => {
+            console.log(err);
+            resolve(-1);
+        });
+    });
+};
 /*
  * Work in Progress: Not sure if I will get this working by deadline, not sure 
  * if it's worth the effort. For now it's returning -1 and will not be displayed 

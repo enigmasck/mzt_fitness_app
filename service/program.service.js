@@ -328,25 +328,3 @@ exports.coachUpdateSessStat = function (progId, sessionNb) {
         });
     });
 };
-
-exports.findSession = function (custId) {
-    return new Promise(function (resolve, reject) {
-        console.log('customer Id: '+custId);
-        var query = mongoose.Types.ObjectId(custId);
-        // Get the program
-        Program.aggregate([
-            {$unwind:{path: "$sessions", includeArrayIndex: "SIndex"}},
-            {$unwind: {path: "$sessions.exercises", includeArrayIndex: "EIndex" }},
-
-            {$match: {"sessions.session_type":"focus", "status": "COMPLETED" || "IN_PROGRESS", 
-                    "sessions.session_status": "COMPLETED", "customer_id": query}},
-            {$group: {_id:"$SIndex", exercise: {$push:{index:"$EIndex",result: "$sessions.exercises.result"}}}},
-            {$project: {"exercise": 1, _id: 1}}]).then(prog => {
-            if (!prog) {
-                reject("Program template not found with id " + custId);
-            } else {
-                resolve(prog);
-            }
-        });
-    });
-};

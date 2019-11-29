@@ -141,15 +141,3 @@ module.exports.customerUpdateSessionStatus = function customerUpdateSessionStatu
       utils.writeJson(res, response);
     });
 };
-
-module.exports.findSession = function findSession (req, res, next) {
-  var custId = req.swagger.params['customer_id'].value;
-  
-  Program.findSession(custId)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
-};
