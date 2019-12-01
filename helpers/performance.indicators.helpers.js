@@ -22,18 +22,47 @@ async function getPerformanceIndicators(custId){
             displayIndc: cntSess > 0 ? "TRUE":"FALSE" 
         },
         dicksonIndcImprove: {
-            indc: dIndcImprove,
+            indc: dIndcImprove.toFixed(2),
             name: "Dickson Indicator Improvement",
-            msg: "Your Dickson Indicator has improved by " + dIndcImprove + " units.",
+            msg: "Your Dickson Indicator has improved by " + dIndcImprove.toFixed(2) + " units.",
             displayIndc: dIndcImprove > 0 ? "TRUE":"FALSE" 
         },
-        // first session result, second session result, third session result
-        planksImprove: improvePlanks,
-        lungesImprove: improveLunges,
-        crunchesImprove: improveCrunches,
-        pushupsImprove: improvePushups,
-        squatsImprove: improveSquats,
-        tricepsImprove: improveTriceps
+        planksImprove: {
+            indc: improvePlanks,
+            name: "Planks Improvement",
+            msg: "The number of planks you can do has improved by " + improvePlanks + " planks.",
+            displayIndc: improvePlanks > 0 ? "TRUE":"FALSE" 
+        },
+        lungesImprove: {
+            indc: improveLunges,
+            name: "Lunges Improvement",
+            msg: "The number of lunges you can do has improved by " + improveLunges + " lunges.",
+            displayIndc: improveLunges > 0 ? "TRUE":"FALSE" 
+        },
+        crunchesImprove: {
+            indc: improveCrunches,
+            name: "Crunches Improvement",
+            msg: "The number of crunches you can do has improved by " + improveCrunches + " crunches.",
+            displayIndc: improveCrunches > 0 ? "TRUE":"FALSE" 
+        },
+        pushupsImprove: {
+            indc: improvePushups,
+            name: "Pushups Improvement",
+            msg: "The number of pushups you can do has improved by " + improvePushups + " pushups.",
+            displayIndc: improvePushups > 0 ? "TRUE":"FALSE" 
+        },
+        squatsImprove: {
+            indc: improveSquats,
+            name: "Squats Improvement",
+            msg: "The number of squats you can do has improved by " + improveSquats + " squats.",
+            displayIndc: improveSquats > 0 ? "TRUE":"FALSE" 
+        },
+        tricepsImprove: {
+            indc: improveTriceps,
+            name: "Tricep Dips Improvement",
+            msg: "The number of tricep dips you can do has improved by " + improveTriceps + " tricep dips.",
+            displayIndc: improveTriceps > 0 ? "TRUE":"FALSE" 
+        }
     };
     
     return indicators;
@@ -45,7 +74,7 @@ global.getPerformanceIndicators = getPerformanceIndicators;
  * @arguments: {string} custId
  * @description: Gets all the completed sessions for a given customer id
  * @returns {integer} : an integer representing the total number of sessions completed
- * @error:
+ * @error: {integer} : return an integer of -1.
  */
 function getTotalCompletedSessions(custId){
     return new Promise(function (resolve, reject) {
@@ -64,16 +93,25 @@ function getTotalCompletedSessions(custId){
             }
             resolve(cntSessTot);
         }).catch(err => {
-            resolve(0);
+            resolve(-1);
         });
     }catch(err){
         console.log(err);
-        resolve(0);
+        reject(-1);
     }
 });
 };
 global.getTotalCompletedSessions = getTotalCompletedSessions;
 
+/*
+ * @function: getImproveDicksonIndic
+ * @arguments: {string} custId
+ * @description: Gets a single value which displays the improvement of a client's
+ * dickson indicator improvement. It takes the last focus session and the subtracts the baseline
+ * measurement.
+ * @returns {integer} : an integer representing the total number of sessions completed
+ * @error: {integer} : return an integer of -1.
+ */
 function getImproveDicksonIndic(custId){
     return new Promise(function (resolve, reject) {
         var indicDiff = -1;
@@ -100,6 +138,16 @@ function getImproveDicksonIndic(custId){
 });
 };
 
+/*
+ * @function: getImprovePlanks
+ * @arguments: {string} custId
+ * @description: Gets a single value which displays the improvement of a client's
+ * planks improvement. It takes the last focus session and the subtracts the baseline
+ * measurement.
+ * @returns {integer} : an integer representing the total number of planks 
+ * improved between focus sessions
+ * @error: {integer} : return an integer of -1.
+ */
 function getImprovePlanks(custId){
     return new Promise(function (resolve, reject) {
         console.log('customer Id: '+custId);
@@ -117,9 +165,10 @@ function getImprovePlanks(custId){
         // Get the program
         PROGRAM.aggregate(aggQuery).then(prog => {
             if (!prog) {
-                reject("Program template not found with id " + custId);
+                reject(-1);
             } else {
-                resolve(prog);
+                var diff = prog[0]["exercise"][2] - prog[0]["exercise"][0];
+                resolve(diff);
             }
         }).catch(err => {
             console.log(err);
@@ -128,6 +177,16 @@ function getImprovePlanks(custId){
     });
 };
 
+/*
+ * @function: getImproveLunges
+ * @arguments: {string} custId
+ * @description: Gets a single value which displays the improvement of a client's
+ * lunges improvement. It takes the last focus session and the subtracts the baseline
+ * measurement.
+ * @returns {integer} : an integer representing the total number of lunges 
+ * improved between focus sessions
+ * @error: {integer} : return an integer of -1.
+ */
 function getImproveLunges(custId){
     return new Promise(function (resolve, reject) {
         console.log('customer Id: '+custId);
@@ -145,9 +204,10 @@ function getImproveLunges(custId){
         // Get the program
         PROGRAM.aggregate(aggQuery).then(prog => {
             if (!prog) {
-                reject("Program template not found with id " + custId);
+                reject(-1);
             } else {
-                resolve(prog);
+                var diff = prog[0]["exercise"][2] - prog[0]["exercise"][0];
+                resolve(diff);
             }
         }).catch(err => {
             console.log(err);
@@ -156,6 +216,16 @@ function getImproveLunges(custId){
     });
 };
 
+/*
+ * @function: getImproveCrunches
+ * @arguments: {string} custId
+ * @description: Gets a single value which displays the improvement of a client's
+ * crunches improvement. It takes the last focus session and the subtracts the baseline
+ * measurement.
+ * @returns {integer} : an integer representing the total number of crunches 
+ * improved between focus sessions
+ * @error: {integer} : return an integer of -1.
+ */
 function getImproveCrunches(custId){
     return new Promise(function (resolve, reject) {
         console.log('customer Id: '+custId);
@@ -173,9 +243,10 @@ function getImproveCrunches(custId){
         // Get the program
         PROGRAM.aggregate(aggQuery).then(prog => {
             if (!prog) {
-                reject("Program template not found with id " + custId);
+                reject(-1);
             } else {
-                resolve(prog);
+                var diff = prog[0]["exercise"][2] - prog[0]["exercise"][0];
+                resolve(diff);
             }
         }).catch(err => {
             console.log(err);
@@ -184,6 +255,16 @@ function getImproveCrunches(custId){
     });
 };
 
+/*
+ * @function: getImprovePushups
+ * @arguments: {string} custId
+ * @description: Gets a single value which displays the improvement of a client's
+ * pushups improvement. It takes the last focus session and the subtracts the baseline
+ * measurement.
+ * @returns {integer} : an integer representing the total number of pushups 
+ * improved between focus sessions
+ * @error: {integer} : return an integer of -1.
+ */
 function getImprovePushups(custId){
     return new Promise(function (resolve, reject) {
         console.log('customer Id: '+custId);
@@ -201,9 +282,10 @@ function getImprovePushups(custId){
         // Get the program
         PROGRAM.aggregate(aggQuery).then(prog => {
             if (!prog) {
-                reject("Program template not found with id " + custId);
+                reject(-1);
             } else {
-                resolve(prog);
+                var diff = prog[0]["exercise"][2] - prog[0]["exercise"][0];
+                resolve(diff);
             }
         }).catch(err => {
             console.log(err);
@@ -212,6 +294,16 @@ function getImprovePushups(custId){
     });
 };
 
+/*
+ * @function: getImproveSquats
+ * @arguments: {string} custId
+ * @description: Gets a single value which displays the improvement of a client's
+ * squats improvement. It takes the last focus session and the subtracts the baseline
+ * measurement.
+ * @returns {integer} : an integer representing the total number of squats 
+ * improved between focus sessions
+ * @error: {integer} : return an integer of -1.
+ */
 function getImproveSquats(custId){
     return new Promise(function (resolve, reject) {
         console.log('customer Id: '+custId);
@@ -229,9 +321,10 @@ function getImproveSquats(custId){
         // Get the program
         PROGRAM.aggregate(aggQuery).then(prog => {
             if (!prog) {
-                reject("Program template not found with id " + custId);
+                reject(-1);
             } else {
-                resolve(prog);
+                var diff = prog[0]["exercise"][2] - prog[0]["exercise"][0];
+                resolve(diff);
             }
         }).catch(err => {
             console.log(err);
@@ -240,6 +333,16 @@ function getImproveSquats(custId){
     });
 };
 
+/*
+ * @function: getImproveTriceps
+ * @arguments: {string} custId
+ * @description: Gets a single value which displays the improvement of a client's
+ * tricep dips improvement. It takes the last focus session and the subtracts the baseline
+ * measurement.
+ * @returns {integer} : an integer representing the total number of tricep dips 
+ * improved between focus sessions
+ * @error: {integer} : return an integer of -1.
+ */
 function getImproveTriceps(custId){
     return new Promise(function (resolve, reject) {
         console.log('customer Id: '+custId);
@@ -257,9 +360,10 @@ function getImproveTriceps(custId){
         // Get the program
         PROGRAM.aggregate(aggQuery).then(prog => {
             if (!prog) {
-                reject("Program template not found with id " + custId);
+                reject(-1);
             } else {
-                resolve(prog);
+                var diff = prog[0]["exercise"][2] - prog[0]["exercise"][0];
+                resolve(diff);
             }
         }).catch(err => {
             console.log(err);
@@ -267,81 +371,3 @@ function getImproveTriceps(custId){
         });
     });
 };
-/*
- * Work in Progress: Not sure if I will get this working by deadline, not sure 
- * if it's worth the effort. For now it's returning -1 and will not be displayed 
- */
-/*function getImprovePushups(custId){
-    return new Promise(function (resolve, reject) {
-    
-    console.log("In getImprovePushups");
-    var currPush = -1;
-    var prevPush = -1;
-    try{
-        var query = {"customer_id":custId};
-        
-        var sortQuery = {measurement_date: -1};
-        
-        MEASUREMENT.find(query).sort(sortQuery).then(msr => {         
-            console.log("msr="+msr);
-            if(msr.length >= 2){
-                var sess = getSession(msr.session_id);
-                if(sess !== -1){
-                    console.log("sess="+sess);
-                    var curr = msr[0].sessions;
-                    var prev = msr[1].sessions;
-                }
-            }
-        }).catch(err => {
-            console.log(err);
-            resolve(-1);
-        });
-        var query = {"customer_id":custId, 
-            "status": {$in: ["COMPLETED","IN_PROGRESS"]},
-            "sessions": {$elemMatch: { session_type: "focus", session_status: "COMPLETED" }} 
-            //"sessions.session_status": "COMPLETED"
-            //"sessions.exercises.name": "Half push-ups",
-            //"sessions.exercises.result": { $exists: true, $ne: null }
-        };
-        var sortQuery = {create_timestamp: -1};
-        var projectQuery = {"sessions":1};*/
-
-        /*PROGRAM.find(query,projectQuery).sort(sortQuery).then(prog => {
-            console.log("prog="+prog);
-            for(var i in prog){
-                var sess = prog[i].sessions;
-                console.log("sess="+sess.status);
-                if(sess.session_type === "focus" && sess.session_status === "COMPLETED"){
-                    for(var k in sess){
-                        var ex = sess[k].exercises;
-                        for(var r in ex){
-                            if(ex[r].name === "Half push-ups" && currPush === -1 && prevPush === -1){
-                                currPush = ex[r].result;
-                            }
-                            if(ex[r].name === "Half push-ups" && currPush !== -1 && prevPush === -1){
-                                prevPush = ex[r].result;
-                            }
-                        }
-                    }
-                }
-            }
-            
-            if(currPush !== -1 && prevPush !== -1)
-                resolve(currPush - prevPush);
-            else
-                resolve(-1);
-            resolve(-1);
-
-        }).catch(err => {
-            console.log(err);
-            resolve(-1);
-        });
-        resolve(-1);
-    }catch(err){
-        console.log(err);
-        resolve(-1);
-    }
-    
-});
-};*/
-
