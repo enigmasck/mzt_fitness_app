@@ -1,6 +1,7 @@
 const PROGRAM = require('../models/program.model.js');
 const MEASUREMENT = require('../models/measurement.model.js');
 const SESSION = require('../models/session.model.js');
+const OFFER_TRANS = require('../models/offer.transaction.model.js');
 var mongoose = require('mongoose');
 var utils = require('../utils/logger.js');
 
@@ -13,6 +14,7 @@ async function getPerformanceIndicators(custId){
     var improveCrunches = await getImproveCrunches(custId);
     var improveSquats = await getImproveSquats(custId);
     var improveTriceps = await getImproveTriceps(custId);
+    var lastChallengePts = await getLastChallenge(custId);
     
     var indicators = {
         cntSession : { 
@@ -62,6 +64,12 @@ async function getPerformanceIndicators(custId){
             name: "Tricep Dips Improvement",
             msg: "The number of tricep dips you can do has improved by " + improveTriceps + " tricep dips.",
             displayIndc: improveTriceps > 0 ? "TRUE":"FALSE" 
+        },
+        lastChallengePtsEarned: {
+            indc: lastChallengePts[1],
+            name: "Last Challenge Points Earned",
+            msg: "In your last challenge, " + lastChallengePts[0] + ", you earned " + lastChallengePts[1] + " points!!!",
+            displayIndc: lastChallengePts[1] > 0 ? "TRUE":"FALSE" 
         }
     };
     
@@ -369,5 +377,37 @@ function getImproveTriceps(custId){
             console.log(err);
             resolve(-1);
         });
+    });
+};
+
+/*
+ * @function: getLastChallenge
+ * @arguments: {string} custId
+ * @description: Gets an array of challenge of name and total points earned in
+ * the client's last challenge
+ * @returns {array} : an integer representing the total points earned and the 
+ * name of the challenge where the points were earned
+ * @error: {array} : return  '' for challenge name and -1 for points earned
+ */
+function getLastChallenge(custId){
+    return new Promise(function (resolve, reject) {
+        console.log('customer Id: '+custId);
+        var custIdObj = mongoose.Types.ObjectId(custId);
+        var query = {
+            customer_id: custIdObj,
+            transaction_type : {$in: 'EARNED'}
+        };
+        var sortQuery = {create_timestamp: 1};
+        OFFER_TRANS.find(query).populate({path: 'challenge_id'}).sort(sortQuery).then(offerTrans => {
+            var name = offerTrans[0].challenge_id.name;
+            var pts = offerTrans[0].points;
+            console.log("offerTrans"+offerTrans);
+            resolve([name,pts]);
+        }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                reject(['',-1]);
+            }
+            reject(['',-1]);
+        }); 
     });
 };

@@ -6,7 +6,8 @@ const OfferSchema = mongoose.Schema({
     offer_description: String,
     sponsor_name: String,
     website_url: String,
-    points: Number
+    points: Number,
+    create_timestamp: {type: Date, default: Date.now()}
 }, {
     timestamp: true
 });
