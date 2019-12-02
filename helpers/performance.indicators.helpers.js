@@ -5,6 +5,14 @@ const OFFER_TRANS = require('../models/offer.transaction.model.js');
 var mongoose = require('mongoose');
 var utils = require('../utils/logger.js');
 
+/*
+ * @function: getPerformanceIndicators
+ * @arguments: {string} custId
+ * @description: Gets all performance indicators for a given client
+ * @returns {JSON} : A JSON string with all performance indicators name, message, value
+ * and if the performance indicator should be displayed (shows improvement)
+ * @error: null - any errors handled by the controller
+ */
 async function getPerformanceIndicators(custId){
     var cntSess = await getTotalCompletedSessions(custId);
     var dIndcImprove = await getImproveDicksonIndic(custId);

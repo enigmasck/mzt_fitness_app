@@ -9,11 +9,13 @@ const WARN_NO_ID = 'There was an error in processing your request. An ID was exp
 const WARN_NO_DATA_FOUND = 'Unable to retrieve the data associated with request. \n\
     Please try again, if the problem persists please contact customer support.';
 const WARN_ONLY_ONE_CHALLENGE = "Only one challenge can be active at a time. When you finish your current challenge, come back and challenge yourself some more!";
+const WARN_UPDATE_CONTENT_EMPTY = "The server did not receive any data. Please fill in the required fields to update your data.";
 
 //HANDLED EXCEPTION ERRORS
 
 //CRITICAL EXCEPTION ERRORS
 const INTERNAL_ERROR = 'There was an internal error. Unable to process request.';
+const SAVE_ERROR = "Unable to save the data. Unknown error. Please try again later.";
 
 module.exports.WARN_NO_ID = WARN_NO_ID;
 module.exports.WARN_NO_DATA_FOUND = WARN_NO_DATA_FOUND;

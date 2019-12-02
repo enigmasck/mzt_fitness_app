@@ -1,106 +1,140 @@
-const Challenge = require('../models/challenge.model.js');
+const CHALLENGE = require('../models/challenge.model.js');
+const ERROR_MSG = require('../message.strings/error.strings.js');
 require('../service/checkNull.js');
 
+/*
+ * @function: findAll
+ * @arguments: null
+ * @description: Find all challenges in the database.
+ * @returns {JSON} : a JSON object model of type Challenge
+ * @error: {reject} : reject with error message
+ */
 exports.findAll = function () {
     return new Promise(function (resolve, reject) {
-        Challenge.find()
-                .then(challenges => {
-                    resolve(challenges);
-                }).catch(err => {
-            reject('IT WAS REJECTED');
+        CHALLENGE.find().then(challenges => {
+            resolve(challenges);
+        }).catch(err => {
+            reject(ERROR_MSG.INTERNAL_ERROR);
         });
     });
 };
 
+/*
+ * @function: find6RandomChallenge
+ * @arguments: null
+ * @description: Get 6 random challenges for the challenge lottery wheel
+ * @returns {JSON} : a JSON object model of type Challenge
+ * @error: {reject} : reject with error message
+ */
 exports.find6RandomChallenge = function () {
     return new Promise(function (resolve, reject) {
         var query = [{$sample: {size: 6}}];
-        Challenge.aggregate(query).then(challenges => {
-            console.log("random6="+challenges);
+        CHALLENGE.aggregate(query).then(challenges => {
             resolve(challenges);
         }).catch(err => {
-            reject('IT WAS REJECTED');
+            reject(ERROR_MSG.INTERNAL_ERROR);
         });
     });
 };
 
-
+/*
+ * @function: findOne
+ * @arguments: null
+ * @description: Retrieve challenges by CustomerID
+ * @returns {JSON} : a JSON object model of type Challenge
+ * @error: {reject} : reject with error message
+ */
 exports.findOne = function (custId) {
     return new Promise(function (resolve, reject) {
-        Challenge.findById(custId)
-                .then(challenges => {
-                    resolve(challenges);
-                }).catch(err => {
+        CHALLENGE.findById(custId).then(challenges => {
+            resolve(challenges);
+        }).catch(err => {
             if (err.kind === 'ObjectId') {
-                reject('Challenge Not Found By ID');
+                reject(ERROR_MSG.WARN_NO_DATA_FOUND);
             }
-            //TODO setup real error messages
-            reject('INTERNAL ERROR');
+
+            reject(ERROR_MSG.INTERNAL_ERROR);
         });
     });
 };
 
-// Create and save a new challenge
-exports.create = function (cust) {
+/*
+ * @function: create
+ * @arguments: {JSON} : JSON object of type Challenge
+ * @description: Create a new challenge
+ * @returns {JSON} : a JSON object model of type Challenge
+ * @error: {reject} : reject with error message
+ */
+exports.create = function (nChallenge) {
     return new Promise(function (resolve, reject) {
-        // Validate request
-        if(!cust) {
-            reject('Challenge content can not be empty');
+
+        if(!nChallenge) {
+            reject(ERROR_MSG.WARN_UPDATE_CONTENT_EMPTY);
         }
         var raw = {};
-        raw = checkNull(raw, cust);
-        // Create a challenge
-        const challenge = new Challenge(raw);
+        raw = checkNull(raw, nChallenge);
 
-        // Save the challenge in the database
-        challenge.save()
-        .then(data => {
+        const NEW_CHALLENGE = new CHALLENGE(raw);
+
+        NEW_CHALLENGE.save().then(data => {
             resolve(data);
         }).catch(err => {
-            reject(err.message || "Some error occurred while creating the challenge.");
+            reject(ERROR_MSG.SAVE_ERROR);
         });
     });
 };
 
-// Update a challenge identified by the challengeId in the request
-exports.update = function(cust) {
+/*
+ * @function: update
+ * @arguments: {JSON} : JSON object with challenge fields
+ * @description: Update a new challenge
+ * @returns {JSON} : a JSON object model of type Challenge
+ * @error: {reject} : reject with error message
+ */
+exports.update = function(nChallenge) {
   return new Promise(function(resolve, reject) {
         // Validate Request
-        if(!cust) {
-            reject("Challenge content can not be empty");
+        if(!nChallenge) {
+            reject(ERROR_MSG.WARN_NO_DATA_FOUND);
         }
         var raw = {};
-        raw = checkNull(raw, cust);
+        raw = checkNull(raw, nChallenge);
         // Find challenge and update its name with the request body
-        Challenge.findByIdAndUpdate(cust['challenge_id'], raw, {new: true})
+        CHALLENGE.findByIdAndUpdate(nChallenge['challenge_id'], raw, {new: true})
         .then(challenges => {
             if(!challenges) {
-                reject("Challenge not found with id " + cust['challenge_id']);
+                reject(ERROR_MSG.WARN_NO_DATA_FOUND);
             }
             resolve(challenges);
         }).catch(err => {
             if(err.kind === 'ObjectId') {
-                reject("Challenge not found with id " + cust['challenge_id']);
+                reject(ERROR_MSG.WARN_NO_DATA_FOUND);
             }
-            reject("Error updating challenge with id " + cust['challenge_id']);
+            reject(ERROR_MSG.INTERNAL_ERROR);
         });
     });
 };
 
-// Delete a challenge with the specified challengeId in the request
+/*
+ * @function: delete
+ * @arguments: {string} : challenge_id
+ * @description: Delete a challenge
+ * @returns {string} : delete successful message
+ * @error: {reject} : reject with error message
+ */
 exports.delete = function(challenge_id) {
   return new Promise(function(resolve, reject) {
-    Challenge.findByIdAndRemove(challenge_id)
+    CHALLENGE.findByIdAndRemove(challenge_id)
     .then(challenges => {
         if(!challenges) {
-            reject("Challenge not found with id " + challenge_id);
+            reject(ERROR_MSG.WARN_NO_DATA_FOUND);
         }
         resolve("Challenge deleted successfully!");
     }).catch(err => {
-            if(err.kind === 'ObjectId' || err.name === 'NotFound') {
-                reject("Challenge not found with id " + challenge_id);            
-            }
-            reject("Could not delete challenge with id " + challenge_id);
-        });
+        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
+            reject(ERROR_MSG.WARN_NO_DATA_FOUND);            
+        }
+        reject(ERROR_MSG.WARN_NO_DATA_FOUND);
     });
+});
 };
