@@ -134,11 +134,11 @@ function getImproveDicksonIndic(custId){
 
     try{
         var query = { "customer_id":custId};
-        var sortQuery = {"measurement_date": -1};
+        var sortQuery = {"measurement_date": 1};
         MEASUREMENT.find(query).sort(sortQuery).then(msr => {
             var msrLen = msr.length;
             if(msrLen >= 2){
-                indicDiff = msr[msrLen-1].dickson_metric - msr[msrLen-2].dickson_metric;
+                indicDiff = msr[msrLen-2].dickson_metric - msr[msrLen-1].dickson_metric;
             }
 
             resolve(indicDiff);
